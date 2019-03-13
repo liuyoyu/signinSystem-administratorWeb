@@ -13,7 +13,7 @@ public class LoginController {
     @Autowired
     LoginService loginService;
 
-    @RequestMapping(method = RequestMethod.POST, value = "/login")
+    @RequestMapping(method = RequestMethod.POST, value = "/loginCheck")
     public ModelAndView loginCheck(@RequestParam("account") String uname,
                                    @RequestParam("password") String password){
         Integer res = loginService.checkLogin(uname, password);

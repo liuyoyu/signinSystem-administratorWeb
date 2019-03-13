@@ -8,7 +8,6 @@ import java.io.Serializable;
 public class StudentInfo implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private String sno;
     @Column(nullable = false)

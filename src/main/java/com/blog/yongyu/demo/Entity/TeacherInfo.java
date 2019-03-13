@@ -7,7 +7,6 @@ import java.io.Serializable;
 @Table(name = "teacherInfo", schema="dbo", catalog = "et")
 public class TeacherInfo implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private String id;
 
