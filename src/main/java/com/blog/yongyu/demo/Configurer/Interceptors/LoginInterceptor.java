@@ -22,7 +22,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession();
         List<String> Users = (List<String>) session.getAttribute("users");
         if (Users == null) {
-            response.sendRedirect(basePath + "/login.html");
+            response.sendRedirect(basePath + "/static/login.html");
             return false;
         } else {
             System.out.println(path);

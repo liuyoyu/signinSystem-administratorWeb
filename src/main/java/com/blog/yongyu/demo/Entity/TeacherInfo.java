@@ -1,5 +1,7 @@
 package com.blog.yongyu.demo.Entity;
 
+import org.springframework.web.bind.annotation.ControllerAdvice;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -12,6 +14,9 @@ public class TeacherInfo implements Serializable {
 
     @Column(nullable = false)
     private String tname;
+
+    @Column(length = 10)
+    private String sex;
 
     @Column(nullable = false)
     private String college;
@@ -28,8 +33,10 @@ public class TeacherInfo implements Serializable {
     public TeacherInfo() {
     }
 
-    public TeacherInfo(String tname, String college, String academicTitle, String phone, String email) {
+    public TeacherInfo(String id, String tname, String sex, String college, String academicTitle, String phone, String email) {
+        this.id = id;
         this.tname = tname;
+        this.sex = sex;
         this.college = college;
         this.academicTitle = academicTitle;
         this.phone = phone;
@@ -84,11 +91,20 @@ public class TeacherInfo implements Serializable {
         Email = email;
     }
 
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
     @Override
     public String toString() {
         return "TeacherInfo{" +
                 "id='" + id + '\'' +
                 ", tname='" + tname + '\'' +
+                ", sex='" + sex + '\'' +
                 ", college='" + college + '\'' +
                 ", academicTitle='" + academicTitle + '\'' +
                 ", phone='" + phone + '\'' +

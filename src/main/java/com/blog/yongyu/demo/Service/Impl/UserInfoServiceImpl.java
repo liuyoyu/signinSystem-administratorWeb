@@ -1,15 +1,24 @@
 package com.blog.yongyu.demo.Service.Impl;
 
+import com.blog.yongyu.demo.Entity.StudentInfo;
+import com.blog.yongyu.demo.Entity.TeacherInfo;
 import com.blog.yongyu.demo.Entity.UserInfo;
 import com.blog.yongyu.demo.Repository.UserInfoRepository;
 import com.blog.yongyu.demo.Service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service("userInfoService")
 public class UserInfoServiceImpl implements UserInfoService {
     @Autowired
     UserInfoRepository userInfoRepository;
+
+    @Override
+    public UserInfo findUserByAccount(String account) {
+        return userInfoRepository.findUserInfoByAccount(account);
+    }
 
     @Override
     public Optional<UserInfo> findUserById(String id) {
@@ -17,12 +26,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public Integer createUser(UserInfo user) {
+    public UserInfo createUser(UserInfo user) {
         UserInfo newUser = userInfoRepository.save(user);
-        if (newUser == null) {
-            return 1;//创建失败
-        }
-        return 0;//创建成功
+        return newUser;
     }
 
     @Override
@@ -41,5 +47,39 @@ public class UserInfoServiceImpl implements UserInfoService {
             return 1;//修改失败
         }
         return 0;//修改成功
+    }
+
+    /**
+     * 绑定学生信息
+     * @param user
+     * @return
+     */
+    @Override
+    public StudentInfo addStudentInfo(UserInfo user, StudentInfo student) {
+        return null;
+    }
+
+    /**
+     * 绑定教师信息
+     * @param teacher
+     * @return
+     */
+    @Override
+    public TeacherInfo addTeacherInfo(TeacherInfo teacher) {
+        return null;
+    }
+
+    /**
+     * 修改教师信息
+     * @param user
+     * @return
+     */
+    @Override
+    public UserInfo modifyUser(UserInfo user) {
+        if (user == null) {
+            return null;
+        }
+        UserInfo userNew = userInfoRepository.save(user);
+        return userNew;
     }
 }

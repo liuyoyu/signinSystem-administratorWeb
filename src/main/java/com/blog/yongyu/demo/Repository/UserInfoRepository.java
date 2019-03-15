@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface UserInfoRepository extends JpaRepository<UserInfo, String> {
 
+    @Query("from UserInfo where account = ?1")
     UserInfo findUserInfoByAccount(String account);
 }
