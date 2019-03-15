@@ -56,6 +56,8 @@ public class UserInfoServiceImpl implements UserInfoService {
      */
     @Override
     public StudentInfo addStudentInfo(UserInfo user, StudentInfo student) {
+        //方案一：填写学生信息，然后绑定用户
+        //方案二：填写用户信息，然后绑定学生
         return null;
     }
 
