@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,7 +55,7 @@ public class LoginController{
      * @return
      */
     @RequestMapping(value = "/login/forgetPwd",method = RequestMethod.GET)
-    public DataResult forgetPwd(@RequestParam(value = "account") String account) {
+    public DataResult forgetPwd(@RequestParam("account") String account) {
         UserInfo user = userInfoService.findUserByAccount(account);
         if (user == null) {
             return  ResultUtils.error(1,"用户不存在");
@@ -65,5 +64,15 @@ public class LoginController{
         data.put("account", user.getAccount());
         data.put("pwd", user.getPwd());
         return ResultUtils.success(data);
+    }
+
+    /**
+     * 注销登陆
+     * @return
+     */
+    @RequestMapping("/loginOut")
+    public DataResult loginOut(){
+        request.getSession().invalidate();
+        return ResultUtils.success();//return "/login.html";
     }
 }

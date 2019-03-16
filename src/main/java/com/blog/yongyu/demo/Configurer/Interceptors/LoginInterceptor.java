@@ -20,9 +20,9 @@ public class LoginInterceptor implements HandlerInterceptor {
         //获取请求路径：根目录到结尾
         String path = request.getRequestURI();
         HttpSession session = request.getSession();
-        List<String> Users = (List<String>) session.getAttribute("users");
+        String Users = (String) session.getAttribute("userid");
         if (Users == null) {
-            response.sendRedirect(basePath + "/static/login.html");
+            response.sendRedirect(basePath + "/login.html");
             return false;
         } else {
             System.out.println(path);
