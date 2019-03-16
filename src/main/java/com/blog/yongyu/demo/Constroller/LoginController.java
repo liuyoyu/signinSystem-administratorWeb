@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,8 +24,7 @@ public class LoginController{
     private static String[] message = {"SUCCESS", "账户不存在 | 密码错误"};
     @RequestMapping(method = RequestMethod.POST, value = "/loginCheck")
     public DataResult loginCheck(@RequestParam("account") String uname,
-                                 @RequestParam("password") String password,
-                                 HttpSession session){
+                                 @RequestParam("password") String password){
         UserInfo res = loginService.checkLogin(uname, password);
         if (res != null) {
             request.getSession().setAttribute("userid", res.getId());
