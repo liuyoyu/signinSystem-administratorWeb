@@ -52,11 +52,11 @@
         <!--logger日志-->
         <dependency>
             <groupId>org.projectlombok</groupId>
-            <artifactId>lomnok</artifactId>
+            <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
 
-        <!--集成页面-->
+        <!--thymeleaf集成页面-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -70,6 +70,13 @@
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
+        </dependency>
+
+        <!--邮箱验证-->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.7</version>
         </dependency>
     </dependencies>
 

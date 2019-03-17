@@ -1,5 +1,6 @@
 package com.blog.yongyu.demo.Configurer.Interceptors;
 
+import com.blog.yongyu.demo.Entity.HttpContent;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -20,14 +21,13 @@ public class LoginInterceptor implements HandlerInterceptor {
         //获取请求路径：根目录到结尾
         String path = request.getRequestURI();
         HttpSession session = request.getSession();
-        String Users = (String) session.getAttribute("userid");
+        String Users = (String) session.getAttribute(HttpContent.userId);
         if (Users == null) {
             response.sendRedirect(basePath + "/login.html");
             return false;
         } else {
-            System.out.println(path);
+            return true;
         }
-        return true;
     }
 
     @Override
