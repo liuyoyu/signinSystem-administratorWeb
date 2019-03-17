@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html" charset="UTF-8"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width"/>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="#" />
+    <!-- jQuery -->
+    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!--bootstrapValidator-->
+    <!--<script src="https://cdn.bootcss.com/bootstrap-validator/0.5.3/js/bootstrapValidator.js"></script>-->
+    <script src="../vendors/bootstrapValidator/bootstrapValidator.js"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="../build/js/custom.min.js"></script>
+    <!-- PNotify -->
+    <script src="../vendors/pnotify/dist/pnotify.js"></script>
+    <script src="../vendors/pnotify/dist/pnotify.buttons.js"></script>
+    <script src="../vendors/pnotify/dist/pnotify.nonblock.js"></script>
+
+    <!-- bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
+    <!--Animate.css-->
+    <link href="../vendors/animate.css/animate.min.css" rel="stylesheet"/>
+    <!-- Custom Theme Style-->
+    <link href="../build/css/custom.min.css" rel="stylesheet"/>
+    <!-- bootstrap-progressbar -->
+    <link href="../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <!-- PNotify -->
+    <link href="../vendors/pnotify/dist/pnotify.css" rel="stylesheet">
+    <link href="../vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+    <link href="../vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+    <!--bootstrapValidator-->
+    <!--<link href="https://cdn.bootcss.com/bootstrap-validator/0.5.3/css/bootstrapValidator.css" rel="stylesheet">-->
+    <script src="../vendors/bootstrapValidator/bootstrapValidator.css" rel="stylesheet"></script>
+    <title>登陆</title>
+</head>
+<body class="login">
+<div>
+    <a class="hiddenanchor" id="signup"></a>
+    <a class="hiddenanchor" id="signin"></a>
+
+    <div class="login_wrapper">
+        <div class="animate form">
+            <section class="login_content">
+                <form  method="post" action="/loginCheck" id="login_form">
+                    <h1>签到管理系统</h1>
+                    <input class="form-control" name="account" type="text" value="" placeholder="账号" required/>
+                    <input class="form-control" name="password" type="password" value="" placeholder="密码" required/>
+                    <div>
+                        <input class="btn btn-default btn-group-lg submit" type="button" id="submitBtn" value="登陆"/>
+                        <a class="reset_pass" data-toggle="modal" data-target=".forgetPwd">忘记密码 ?_?</a>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="separator">
+                        <p class="change_link">
+                            没有账户？<a href="signup.html" class="to_register">现在创建</a>
+                        </p>
+
+                        <div class="clearfix"></div>
+                        <br/>
+
+                        <div>
+                            <!--<h4><i class="fa fa-paw"></i>管理员界面</h4>-->
+                            <h4>管理员界面</h4>
+                            <p>&copy;2018.03.14</p>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
+</body>
+<div class="modal fade forgetPwd" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>X_X</span></button>
+                <h4 class="modal-title" id="myModalLabel">正在召唤密码</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal form-label-left" id="email_form">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="receiver">邮箱</label>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <input type="email" id="receiver" name="receiver" class="form-control col-md-7 col-sm-7 col-sm-7 col-xs-12" required/>
+                        </div>
+                        <div class="col-md-2 col-sm-2 col-md-12">
+                            <input type="submit" class="submit btn btn-primary btn-group-sm col-md-7 col-sm-7 col-xs-12" id="sendEmail" value="发送">
+                        </div>
+                    </div>
+                </form>
+                <form class="form-horizontal" action="" method="get" id="code_form">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">验证码</label>
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <input type="text" id="code" class="form-control col-md-7 col-xs-12" required/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#submitBtn').click(function () {
+            var $form = $('#login_form');
+            $.ajax({
+                cache: false,
+                method: 'post',
+                url: $form.attr('action'),
+                data: $form.serialize(),
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.status === 0) {
+                        new PNotify({
+                            title: '消息',
+                            text: '登陆成功',
+                            type: 'success',
+                            styling: 'bootstrap3',
+                            toggle: true
+                        });
+                        setTimeout(function () {
+                            window.location.href = "/index.html";
+                        },2000)
+                    } else {
+                        new PNotify({
+                            title: '消息',
+                            text: data.msg,
+                            type: 'info',
+                            styling: 'bootstrap3',
+                            toggle: true
+                        });
+                    }
+                },
+                error: function (XMLHttpRequest, testStatus, errorThrow) {
+                    new PNotify({
+                        title: '消息',
+                        text: '提交失败',
+                        type: 'error',
+                        styling: 'bootstrap3',
+                        toggle: true
+                    });
+                    console.log(XMLHttpRequest);
+                    console.log(testStatus);
+                    console.log(errorThrow);
+                }
+            });
+        });
+
+        $('#sendEmail').click(function () {
+            var $form = $('#email_form');
+            $.ajax({
+                cache: false,
+                method: 'get',
+                url: '/login/sendEmail',
+                data: $form.serialize(),
+                dataType: "JSON",
+                success: function (data) {
+                    if (data.status === 0) {
+                        new PNotify({
+                            title: '消息',
+                            text: '已发送验证码到邮箱，请查看',
+                            type: 'success',
+                            styling: 'bootstrap3',
+                            toggle: true
+                        });
+                    } else {
+                        new PNotify({
+                            title: '消息',
+                            text: data.msg,
+                            type: 'error',
+                            styling: 'bootstrap3',
+                            toggle: true
+                        });
+                    }
+                },
+                error: function () {
+                    new PNotify({
+                        title: '消息',
+                        text: '提交失败',
+                        type: 'error',
+                        styling: 'bootstrap3',
+                        toggle: true
+                    });
+                }
+            });
+        });
+
+    });
+</script>
+</html>
