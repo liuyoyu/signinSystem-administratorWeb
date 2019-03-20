@@ -17,7 +17,7 @@ public class EmailUtils {
     private static final String pwd = "liu111";//授权密码
     private static final String TITLE = "签到Start";
     private static final String EAMIL_HOST = "smtp.126.com";
-    private static final String EAMIL_PORT = 25+"";
+    private static final String EAMIL_PORT = 465+"";
     private static final Integer CODE_LENGTH = 25;
 
     /**
@@ -44,7 +44,7 @@ public class EmailUtils {
         return code;
     }
     /**
-     * 发送验证码邮件
+     * 发送验证码
      * @param receiver
      * @param code
      * @return
@@ -56,6 +56,8 @@ public class EmailUtils {
         properties.put("mail.smtp.host", EAMIL_HOST);
         properties.put("mail.smtp.port", EAMIL_PORT);
         properties.put("mail.smtp.auth", "true");
+//        properties.put("mail.smtp.connectiontiomeout", 3000);
+//        properties.put("mail.smtp.timeout", 3000);
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -71,7 +73,7 @@ public class EmailUtils {
         //设置收件人
         message.setRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
         //设置主题
-        message.setSubject("签到Start");
+        message.setSubject(TITLE);
         //设置内容
         message.setContent(code, "text/html;charset=UTF-8");
         //发送邮件

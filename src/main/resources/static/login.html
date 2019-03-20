@@ -72,8 +72,8 @@
                         <br/>
 
                         <div>
-                            <!--<h4><i class="fa fa-paw"></i>管理员界面</h4>-->
-                            <h4>管理员界面</h4>
+                            <h4><i class="fa fa-paw"></i>管理员界面</h4>
+                            <!--<h4>管理员界面</h4>-->
                             <p>&copy;2018.03.14</p>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
     </div>
 </div>
 </body>
-<div class="modal fade forgetPwd" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade forgetPwd" tabindex="-1" role="dialog" aria-hidden="true" id="forgetPwd">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -93,12 +93,18 @@
             <div class="modal-body">
                 <form class="form-horizontal form-label-left" id="email_form">
                     <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="account">登陆账号</label>
+                        <div class="control-label col-md-4 col-sm-4 col-xs-12">
+                            <input id="account" name="account" type="text" class="form-control col-md-7 col-sm-7 col-xs-12" required/>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="receiver">邮箱</label>
                         <div class="col-md-4 col-sm-4 col-xs-12">
                             <input type="email" id="receiver" name="receiver" class="form-control col-md-7 col-sm-7 col-sm-7 col-xs-12" required/>
                         </div>
                         <div class="col-md-2 col-sm-2 col-md-12">
-                            <input type="submit" class="submit btn btn-primary btn-group-sm col-md-7 col-sm-7 col-xs-12" id="sendEmail" value="发送">
+                            <button type="button" class="btn btn-info btn-group-sm col-md-7 col-sm-7 col-xs-12" id="sendEmail">发送</button>
                         </div>
                     </div>
                 </form>
@@ -108,11 +114,11 @@
                         <div class="col-md-4 col-sm-4 col-xs-12">
                             <input type="text" id="code" class="form-control col-md-7 col-xs-12" required/>
                         </div>
+                        <div class="col-md-2 col-sm-2 col-md-12">
+                            <button type="button" class="btn btn-primary btn-group-sm col-md-7 col-sm-7 col-xs-12" id="suerBtn">确认</button>
+                        </div>
                     </div>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>
     </div>
@@ -131,8 +137,8 @@
                 success: function (data) {
                     if (data.status === 0) {
                         new PNotify({
-                            title: '消息',
-                            text: '登陆成功',
+                            title: '成功',
+                            text: '正在登陆',
                             type: 'success',
                             styling: 'bootstrap3',
                             toggle: true
@@ -142,7 +148,7 @@
                         },2000)
                     } else {
                         new PNotify({
-                            title: '消息',
+                            title: '失败',
                             text: data.msg,
                             type: 'info',
                             styling: 'bootstrap3',
@@ -152,8 +158,8 @@
                 },
                 error: function (XMLHttpRequest, testStatus, errorThrow) {
                     new PNotify({
-                        title: '消息',
-                        text: '提交失败',
+                        title: '失败',
+                        text: '无法找到请求',
                         type: 'error',
                         styling: 'bootstrap3',
                         toggle: true
@@ -176,7 +182,7 @@
                 success: function (data) {
                     if (data.status === 0) {
                         new PNotify({
-                            title: '消息',
+                            title: '成功',
                             text: '已发送验证码到邮箱，请查看',
                             type: 'success',
                             styling: 'bootstrap3',
@@ -184,7 +190,7 @@
                         });
                     } else {
                         new PNotify({
-                            title: '消息',
+                            title: '失败',
                             text: data.msg,
                             type: 'error',
                             styling: 'bootstrap3',
@@ -194,14 +200,43 @@
                 },
                 error: function () {
                     new PNotify({
-                        title: '消息',
-                        text: '提交失败',
+                        title: '失败',
+                        text: '无法找到请求',
                         type: 'error',
                         styling: 'bootstrap3',
                         toggle: true
                     });
                 }
             });
+        });
+        $('#sureBtn').click(function () {
+            $.ajax({
+                cache: false,
+                method: 'post',
+                url: '/login/sendCode',
+                data: $('code_form').serialize(),
+                dataType: 'JSON',
+                success: function () {
+                    new PNotify({
+                        title: '成功',
+                        text: '密码已发送至邮箱，请查',
+                        type: 'sccuess',
+                        styling:'bootstrap3',
+                        toggle: true
+                    });
+                    $('forgetPwd').hide()
+                },
+                error: function () {
+                    new PNotify({
+                        title: '失败',
+                        text: '无法找到请求',
+                        type: 'error',
+                        styling:'bootstrap3',
+                        toggle: true
+                    });
+                }
+
+            })
         });
 
     });

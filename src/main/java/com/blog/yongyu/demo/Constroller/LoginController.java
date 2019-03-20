@@ -75,14 +75,24 @@ public class LoginController{
 
     @RequestMapping("/login/sendEmail")
     public DataResult sendEmail(@RequestParam("receiver") String receiver,
+                                @RequestParam("account") String account,
                                 HttpServletRequest request){
+        if (account == null || "".equals(account)) {
+            return ResultUtils.error(1, "账号不能为空");
+        }
         //从数据库中查看相应的邮箱账号
+        UserInfo user = userInfoService.findUserByAccount(account);
+        if (user == null) {
+            return ResultUtils.error(2, "账号为空");
+        }
         //
         HttpSession session = request.getSession();
         try {
             session.setAttribute(HttpContent.emailCode, EmailUtils.editEmail(receiver));
         } catch (Exception e) {
-            return ResultUtils.error(1, e.getMessage());
+            e.printStackTrace();
+//            return ResultUtils.error(1, "邮件可能被当垃圾邮件处理，请更换邮箱");
+            return ResultUtils.error(3, e.getMessage());
         }
         return ResultUtils.success();
     }
@@ -91,7 +101,7 @@ public class LoginController{
      * 注销登陆
      * @return
      */
-    @RequestMapping("/loginOut")
+    @RequestMapping("/logOut")
     public DataResult loginOut(HttpServletRequest request){
         request.getSession().invalidate();
         return ResultUtils.success();//return "/login.html";
