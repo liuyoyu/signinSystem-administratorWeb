@@ -3,8 +3,11 @@
  */
 package com.blog.yongyu.demo.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "UserRole", schema="dbo", catalog = "et")
@@ -16,9 +19,9 @@ public class UserRole implements Serializable {
     @Column
     private String userRoleUserId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
-    private UserInfo userInfo;
+    @OneToMany(mappedBy = "userRole",cascade = CascadeType.REMOVE,fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<UserInfo> userInfos;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "roleId")
@@ -27,9 +30,9 @@ public class UserRole implements Serializable {
     public UserRole() {
     }
 
-    public UserRole(String userRoleUserId, UserInfo userInfo, Role role) {
+    public UserRole(String userRoleUserId, List<UserInfo> userInfo, Role role) {
         this.userRoleUserId = userRoleUserId;
-        this.userInfo = userInfo;
+        this.userInfos = userInfo;
         this.role = role;
     }
 
@@ -41,12 +44,12 @@ public class UserRole implements Serializable {
         this.id = id;
     }
 
-    public UserInfo getUserInfo() {
-        return userInfo;
+    public List<UserInfo> getUserInfo() {
+        return userInfos;
     }
 
-    public void setUserInfo(UserInfo userInfo) {
-        this.userInfo = userInfo;
+    public void setUserInfo(List<UserInfo> userInfo) {
+        this.userInfos = userInfo;
     }
 
     public Role getRole() {
@@ -69,7 +72,7 @@ public class UserRole implements Serializable {
     public String toString() {
         return "UserRole{" +
                 "id='" + id + '\'' +
-                ", userInfo=" + userInfo +
+                ", userInfo=" + userInfos +
                 ", role=" + role +
                 '}';
     }

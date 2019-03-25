@@ -4,13 +4,10 @@
 package com.blog.yongyu.demo.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "userInfo", schema = "dbo", catalog = "et")
@@ -35,21 +32,21 @@ public class UserInfo implements Serializable {
     @Column()
     private String sex;
 
-    @OneToMany(mappedBy = "userInfo",cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    @JsonIgnore//不进行序列化
-    private List<UserRole> userRoles;
+    @ManyToOne()
+    @JoinColumn(name = "userRoleId")
+    private UserRole userRole;
 
     public UserInfo() {
-        userRoles = new ArrayList<>();
+
     }
 
-    public UserInfo(Date createTime, String account, String pwd, String userName, String sex, List<UserRole> userRoles) {
+    public UserInfo(Date createTime, String account, String pwd, String userName, String sex, UserRole userRoles) {
         this.createTime = createTime;
         this.account = account;
         this.pwd = pwd;
         this.userName = userName;
         this.sex = sex;
-        this.userRoles = userRoles;
+        this.userRole = userRoles;
     }
 
     public String getId() {
@@ -100,12 +97,12 @@ public class UserInfo implements Serializable {
         this.sex = sex;
     }
 
-    public List<UserRole> getUserRoles() {
-        return userRoles;
+    public UserRole getUserRole() {
+        return userRole;
     }
 
-    public void setUserRoles(List<UserRole> userRoles) {
-        this.userRoles = userRoles;
+    public void setUserRole(UserRole userRoles) {
+        this.userRole = userRoles;
     }
 
     @Override
@@ -117,7 +114,7 @@ public class UserInfo implements Serializable {
                 ", pwd='" + pwd + '\'' +
                 ", userName='" + userName + '\'' +
                 ", sex='" + sex + '\'' +
-                ", userRoles=" + userRoles +
+                ", userRoles=" + userRole +
                 '}';
     }
 }

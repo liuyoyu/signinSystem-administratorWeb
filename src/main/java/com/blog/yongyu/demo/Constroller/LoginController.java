@@ -6,6 +6,7 @@ import com.blog.yongyu.demo.Entity.UserInfo;
 import com.blog.yongyu.demo.Service.LoginService;
 import com.blog.yongyu.demo.Service.UserInfoService;
 import com.blog.yongyu.demo.Utils.EmailUtils;
+import com.blog.yongyu.demo.Utils.JWTUtils;
 import com.blog.yongyu.demo.Utils.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,17 +28,11 @@ public class LoginController{
     private static String[] message = {"SUCCESS", "账户不存在 | 密码错误"};
     @RequestMapping(method = RequestMethod.POST, value = "/loginCheck")
     public DataResult loginCheck(@RequestParam("account") String uname,
-                                 @RequestParam("password") String password,
-                                 HttpServletRequest request,
-                                 HttpServletResponse response){
-        Cookie cookie = new Cookie("account", uname);
-        cookie.setPath("/");
-        cookie.setMaxAge(60*60*24*7);
-        response.addCookie(cookie);
+                                 @RequestParam("password") String password){
         UserInfo res = loginService.checkLogin(uname, password);
         if (res != null) {
-            request.getSession().setAttribute(HttpContent.userId, res.getId());
-            return ResultUtils.success();
+            String token = JWTUtils.generateToken(res.getId(), res.getUserRole().getId());
+            return ResultUtils.success(token);
         }
 
         return ResultUtils.error(1,message[1]);
