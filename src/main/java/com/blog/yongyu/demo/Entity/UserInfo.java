@@ -7,21 +7,28 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 
 @Entity
 @Table(name = "userInfo", schema = "dbo", catalog = "et")
 public class UserInfo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
+    private Long id;
+    /**
+     * 学号或教职工号
+     * 通过角色和账号，可以唯一确定一个学生或教师
+     */
+    @Column(nullable = false)
+    private String account;
 
     @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     @Column(nullable = false)
-    private String account;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date modifyTime;
 
     @Column(nullable = false)
     private String pwd;//MD5加密
@@ -34,26 +41,17 @@ public class UserInfo implements Serializable {
 
     @ManyToOne()
     @JoinColumn(name = "userRoleId")
-    private UserRole userRole;
+    private Role role;
 
     public UserInfo() {
 
     }
 
-    public UserInfo(Date createTime, String account, String pwd, String userName, String sex, UserRole userRoles) {
-        this.createTime = createTime;
-        this.account = account;
-        this.pwd = pwd;
-        this.userName = userName;
-        this.sex = sex;
-        this.userRole = userRoles;
-    }
-
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -63,6 +61,14 @@ public class UserInfo implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
     }
 
     public String getAccount() {
@@ -97,24 +103,11 @@ public class UserInfo implements Serializable {
         this.sex = sex;
     }
 
-    public UserRole getUserRole() {
-        return userRole;
+    public Role getRole() {
+        return role;
     }
 
-    public void setUserRole(UserRole userRoles) {
-        this.userRole = userRoles;
-    }
-
-    @Override
-    public String toString() {
-        return "UserInfo{" +
-                "id='" + id + '\'' +
-                ", createTime=" + createTime +
-                ", account='" + account + '\'' +
-                ", pwd='" + pwd + '\'' +
-                ", userName='" + userName + '\'' +
-                ", sex='" + sex + '\'' +
-                ", userRoles=" + userRole +
-                '}';
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

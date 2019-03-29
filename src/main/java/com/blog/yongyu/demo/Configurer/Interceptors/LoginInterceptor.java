@@ -19,6 +19,8 @@ import java.util.Map;
 public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String path = request.getContextPath();
+        String basePath = request.getScheme() + "://"+ request.getServerName() + ":" + request.getServerPort()+ path + "/";
 
         //不是映射到方法上，直接通过
         if (!(handler instanceof HandlerMethod)) {
@@ -27,11 +29,17 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         //token验证
         String token = request.getHeader(HttpContent.header_AUTHORIZATION);
+        if ("".equals(token) || token == null) {
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json; charaset=utf-8");
+            response.sendRedirect(basePath+"/login.html");
+            return false;
+        }
         Map<String, Object> dataMap = JWTUtils.validToken(token);
         if (!dataMap.get(JWTUtils.params.STATUS.toString()).equals(JWTUtils.TokenStatus.Valid)) {  //token验证失败
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json; charaset=utf-8");
-            response.sendRedirect("/login.html");
+            response.sendRedirect(basePath+"/login.html");
             return false;
         }
         HttpSession session = request.getSession();

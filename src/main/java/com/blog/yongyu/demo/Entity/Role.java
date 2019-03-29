@@ -1,10 +1,12 @@
 package com.blog.yongyu.demo.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,11 +14,25 @@ import java.util.List;
 @Table(name = "role", schema="dbo", catalog = "et")
 public class Role implements Serializable {
     @Id
-    @Column(nullable = false)
+    @Column(nullable = false, length = 3)
     private String roleId;
 
     @Column(nullable = false)
     private String roleName;
+
+    @Column()
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+
+    @Column()
+    private String creatorName;//创建者名字
+
+    @Column()
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date modifyTime;
+
+    @Column()
+    private String menderName;//修改者名字
 
     @Column
     @Type(type = "text")
@@ -24,17 +40,10 @@ public class Role implements Serializable {
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<UserRole> userRoles;
+    private List<UserInfo> userInfos;
 
     public Role() {
-        this.userRoles = new ArrayList<>();
-    }
-
-    public Role(String roleId, String roleName, String detail, List<UserRole> userRoles) {
-        this.roleId = roleId;
-        this.roleName = roleName;
-        this.detail = detail;
-        this.userRoles = userRoles;
+        userInfos = new ArrayList<>();
     }
 
     public String getRoleId() {
@@ -53,6 +62,38 @@ public class Role implements Serializable {
         this.roleName = roleName;
     }
 
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+
+    public String getMenderName() {
+        return menderName;
+    }
+
+    public void setMenderName(String menderName) {
+        this.menderName = menderName;
+    }
+
     public String getDetail() {
         return detail;
     }
@@ -61,21 +102,11 @@ public class Role implements Serializable {
         this.detail = detail;
     }
 
-    public List<UserRole> getUserRoles() {
-        return userRoles;
+    public List<UserInfo> getUserInfos() {
+        return userInfos;
     }
 
-    public void setUserRoles(List<UserRole> userRoles) {
-        this.userRoles = userRoles;
-    }
-
-    @Override
-    public String toString() {
-        return "Role{" +
-                "roleId='" + roleId + '\'' +
-                ", roleName='" + roleName + '\'' +
-                ", detail='" + detail + '\'' +
-                ", userRoles=" + userRoles +
-                '}';
+    public void setUserInfos(List<UserInfo> userInfos) {
+        this.userInfos = userInfos;
     }
 }

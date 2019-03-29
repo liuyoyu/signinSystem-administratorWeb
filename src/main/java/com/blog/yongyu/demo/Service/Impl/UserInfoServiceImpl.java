@@ -1,19 +1,35 @@
 package com.blog.yongyu.demo.Service.Impl;
 
+import com.blog.yongyu.demo.Entity.Role;
 import com.blog.yongyu.demo.Entity.StudentInfo;
 import com.blog.yongyu.demo.Entity.TeacherInfo;
 import com.blog.yongyu.demo.Entity.UserInfo;
+import com.blog.yongyu.demo.Repository.RoleRepository;
+import com.blog.yongyu.demo.Repository.StudentInfoRepository;
+import com.blog.yongyu.demo.Repository.TeacherInfoRepository;
 import com.blog.yongyu.demo.Repository.UserInfoRepository;
 import com.blog.yongyu.demo.Service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.Optional;
 
 @Service("userInfoService")
 public class UserInfoServiceImpl implements UserInfoService {
+
     @Autowired
     UserInfoRepository userInfoRepository;
+
+    @Autowired
+    StudentInfoRepository studentInfoRepository;
+
+    @Autowired
+    TeacherInfoRepository teacherInfoRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
+
 
     @Override
     public UserInfo findUserByAccount(String account) {
@@ -21,12 +37,34 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public Optional<UserInfo> findUserById(String id) {
+    public Optional<UserInfo> findUserById(Long id) {
         return userInfoRepository.findById(id);
     }
 
     @Override
-    public UserInfo createUser(UserInfo user) {
+    public UserInfo createUser(UserInfo user,String roleId) {
+        if (user == null) {
+            return null;
+        }
+        Optional<Role> role = roleRepository.findById(roleId);
+        user.setRole(role.get());
+        if (user.getRole().getRoleId().equals("001")) {
+            StudentInfo studentInfo = new StudentInfo();
+            studentInfo.setSno(user.getAccount());
+            studentInfo.setSname(user.getUserName());
+            studentInfo.setSex(user.getSex());
+            studentInfoRepository.save(studentInfo);
+        }
+        if (user.getRole().getRoleId().equals("002")) {
+            TeacherInfo teacherInfo = new TeacherInfo();
+            teacherInfo.setId(user.getAccount());
+            teacherInfo.setTname(user.getUserName());
+            teacherInfo.setSex(user.getSex());
+            teacherInfoRepository.save(teacherInfo);
+        }
+        Long time = System.currentTimeMillis();
+        user.setCreateTime(new Date(time));
+        user.setModifyTime(new Date(time));
         UserInfo newUser = userInfoRepository.save(user);
         return newUser;
     }

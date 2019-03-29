@@ -1,7 +1,10 @@
 package com.blog.yongyu.demo.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Date;
 
 @Entity
 @Table(name = "studentInfo", schema="dbo", catalog = "et")
@@ -14,16 +17,71 @@ public class StudentInfo implements Serializable {
     private String sname;
     @Column
     private String sex;
-    @Column(nullable = false)
+    @Column
+    private String grage;//年级
+    @Column()
     private String college;
-    @Column(nullable = false)
+    @Column()
     private String major;
     @Column
     private String phone;
     @Column
     private String Email;
+    @Column
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+
+    @Column
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date modifyTime;
+
+    @Column
+    private String creatorName;
+
+    @Column
+    private String menderName;//修改者名字
 
     public StudentInfo() {
+    }
+
+    public String getGrage() {
+        return grage;
+    }
+
+    public void setGrage(String grage) {
+        this.grage = grage;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
+    }
+
+    public String getMenderName() {
+        return menderName;
+    }
+
+    public void setMenderName(String menderName) {
+        this.menderName = menderName;
     }
 
     public StudentInfo(String sname, String college, String major) {

@@ -1,9 +1,11 @@
 package com.blog.yongyu.demo.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Date;
 
 @Entity
 @Table(name = "teacherInfo", schema="dbo", catalog = "et")
@@ -18,10 +20,10 @@ public class TeacherInfo implements Serializable {
     @Column(length = 10)
     private String sex;
 
-    @Column(nullable = false)
+    @Column()
     private String college;
 
-    @Column(nullable = false)
+    @Column()
     private String academicTitle;
 
     @Column
@@ -30,17 +32,22 @@ public class TeacherInfo implements Serializable {
     @Column
     private String Email;
 
-    public TeacherInfo() {
-    }
+    @Column
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 
-    public TeacherInfo(String id, String tname, String sex, String college, String academicTitle, String phone, String email) {
-        this.id = id;
-        this.tname = tname;
-        this.sex = sex;
-        this.college = college;
-        this.academicTitle = academicTitle;
-        this.phone = phone;
-        Email = email;
+    @Column
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date modifyTime;
+
+    @Column
+    private String creatorName;
+
+    @Column
+    private String menderName;//修改者名字
+
+    public TeacherInfo() {
+
     }
 
     public String getId() {
@@ -99,16 +106,35 @@ public class TeacherInfo implements Serializable {
         this.sex = sex;
     }
 
-    @Override
-    public String toString() {
-        return "TeacherInfo{" +
-                "id='" + id + '\'' +
-                ", tname='" + tname + '\'' +
-                ", sex='" + sex + '\'' +
-                ", college='" + college + '\'' +
-                ", academicTitle='" + academicTitle + '\'' +
-                ", phone='" + phone + '\'' +
-                ", Email='" + Email + '\'' +
-                '}';
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
+    }
+
+    public String getMenderName() {
+        return menderName;
+    }
+
+    public void setMenderName(String menderName) {
+        this.menderName = menderName;
     }
 }

@@ -4,8 +4,8 @@ import com.blog.yongyu.demo.Entity.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface UserInfoRepository extends JpaRepository<UserInfo, String> {
+public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
 
-    @Query("from UserInfo where account = ?1")
+    @Query(value = "from UserInfo where account = ?1")
     UserInfo findUserInfoByAccount(String account);
 }

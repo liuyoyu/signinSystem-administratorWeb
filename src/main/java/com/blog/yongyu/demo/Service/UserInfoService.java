@@ -7,11 +7,11 @@ import com.blog.yongyu.demo.Entity.UserInfo;
 import java.util.Optional;
 
 public interface UserInfoService {
-    Optional<UserInfo> findUserById(String id);
+    Optional<UserInfo> findUserById(Long id);
 
     UserInfo findUserByAccount(String account);
 
-    UserInfo createUser(UserInfo user);
+    UserInfo createUser(UserInfo user,String roleId);
 
     Integer removeUser(UserInfo user);
 

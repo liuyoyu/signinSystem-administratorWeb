@@ -1,6 +1,5 @@
 package com.blog.yongyu.demo.Utils;
 
-import com.blog.yongyu.demo.Entity.UserRole;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -12,7 +11,6 @@ import net.minidev.json.JSONObject;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Log4j2
@@ -56,7 +54,7 @@ public class JWTUtils {
      * @param userid, role
      * @return
      */
-    public static String generateToken(String userid, String roleId) {
+    public static String generateToken(Long userid, String roleId) {
         JWTClaimsSet claim = new JWTClaimsSet.Builder()
                 .claim(params.DATA_EXT.toString(),new Date().getTime() + expirationMillis )
                 .claim(params.DATA_USERID.toString(),userid)
