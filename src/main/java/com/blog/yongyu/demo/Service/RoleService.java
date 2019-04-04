@@ -3,9 +3,11 @@ package com.blog.yongyu.demo.Service;
 import com.blog.yongyu.demo.Entity.Role;
 
 public interface RoleService {
-    Role findRoleById(String id);
+    Role findRoleById(Long id);
 
     Integer addRole(Role role);
 
-    Integer removeRole(String roleId);
+    Integer removeRole(Long roleId);
+
+    Integer modifyRole(Role role);
 }

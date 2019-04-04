@@ -4,10 +4,14 @@
 package com.blog.yongyu.demo.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.util.DigestUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "userInfo", schema = "dbo", catalog = "et")
@@ -15,20 +19,9 @@ public class UserInfo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    /**
-     * 学号或教职工号
-     * 通过角色和账号，可以唯一确定一个学生或教师
-     */
+
     @Column(nullable = false)
     private String account;
-
-    @Column(nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
-
-    @Column(nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date modifyTime;
 
     @Column(nullable = false)
     private String pwd;//MD5加密
@@ -39,16 +32,38 @@ public class UserInfo implements Serializable {
     @Column()
     private String sex;
 
-    @ManyToOne()
-    @JoinColumn(name = "userRoleId")
-    private Role role;
+    @Column()
+    private String email;
+
+    @Column()
+    private String phone;
+
+    @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+
+    @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date modifyTime;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userInfo", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<UserRole> userRoles;
 
     public UserInfo() {
-
+        userRoles = new ArrayList<>();
     }
 
     public Long getId() {
         return id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setId(Long id) {
@@ -103,11 +118,28 @@ public class UserInfo implements Serializable {
         this.sex = sex;
     }
 
-    public Role getRole() {
-        return role;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public List<UserRole> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(List<UserRole> userRoles) {
+        this.userRoles = userRoles;
+    }
+
+    /**
+     * 初始化密码
+     */
+    public void setInitPassword(){
+        if (this.pwd == null) {
+            setPwd(DigestUtils.md5DigestAsHex("8888".getBytes()));
+        }
     }
 }

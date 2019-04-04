@@ -17,24 +17,33 @@ public class EmailUtils {
     private static final String pwd = "liu111";//授权密码
     private static final String TITLE = "签到Start";
     private static final String EAMIL_HOST = "smtp.126.com";
-    private static final String EAMIL_PORT = 465+"";
+    private static final String EAMIL_PORT = 465 + "";
     private static final Integer CODE_LENGTH = 25;
 
     /**
      * 发送验证邮件
+     *
      * @param receiver
      */
-    public static String editEmail(String receiver) throws Exception {
+    public static String editEmail(String receiver){
         String code = getRandomCode();
-        String text = "感谢您使用我们的签到Start平台。<br>您本次注册验证码为: "+code+"<br>若非本人操作，请忽略本条邮件。祝，生活愉快。";
-        EmailUtils.sendEmail(receiver, text);
-        return code;
+        String text = "感谢您使用我们的签到Start平台。<br>您本次注册验证码为: " + code + "<br>若非本人操作，请忽略本条邮件。祝，生活愉快。";
+        try {
+            EmailUtils.sendEmail(receiver, text);
+        } catch (Exception e) {
+            e.printStackTrace();
+            code = "";
+        } finally {
+            return code;
+        }
     }
+
     /**
      * 生成随机字符串
+     *
      * @return
      */
-    public static String getRandomCode(){
+    public static String getRandomCode() {
         String strcode = "abcdefghijklnmopqrstuvwxykABCDEFGHIJKLNMOPQRSTUVWXYZ0123456789";
         String code = "";
         Random rand = new Random();
@@ -43,14 +52,16 @@ public class EmailUtils {
         }
         return code;
     }
+
     /**
      * 发送验证码
+     *
      * @param receiver
      * @param code
      * @return
      * @throws Exception
      */
-    public static void sendEmail(String receiver, String code) throws Exception{
+    public static void sendEmail(String receiver, String code) throws Exception {
         Properties properties = new Properties();
 
         properties.put("mail.smtp.host", EAMIL_HOST);

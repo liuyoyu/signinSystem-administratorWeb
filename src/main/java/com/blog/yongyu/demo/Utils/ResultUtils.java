@@ -1,6 +1,6 @@
 package com.blog.yongyu.demo.Utils;
 
-import com.blog.yongyu.demo.Entity.DataResult;
+import com.blog.yongyu.demo.Entity.BaseClass.DataResult;
 
 public class ResultUtils {
     public static DataResult success(Object object) {

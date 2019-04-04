@@ -54,11 +54,11 @@ public class JWTUtils {
      * @param userid, role
      * @return
      */
-    public static String generateToken(Long userid, String roleId) {
+    public static String generateToken(Long userid, Long userRoleId) {
         JWTClaimsSet claim = new JWTClaimsSet.Builder()
                 .claim(params.DATA_EXT.toString(),new Date().getTime() + expirationMillis )
                 .claim(params.DATA_USERID.toString(),userid)
-                .claim(params.DATA_USERROLEID.toString(), roleId)
+                .claim(params.DATA_USERROLEID.toString(), userRoleId)
                 .build();
         String tokenString = null;
         JWSObject jwsObject = new JWSObject(header, new Payload(claim.toJSONObject()));
@@ -89,7 +89,7 @@ public class JWTUtils {
             if (jwsObject.verify(verifier)) {
                 JSONObject jsObject = payload.toJSONObject();
                 if (jsObject.containsKey(params.DATA_EXT.toString())) {
-                    Long extTime = Long.valueOf(jsObject.get(params.STATUS.toString()).toString());
+                    Long extTime = Long.valueOf(jsObject.get(params.DATA_EXT.toString()).toString());
                     Long curTime = new Date().getTime();
                     if (curTime > extTime) {
                         resultMap.put(params.STATUS.toString(), TokenStatus.Expired.toString());

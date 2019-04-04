@@ -1,4 +1,4 @@
-package com.blog.yongyu.demo.Entity;
+package com.blog.yongyu.demo.Entity.BaseClass;
 
 public class HttpContent {
     public static final String data = "data";

@@ -14,7 +14,7 @@ public class RoleServiceImpl implements RoleService {
     RoleRepository roleRepository;
 
     @Override
-    public Role findRoleById(String id) {
+    public Role findRoleById(Long id) {
         Optional<Role> role = roleRepository.findById(id);
         if (role.isPresent()) {
             return role.get();
@@ -32,12 +32,25 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Integer removeRole(String roleId) {
+    public Integer removeRole(Long roleId) {
         Role role = findRoleById(roleId);
         if (role == null) {
             return 1;//删除对象不存在
         }
         roleRepository.delete(role);
+        return 0;
+    }
+
+    @Override
+    public Integer modifyRole(Role role) {
+        if (role == null) {
+            return 1; // 修改对象不能为空
+        }
+        Role oldRole = findRoleById(role.getRoleId());
+        if (oldRole == null) {
+            return 2; // 修改对象不存在
+        }
+        roleRepository.save(role);
         return 0;
     }
 }

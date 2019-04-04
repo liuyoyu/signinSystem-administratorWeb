@@ -1,6 +1,6 @@
 package com.blog.yongyu.demo.Configurer.Interceptors;
 
-import com.blog.yongyu.demo.Entity.HttpContent;
+import com.blog.yongyu.demo.Entity.BaseClass.HttpContent;
 import com.blog.yongyu.demo.Utils.JWTUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
@@ -11,7 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 import java.util.Map;
 
 @Controller

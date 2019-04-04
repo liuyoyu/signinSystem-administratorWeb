@@ -13,9 +13,15 @@ import java.util.List;
 @Entity
 @Table(name = "role", schema="dbo", catalog = "et")
 public class Role implements Serializable {
+    public enum ROLE{
+        NormalUser,
+        Admin
+    }
+
+
     @Id
-    @Column(nullable = false, length = 3)
-    private String roleId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long roleId;
 
     @Column(nullable = false)
     private String roleName;
@@ -25,32 +31,31 @@ public class Role implements Serializable {
     private Date createTime;
 
     @Column()
-    private String creatorName;//创建者名字
-
-    @Column()
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date modifyTime;
-
-    @Column()
-    private String menderName;//修改者名字
 
     @Column
     @Type(type = "text")
     private String detail;
 
-    @OneToMany(mappedBy = "role", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userInfo", cascade = CascadeType.REMOVE)
     @JsonIgnore
-    private List<UserInfo> userInfos;
+    private List<UserRole> userRoles;
 
     public Role() {
-        userInfos = new ArrayList<>();
+        roleName = "NormalUser";
+        Long time = System.currentTimeMillis();
+        createTime = new Date(time);
+        modifyTime = new Date(time);
+        detail = "";
+        userRoles = new ArrayList<>();
     }
 
-    public String getRoleId() {
+    public Long getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(String roleId) {
+    public void setRoleId(Long roleId) {
         this.roleId = roleId;
     }
 
@@ -70,14 +75,6 @@ public class Role implements Serializable {
         this.createTime = createTime;
     }
 
-    public String getCreatorName() {
-        return creatorName;
-    }
-
-    public void setCreatorName(String creatorName) {
-        this.creatorName = creatorName;
-    }
-
     public Date getModifyTime() {
         return modifyTime;
     }
@@ -86,27 +83,11 @@ public class Role implements Serializable {
         this.modifyTime = modifyTime;
     }
 
-    public String getMenderName() {
-        return menderName;
-    }
-
-    public void setMenderName(String menderName) {
-        this.menderName = menderName;
-    }
-
     public String getDetail() {
         return detail;
     }
 
     public void setDetail(String detail) {
         this.detail = detail;
-    }
-
-    public List<UserInfo> getUserInfos() {
-        return userInfos;
-    }
-
-    public void setUserInfos(List<UserInfo> userInfos) {
-        this.userInfos = userInfos;
     }
 }
