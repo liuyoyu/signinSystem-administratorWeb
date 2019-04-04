@@ -1,6 +1,5 @@
 package com.blog.yongyu.demo;
 
-import com.blog.yongyu.demo.Repository.StudentInfoRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,5 @@ public class DemoApplicationTests {
     @Test
     public void contextLoads() {
     }
-    @Autowired
-    StudentInfoRepository studentInfoRepository;
 
 }
