@@ -49,10 +49,10 @@ public class ShortMessageServiceImpl implements ShortMessageService {
      */
     @Override
     public Integer verifyEmailMessage(String code, String account, String email) {
-        List<ShortMessage> msgList = shortMessageRepository.findShoerMessagesByAccountEmail(account, email);
-        if (msgList.get(0).equals(code)) {
+        List<ShortMessage> msgList = shortMessageRepository.findShortMessagesByAccountEmail(account, email);
+        if (msgList.get(0).getCode().equals(code)) {
             return 0;
         }
-        return 1;
+        return 1; //验证错误
     }
 }

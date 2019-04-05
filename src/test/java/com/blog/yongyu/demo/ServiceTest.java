@@ -3,6 +3,7 @@ package com.blog.yongyu.demo;
 import com.blog.yongyu.demo.Entity.Role;
 import com.blog.yongyu.demo.Entity.UserInfo;
 import com.blog.yongyu.demo.Service.RoleService;
+import com.blog.yongyu.demo.Service.ShortMessageService;
 import com.blog.yongyu.demo.Service.UserInfoService;
 import com.blog.yongyu.demo.Service.UserRoleService;
 import org.junit.Test;
@@ -37,5 +38,14 @@ public class ServiceTest {
         }
         Integer res = userInfoService.removeUser(userById.get().getId());
         System.out.println(res);
+    }
+
+    @Autowired
+    ShortMessageService shortMessageService;
+    @Test
+    public void emailTest(){
+//        Integer integer = shortMessageService.sendEmailMessage("root", "673677179@qq.com", "找回密码");
+        Integer integer = shortMessageService.verifyEmailMessage("tbkmqJJkCo2JQhEW4EkSokqal", "root", "673677179@qq.com");
+        System.out.println(integer);
     }
 }

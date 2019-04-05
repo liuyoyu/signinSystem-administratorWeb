@@ -16,7 +16,7 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
     @Query(value = "delete from user_role where user_id = ?1", nativeQuery = true)
     Integer deleteAllByUserId(Long id);
 
-    @Query(value = "from UserRole where userInfo.id = ?1")
+    @Query(value = "select u from UserRole u where u.userInfo.id = ?1")
     List<UserRole> findAllByUserId(Long userId);
 
 }

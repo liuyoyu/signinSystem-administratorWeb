@@ -67,27 +67,6 @@ public class LoginController{
     }
 
     /**
-     * 重置密码
-     * @param account
-     * @return
-     */
-    @RequestMapping(value = "/login_forgetPwd",method = RequestMethod.GET)
-    public DataResult forgetPwd(@RequestParam("account") String account,
-                                String verifyCode,
-                                HttpServletRequest request) {
-
-        UserInfo user = userInfoService.findUserByAccount(account);
-        if (user == null) {
-            return  ResultUtils.error(1,"用户不存在");
-        }
-
-
-        Map<String, String> data = new HashMap<>();
-        data.put("pwd", user.getPwd());
-        return ResultUtils.success(data);
-    }
-
-    /**
      * 发送邮箱验证码
      * @param receiver
      * @param account
@@ -99,6 +78,14 @@ public class LoginController{
         if (account == null || "".equals(account)) {
             return ResultUtils.error(1, "账号不能为空");
         }
+        UserInfo userByAccount = userInfoService.findUserByAccount(account);
+        if (userByAccount == null) {
+            return ResultUtils.error(2, "账号不存在");
+        }
+        if (userByAccount.getEmail()==null || !userByAccount.getEmail().equals(receiver)) {
+            return ResultUtils.error(3, "该邮箱不是注册邮箱");
+        }
+
         Integer res = shortMessageService.sendEmailMessage(account, receiver, "重置密码");
         String[] msg = {"成功", "接收人不能为空", "短信功能异常"};
         if (res == 0) {
@@ -108,7 +95,7 @@ public class LoginController{
     }
 
     /**
-     * 验证邮箱，找回密码
+     * 初始化密码：8888
      * @param code
      * @param account
      * @param email
@@ -120,6 +107,9 @@ public class LoginController{
                                     @RequestParam("email")String email) {
         Integer res = shortMessageService.verifyEmailMessage(code, account, email);
         if (res == 0) {
+            UserInfo userByAccount = userInfoService.findUserByAccount(account);
+            userByAccount.setInitPassword();
+            userInfoService.modifyUserInfo(userByAccount);
             return ResultUtils.success();
         }
         return ResultUtils.error(1, "失败");
