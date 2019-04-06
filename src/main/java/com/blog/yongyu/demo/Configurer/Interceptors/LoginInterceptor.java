@@ -2,6 +2,8 @@ package com.blog.yongyu.demo.Configurer.Interceptors;
 
 import com.blog.yongyu.demo.Entity.BaseClass.HttpContent;
 import com.blog.yongyu.demo.Utils.JWTUtils;
+import com.blog.yongyu.demo.Utils.RedisUtils;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.method.HandlerMethod;
@@ -15,36 +17,26 @@ import java.util.Map;
 
 @Controller
 @Component
+@Log4j2
 public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String path = request.getContextPath();
-        String basePath = request.getScheme() + "://"+ request.getServerName() + ":" + request.getServerPort()+ path + "/";
+        String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 
         //不是映射到方法上，直接通过
         if (!(handler instanceof HandlerMethod)) {
             return true;
         }
+        String token = request.getHeader(HttpContent.HEADER_AUTHORIZATION);
+        String value = RedisUtils.get(HttpContent.HEADER_AUTHORIZATION);
 
-        //token验证
-        String token = request.getHeader(HttpContent.header_AUTHORIZATION);
-        if ("".equals(token) || token == null) {
+        if ("".equals(value) || "".equals(token) || token == null || !value.equals(token)) { //token为空或不匹配
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json; charaset=utf-8");
-            response.sendRedirect(basePath+"/login.html");
+            response.sendRedirect(basePath + "login.html");
             return false;
         }
-        Map<String, Object> dataMap = JWTUtils.validToken(token);
-        if (!dataMap.get(JWTUtils.params.STATUS.toString()).equals(JWTUtils.TokenStatus.Valid)) {  //token验证失败
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("application/json; charaset=utf-8");
-            response.sendRedirect(basePath+"/login.html");
-            return false;
-        }
-        HttpSession session = request.getSession();
-        session.setAttribute(HttpContent.userId, dataMap.get(JWTUtils.params.DATA_USERID.toString()));
-        session.setAttribute(HttpContent.userRole, dataMap.get(JWTUtils.params.DATA_USERROLEID.toString()));
-//        request.setAttribute(HttpContent.header_AUTHORIZATION, );
         return true;
     }
 

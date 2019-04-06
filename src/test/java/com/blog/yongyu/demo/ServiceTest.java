@@ -1,18 +1,20 @@
 package com.blog.yongyu.demo;
 
-import com.blog.yongyu.demo.Entity.Role;
 import com.blog.yongyu.demo.Entity.UserInfo;
 import com.blog.yongyu.demo.Service.RoleService;
 import com.blog.yongyu.demo.Service.ShortMessageService;
 import com.blog.yongyu.demo.Service.UserInfoService;
 import com.blog.yongyu.demo.Service.UserRoleService;
+import com.blog.yongyu.demo.Utils.RedisUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.sql.Date;
 import java.util.Optional;
 
 @RunWith(SpringRunner.class)
@@ -48,4 +50,19 @@ public class ServiceTest {
         Integer integer = shortMessageService.verifyEmailMessage("tbkmqJJkCo2JQhEW4EkSokqal", "root", "673677179@qq.com");
         System.out.println(integer);
     }
+
+    @Autowired
+    RedisTemplate<String,Object> template;
+    @Test
+    public void testRedis(){
+//       template.opsForValue().set("key1","value1");
+//        System.out.println(template.opsForValue().get("key1"));
+//        String res = RedisUtils.set("key1", "hello");
+//        System.out.println(res);
+        String key1 = RedisUtils.get("key1");
+        System.out.println(key1);
+        Long key11 = RedisUtils.del("key1");
+        System.out.println(key11);
+    }
+
 }
