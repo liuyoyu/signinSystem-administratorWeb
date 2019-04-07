@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 public class LoginController{
@@ -113,6 +114,19 @@ public class LoginController{
             return ResultUtils.success();
         }
         return ResultUtils.error(1, "失败");
+    }
+
+    @RequestMapping(value = "login_remove",method = RequestMethod.POST)
+    public DataResult removeUser(@RequestParam("id") Long id) {
+        Optional<UserInfo> userById = userInfoService.findUserById(id);
+        if (!userById.isPresent()) {
+            ResultUtils.error(1, "用户不能存在");
+        }
+        Integer res = userInfoService.removeUser(userById.get().getId());
+        if (res == 0) {
+            return ResultUtils.success();
+        }
+        return ResultUtils.error(2, "删除失败");
     }
 
     /**

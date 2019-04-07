@@ -9,6 +9,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 解决跨域问题
+ */
 @Controller
 @Component
 public class AccessInterceptor implements HandlerInterceptor {

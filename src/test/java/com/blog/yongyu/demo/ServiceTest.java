@@ -65,4 +65,12 @@ public class ServiceTest {
         System.out.println(key11);
     }
 
+    @Test
+    public void userInfoTest(){
+        Optional<UserInfo> userById = userInfoService.findUserById(Long.parseLong("7"));
+        userById.get().setEmail("l673677179@163.com");
+        Integer res = userInfoService.modifyUserInfo(userById.get());
+        System.out.println(res);
+    }
+
 }
