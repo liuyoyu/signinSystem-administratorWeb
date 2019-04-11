@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "userRole", schema = "dbo", catalog = "et")
@@ -31,7 +31,17 @@ public class UserRole implements Serializable {
 
     @Column()
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date creatTime;
+    private java.util.Date createDate;
+
+    @Column()
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private java.util.Date modifyDate;
+
+    @Column()
+    private String createBy;
+
+    @Column()
+    private String modifyBy;
 
     public UserRole() {
     }
@@ -42,6 +52,8 @@ public class UserRole implements Serializable {
     public UserRole(UserInfo userInfo, Role role) {
         this.userInfo = userInfo;
         this.role = role;
+        this.createDate = new Date();
+        this.modifyDate = new Date();
     }
 
     public Long getId() {
@@ -68,12 +80,36 @@ public class UserRole implements Serializable {
         this.role = role;
     }
 
-    public Date getCreatTime() {
-        return creatTime;
+    public java.util.Date getCreateDate() {
+        return createDate;
     }
 
-    public void setCreatTime(Date creatTime) {
-        this.creatTime = creatTime;
+    public void setCreateDate(java.util.Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public java.util.Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(java.util.Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public String getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(String modifyBy) {
+        this.modifyBy = modifyBy;
     }
 
     public String getIsDefault() {

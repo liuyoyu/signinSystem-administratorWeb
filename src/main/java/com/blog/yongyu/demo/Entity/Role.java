@@ -6,7 +6,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +14,10 @@ import java.util.List;
 @Table(name = "role", schema="dbo", catalog = "et")
 public class Role implements Serializable {
     public enum ROLE{
-        NormalUser,
-        Admin
+        User,
+        Admin,
+        Student,
+        Teacher
     }
 
 
@@ -27,14 +29,23 @@ public class Role implements Serializable {
     private String roleName;
 
     @Column()
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
+    private Long parentRole = 0L;//0表示无父角色
 
     @Column()
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date modifyTime;
+    private java.util.Date createDate;
 
-    @Column
+    @Column()
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private java.util.Date modifyDate;
+
+    @Column()
+    private String createBy;
+
+    @Column()
+    private String modifyBy;
+
+    @Column()
     @Type(type = "text")
     private String detail;
 
@@ -43,10 +54,9 @@ public class Role implements Serializable {
     private List<UserRole> userRoles;
 
     public Role() {
-        roleName = "NormalUser";
-        Long time = System.currentTimeMillis();
-        createTime = new Date(time);
-        modifyTime = new Date(time);
+        roleName = "User";
+        createDate = new Date();
+        modifyDate = new Date();
         detail = "";
         userRoles = new ArrayList<>();
     }
@@ -67,20 +77,44 @@ public class Role implements Serializable {
         this.roleName = roleName;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
-    public Date getModifyTime() {
-        return modifyTime;
+    public Date getModifyDate() {
+        return modifyDate;
     }
 
-    public void setModifyTime(Date modifyTime) {
-        this.modifyTime = modifyTime;
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public String getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(String modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
+    public List<UserRole> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(List<UserRole> userRoles) {
+        this.userRoles = userRoles;
     }
 
     public String getDetail() {
@@ -89,5 +123,13 @@ public class Role implements Serializable {
 
     public void setDetail(String detail) {
         this.detail = detail;
+    }
+
+    public Long getParentRole() {
+        return parentRole;
+    }
+
+    public void setParentRole(Long parentRole) {
+        this.parentRole = parentRole;
     }
 }

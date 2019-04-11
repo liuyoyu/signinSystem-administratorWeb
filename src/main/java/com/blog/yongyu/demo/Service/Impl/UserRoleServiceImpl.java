@@ -44,7 +44,7 @@ public class UserRoleServiceImpl implements UserRoleService {
             return 2; //对象已存在
         }
         long time = System.currentTimeMillis();
-        userRole.setCreatTime(new Date(time));
+        userRole.setCreateDate(new Date(time));
         userRoleRepository.save(userRole);
         return 0;
     }

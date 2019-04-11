@@ -1,8 +1,10 @@
 package com.blog.yongyu.demo.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "course", schema = "dbo", catalog = "et")
@@ -11,35 +13,40 @@ public class Course implements Serializable {
     @Column(nullable = false)
     private Long id;
 
-    @Column
+    @Column()
     private String name; //课程名称
 
     @Column()
     private String location; //上课地点
 
-    @Column
+    @Column()
     private String startWeek; //起始周
 
-    @Column
+    @Column()
     private String endWeek; //终止周
 
-    @Column
+    @Column()
     private String startSection; //起始节
 
-    @Column
+    @Column()
     private String endSection; //终止节
 
-    @Column
+    @Column()
     private String semester; //学期
 
-    @Column
-    private Date createDate; //创建日期
+    @Column()
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private java.util.Date createDate;
 
-    @Column
-    private Date modifyDate; //修改时间
+    @Column()
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private java.util.Date modifyDate;
 
-    @Column
-    private String Creator; //创建者
+    @Column()
+    private String createBy;
+
+    @Column()
+    private String modifyBy;
 
     public Long getId() {
         return id;
@@ -121,11 +128,19 @@ public class Course implements Serializable {
         this.modifyDate = modifyDate;
     }
 
-    public String getCreator() {
-        return Creator;
+    public String getCreateBy() {
+        return createBy;
     }
 
-    public void setCreator(String creator) {
-        Creator = creator;
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public String getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(String modifyBy) {
+        this.modifyBy = modifyBy;
     }
 }

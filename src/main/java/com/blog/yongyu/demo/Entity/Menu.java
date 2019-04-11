@@ -29,13 +29,24 @@ public class Menu implements Serializable {
     @Column(length = 16)
     private String menuStatus;
 
-    @Column()
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "master")
     private Role role;
+
+    @Column()
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createDate;
+
+    @Column()
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date modifyDate;
+
+    @Column()
+    private String createBy;
+
+    @Column()
+    private String modifyBy;
 
     public Menu() {
         parentMenuId = Long.parseLong("0");
@@ -81,12 +92,36 @@ public class Menu implements Serializable {
         this.menuStatus = menuStatus;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public String getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(String modifyBy) {
+        this.modifyBy = modifyBy;
     }
 
     public Role getRole() {

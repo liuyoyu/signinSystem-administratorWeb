@@ -12,6 +12,8 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
 import java.util.List;
 
 public class RedisUtils{
+    public static int ValidTime = 3600*24*7; //记录有效时间
+
     private static String addr = "59.77.134.183";
     private static int PORT = 6379;
     private static String auth = "123";

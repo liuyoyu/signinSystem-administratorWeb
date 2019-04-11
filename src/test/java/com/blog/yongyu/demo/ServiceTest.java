@@ -1,10 +1,9 @@
 package com.blog.yongyu.demo;
 
+import com.blog.yongyu.demo.Entity.Dictionary;
 import com.blog.yongyu.demo.Entity.UserInfo;
-import com.blog.yongyu.demo.Service.RoleService;
-import com.blog.yongyu.demo.Service.ShortMessageService;
-import com.blog.yongyu.demo.Service.UserInfoService;
-import com.blog.yongyu.demo.Service.UserRoleService;
+import com.blog.yongyu.demo.Repository.UserInfoRepository;
+import com.blog.yongyu.demo.Service.*;
 import com.blog.yongyu.demo.Utils.RedisUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +13,9 @@ import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.DigestUtils;
 
+import java.util.Date;
 import java.util.Optional;
 
 @RunWith(SpringRunner.class)
@@ -38,7 +39,7 @@ public class ServiceTest {
         if (userById.isPresent()) {
             System.out.println("1");
         }
-        Integer res = userInfoService.removeUser(userById.get().getId());
+        Integer res = userInfoService.Delete(userById.get().getId());
         System.out.println(res);
     }
 
@@ -67,10 +68,40 @@ public class ServiceTest {
 
     @Test
     public void userInfoTest(){
-        Optional<UserInfo> userById = userInfoService.findUserById(Long.parseLong("7"));
-        userById.get().setEmail("l673677179@163.com");
-        Integer res = userInfoService.modifyUserInfo(userById.get());
-        System.out.println(res);
+//        Optional<UserInfo> userById = userInfoService.findUserById(Long.parseLong("7"));
+//        userById.get().setEmail("l673677179@163.com");
+//        Integer res = userInfoService.modifyUserInfo(userById.get());
+//        System.out.println(res);
+        UserInfo userInfo = new UserInfo();
+        userInfo.setEmail("673677179@qq.com");
+        userInfo.setAccount("root");
+        userInfo.setInitPassword();
+        userInfo.setUserName("管理员");
+
+        Integer user = userInfoService.Insert(userInfo);
+        System.out.println(user);
+    }
+    @Autowired
+    DictionaryService dictionaryService;
+    @Test
+    public void dictionaryTest(){
+        Dictionary dc = new Dictionary();
+        dc.setDataName("lyy");
+        dictionaryService.insert(dc);
+    }
+
+    @Autowired
+    UserInfoRepository userInfoRepository;
+    @Test
+    public void loginTest(){
+        UserInfo userByAccountOrEmail = userInfoRepository.findUserByAccountOrEmail("root");
+        System.out.println(userByAccountOrEmail.getId());
+    }
+
+    @Test
+    public void resetPwd() {
+        userInfoService.allResetPwd(new Long[]{11L,18L});
+
     }
 
 }

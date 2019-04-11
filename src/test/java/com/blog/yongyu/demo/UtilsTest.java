@@ -14,9 +14,9 @@ import java.util.Map;
 public class UtilsTest {
     @Test
     public void JwtTest(){
-//        String token = JWTUtils.generateToken("123");
+//        String token = JWTUtils.generateToken(123L, 122L);
 //        System.out.println(token);
-        Map<String, Object> map = JWTUtils.validToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJEQVRBX0VYVCI6MTU1NDM0MzMwNTQ3MiwiREFUQV9VU0VSUk9MRUlEIjozLCJEQVRBX1VTRVJJRCI6N30.y_G1lQ3VkEutQ3c2mjKCVYMBcn4fkGRAwZhXlbBriCI");
+        Map<String, Object> map = JWTUtils.validToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJEQVRBX0VYVCI6MTU1NDk0NTE5NTY1NywiREFUQV9VU0VSUk9MRUlEIjoxMjIsIkRBVEFfVVNFUklEIjoxMjN9.PsAET40clqimkRUpyWQ3g-Zgsz618g0u7jTzCH0P6h0");
         for (String key : map.keySet()) {
             System.out.println(key + ":"+ map.get(key));
         }

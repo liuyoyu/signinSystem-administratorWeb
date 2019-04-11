@@ -76,7 +76,7 @@ public class JWTUtils {
     }
 
     /**
-     * 校验Token
+     * 校验Token，格式：{STATUS:Valid, DATA:{"DATA_EXT":1554945195657,"DATA_USERROLEID":122,"DATA_USERID":123}}
      * @param token
      * @return
      */

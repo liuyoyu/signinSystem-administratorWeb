@@ -11,12 +11,15 @@ import com.blog.yongyu.demo.Service.UserInfoService;
 import com.blog.yongyu.demo.Service.UserRoleService;
 import com.blog.yongyu.demo.Utils.EmailUtils;
 import com.blog.yongyu.demo.Utils.JWTUtils;
+import com.blog.yongyu.demo.Utils.RedisUtils;
 import com.blog.yongyu.demo.Utils.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -34,19 +37,18 @@ public class LoginController{
     /**
      * 用户登陆
      */
-    private static String[] message = {"SUCCESS", "账户不存在 | 密码错误"};
     @RequestMapping(method = RequestMethod.POST, value = "/loginCheck")
     public DataResult loginCheck(@RequestParam("account") String uname,
                                  @RequestParam("password") String password){
-        Integer res = loginService.checkLogin(uname, password);
-        if (res ==0) {
-            UserInfo userByAccount = userInfoService.findUserByAccount(uname);
-            UserRole defaultRoleByUserId = userRoleService.findDefaultRoleByUserId(userByAccount.getId());
-            String token = JWTUtils.generateToken(userByAccount.getId(), defaultRoleByUserId.getId());
+        UserInfo userInfo = loginService.checkLogin(uname, password);
+        if (userInfo != null) {
+            UserRole defaultRoleByUserId = userRoleService.findDefaultRoleByUserId(userInfo.getId());
+            String token = JWTUtils.generateToken(defaultRoleByUserId.getId(),userInfo.getId());//token携带用户id和用户角色id
+            RedisUtils.setex("token",token,RedisUtils.ValidTime);//缓存中加入token，有效时长为7天
             return ResultUtils.success(token);//返回token
         }
 
-        return ResultUtils.error(1,message[1]);
+        return ResultUtils.error(1,"用户不存在或密码错误");
     }
 
     /**
@@ -56,11 +58,8 @@ public class LoginController{
      */
     @RequestMapping(value = "/login_signup",method = RequestMethod.POST)
     public DataResult create(UserInfo user){
-        String[] createMsg = {"创建成功", "用户已存在", "不能为空"};
-        if (user == null) {
-            return ResultUtils.error(2,createMsg[2]);
-        }
-        Integer res = userInfoService.createUser(user);
+        String[] createMsg = {"创建成功", "添加账户不能为空", "账户不能为空","该账户已被注册","该邮箱已被注册"};
+        Integer res = userInfoService.Insert(user);
         if (res != 0) {
             return ResultUtils.error(res,createMsg[res]);
         }
@@ -110,11 +109,12 @@ public class LoginController{
         if (res == 0) {
             UserInfo userByAccount = userInfoService.findUserByAccount(account);
             userByAccount.setInitPassword();
-            userInfoService.modifyUserInfo(userByAccount);
+            userInfoService.modify(userByAccount);
             return ResultUtils.success();
         }
-        return ResultUtils.error(1, "失败");
+        return ResultUtils.error(1, "验证码错误");
     }
+
 
     @RequestMapping(value = "login_remove",method = RequestMethod.POST)
     public DataResult removeUser(@RequestParam("id") Long id) {
@@ -122,7 +122,7 @@ public class LoginController{
         if (!userById.isPresent()) {
             ResultUtils.error(1, "用户不能存在");
         }
-        Integer res = userInfoService.removeUser(userById.get().getId());
+        Integer res = userInfoService.Delete(userById.get().getId());
         if (res == 0) {
             return ResultUtils.success();
         }
@@ -134,8 +134,25 @@ public class LoginController{
      * @return
      */
     @RequestMapping("/logOut")
-    public DataResult loginOut(HttpServletRequest request){
-        request.getSession().invalidate();
+    public DataResult loginOut(HttpServletRequest request, HttpServletResponse response) {
+        RedisUtils.del("token");
+        String path = request.getContextPath();
+        String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
+        try {
+            response.sendRedirect(basePath + "#/login");
+        } catch (IOException e) {
+            return ResultUtils.error(1, "注销失败");
+        }
         return ResultUtils.success();//return "/login.html";
+    }
+
+    @RequestMapping("/getLoginRole")
+    public DataResult getLoginRole(HttpServletRequest request){
+        String token = request.getHeader(HttpContent.Token);
+        Map<String, Object> tokenMsg = JWTUtils.validToken(token);
+        if (tokenMsg.get(JWTUtils.params.STATUS.toString()).equals(JWTUtils.TokenStatus.Valid.toString())) {
+            return ResultUtils.success(tokenMsg.get(JWTUtils.params.DATA_USERROLEID));
+        }
+        return ResultUtils.success(null);
     }
 }

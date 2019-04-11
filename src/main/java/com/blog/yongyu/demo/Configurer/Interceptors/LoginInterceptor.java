@@ -28,13 +28,11 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (!(handler instanceof HandlerMethod)) {
             return true;
         }
-        String token = request.getHeader(HttpContent.HEADER_AUTHORIZATION);
-        String value = RedisUtils.get(HttpContent.HEADER_AUTHORIZATION);
+        String token = request.getHeader(HttpContent.Token);
+        String value = RedisUtils.get("token");//获取redis中的token
 
         if ("".equals(value) || "".equals(token) || token == null || !value.equals(token)) { //token为空或不匹配
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("application/json; charaset=utf-8");
-            response.sendRedirect(basePath + "login.html");
+            response.sendRedirect(basePath + "#/login");
             return false;
         }
         return true;

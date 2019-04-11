@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface MenuRepository extends JpaRepository<Menu,Long>{
-    @Query(value = "select m from Menu m order by m.createTime desc ")
+    @Query(value = "select m from Menu m order by m.createDate desc ")
     List<Menu> findAll();
 }

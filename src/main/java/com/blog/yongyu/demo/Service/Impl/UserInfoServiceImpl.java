@@ -8,11 +8,15 @@ import com.blog.yongyu.demo.Repository.UserInfoRepository;
 import com.blog.yongyu.demo.Service.RoleService;
 import com.blog.yongyu.demo.Service.UserInfoService;
 import com.blog.yongyu.demo.Service.UserRoleService;
+import com.blog.yongyu.demo.Utils.ResultUtils;
+import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
-import java.sql.Date;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service("userInfoService")
@@ -42,22 +46,35 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public Integer createUser(UserInfo user) {
+    public List<UserInfo> findUserByEmail(String email) {
+        List<UserInfo>user =  userInfoRepository.findUserByEmail(email);
+        if (user.size() < 1 || user == null) {
+            return null;
+        }
+        return user;
+    }
+
+    @Override
+    public Integer Insert(UserInfo user) {
         if (user == null) {
             return 1; //不能为空
         }
-        Optional<UserInfo> userById = findUserById(user.getId());
-        if (!userById.isPresent()) {
-            return 1;//用户存在
+        if (user.getAccount() == null) {
+            return 2; //账户不能为空
         }
-        Long time = System.currentTimeMillis();
-        user.setCreateTime(new Date(time));
-        user.setModifyTime(new Date(time));
+        if (findUserByAccount(user.getAccount())!=null) {
+            return 3; //该账户已被注册
+        }
+        if (findUserByEmail(user.getEmail()) != null) {
+            return 4;//该邮箱已被注册
+        }
+        user.setCreateDate(new Date());
+        user.setModifyDate(new Date());
         user.setPwd(DigestUtils.md5DigestAsHex(user.getPwd().getBytes()));
-        Role byRoleName = roleRepository.findByRoleName(Role.ROLE.NormalUser.toString());
-        if (byRoleName == null) {
+        Role byRoleName = roleRepository.findByRoleName(Role.ROLE.User.toString());//角色中的正常用户
+        if (byRoleName == null) {//不存在则创建
             byRoleName = new Role();
-            roleService.addRole(byRoleName);
+            roleService.Insert(byRoleName);
         }
         userInfoRepository.save(user);
         UserRole userRole = new UserRole(user, byRoleName);
@@ -67,7 +84,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public Integer removeUser(Long userId) {
+    public Integer Delete(Long userId) {
         if (userId == null) {
             return 1;//删除对象不存在
         }
@@ -81,26 +98,33 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public Integer modifyUserInfo(UserInfo userInfo) {
-        UserInfo save = userInfoRepository.save(userInfo);
-        if (save == null) {
+    public Integer modify(UserInfo userInfo) {
+        if (null == findUserById(userInfo.getId())) {
             return 1;//修改对象不存在
         }
+        if ("".equals(userInfo.getEmail()) || userInfo.getEmail() == null) {
+            return 2; //邮箱不能为空
+        }
+        if ("".equals(userInfo.getPwd()) || userInfo.getPwd() == null) {
+            return 3;//密码不能为空
+        }
+        if ("".equals(userInfo.getUserName()) || userInfo.getUserName() == null) {
+            return 4;//昵称不能为空
+        }
+        userInfo.setModifyDate(new Date());
+        UserInfo save = userInfoRepository.save(userInfo);
         return 0;//修改成功
     }
 
-    /**
-     * 修改教师信息
-     *
-     * @param user
-     * @return
-     */
     @Override
-    public Integer modifyUser(UserInfo user) {
-        if (user == null) {
-            return 1; //修改对象不存在
-        }
-        UserInfo userNew = userInfoRepository.save(user);
-        return 0;
+    public List<UserInfo> findAll() {
+        List<UserInfo> all = userInfoRepository.findAll();
+        return all;
+    }
+
+    @Override
+    @Transactional
+    public void allResetPwd(Long[] list) {
+        userInfoRepository.allResetPwd(DigestUtils.md5DigestAsHex("8888".getBytes()), new Date(),list);
     }
 }

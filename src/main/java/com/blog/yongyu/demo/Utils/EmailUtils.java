@@ -48,11 +48,6 @@ public class EmailUtils {
         }
     }
 
-    /**
-     * 生成随机字符串
-     *
-     * @return
-     */
     public static String getRandomCode() {
         String strcode = "abcdefghijklnmopqrstuvwxykABCDEFGHIJKLNMOPQRSTUVWXYZ0123456789";
         String code = "";
@@ -64,11 +59,9 @@ public class EmailUtils {
     }
 
     /**
-     * 发送验证码
-     *
+     * 发送邮件
      * @param receiver
      * @param code
-     * @return
      * @throws Exception
      */
     public static void sendEmail(String receiver, String code) throws Exception {

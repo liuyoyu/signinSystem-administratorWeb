@@ -24,15 +24,15 @@ public class LoginServiceImpl implements LoginService {
      * @return
      */
     @Override
-    public Integer checkLogin(String uname, String pwd) {
-        UserInfo user = userInfoRepository.findUserInfoByAccount(uname);
+    public UserInfo checkLogin(String uname, String pwd) {
+        UserInfo user = userInfoRepository.findUserByAccountOrEmail(uname);
         if (user == null) {
-            return 1;//账户不存在
+            return null;//用户不存在
         }
         if (DigestUtils.md5DigestAsHex(pwd.getBytes()).equals(user.getPwd())) {
-            return 0;//账户密码正确
+            return user;//账户密码正确
         }
-        return 1;//密码错误
+        return null;//密码错误
     }
 
     /**
@@ -55,7 +55,7 @@ public class LoginServiceImpl implements LoginService {
 //
 //        UserInfo newUser = userInfoRepository.save(user);
 //        return newUser;//增加成功
-        Integer res = userInfoService.createUser(user);
+        Integer res = userInfoService.Insert(user);
         return res;
     }
 }

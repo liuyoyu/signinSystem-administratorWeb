@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface ShortMessageRepository extends JpaRepository<ShortMessage, Long> {
     @Query("select s from ShortMessage s where s.account = ?1 and s.email = ?2 order by s.sendTime desc")
-    List<ShortMessage> findShortMessagesByAccountEmail(String account, String email);
+    ShortMessage findShortMessagesByAccountEmail(String account, String email);
 }

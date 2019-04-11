@@ -6,6 +6,8 @@ import com.blog.yongyu.demo.Service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service("roleService")
@@ -23,16 +25,18 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Integer addRole(Role role) {
+    public Integer Insert(Role role) {
         if (role == null) {
             return 1;//角色不能为空
         }
+        role.setCreateDate(new Date());
+        role.setModifyDate(new Date());
         roleRepository.save(role);
         return 0;
     }
 
     @Override
-    public Integer removeRole(Long roleId) {
+    public Integer Delete(Long roleId) {
         Role role = findRoleById(roleId);
         if (role == null) {
             return 1;//删除对象不存在
@@ -42,7 +46,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Integer modifyRole(Role role) {
+    public Integer modify(Role role) {
         if (role == null) {
             return 1; // 修改对象不能为空
         }
@@ -52,5 +56,10 @@ public class RoleServiceImpl implements RoleService {
         }
         roleRepository.save(role);
         return 0;
+    }
+
+    @Override
+    public List<Role> findAll() {
+        return roleRepository.findAll();
     }
 }

@@ -38,13 +38,19 @@ public class UserInfo implements Serializable {
     @Column()
     private String phone;
 
-    @Column(nullable = false)
+    @Column()
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
+    private java.util.Date createDate;
 
-    @Column(nullable = false)
+    @Column()
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date modifyTime;
+    private java.util.Date modifyDate;
+
+    @Column()
+    private String createBy;
+
+    @Column()
+    private String modifyBy;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "userInfo", cascade = CascadeType.REMOVE)
     @JsonIgnore
@@ -70,20 +76,36 @@ public class UserInfo implements Serializable {
         this.id = id;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public java.util.Date getCreateDate() {
+        return createDate;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreateDate(java.util.Date createDate) {
+        this.createDate = createDate;
     }
 
-    public Date getModifyTime() {
-        return modifyTime;
+    public java.util.Date getModifyDate() {
+        return modifyDate;
     }
 
-    public void setModifyTime(Date modifyTime) {
-        this.modifyTime = modifyTime;
+    public void setModifyDate(java.util.Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public String getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(String modifyBy) {
+        this.modifyBy = modifyBy;
     }
 
     public String getAccount() {
@@ -141,5 +163,16 @@ public class UserInfo implements Serializable {
         if (this.pwd == null) {
             setPwd(DigestUtils.md5DigestAsHex("8888".getBytes()));
         }
+    }
+
+    /**
+     * 设置新密码
+     * @param newPwd
+     */
+    public void setNewPassword(String newPwd){
+        if ("".equals(newPwd)) {
+            setInitPassword();
+        }
+        setPwd(DigestUtils.md5DigestAsHex(newPwd.getBytes()));
     }
 }

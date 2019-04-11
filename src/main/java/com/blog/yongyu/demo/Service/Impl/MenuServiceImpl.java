@@ -10,6 +10,7 @@ import com.blog.yongyu.demo.Service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,6 +61,7 @@ public class MenuServiceImpl implements MenuService {
         if (menu == null) {
             return 1;//不能修改空对象
         }
+        menu.setModifyDate(new Date());
         menuRepository.save(menu);
         return 0;
     }
