@@ -62,8 +62,8 @@ public class ServiceTest {
 //        System.out.println(res);
         String key1 = RedisUtils.get("key1");
         System.out.println(key1);
-        Long key11 = RedisUtils.del("key1");
-        System.out.println(key11);
+//        Long key11 = RedisUtils.del("key1");
+//        System.out.println(key11);
     }
 
     @Test

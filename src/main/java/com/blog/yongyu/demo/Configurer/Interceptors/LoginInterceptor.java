@@ -29,9 +29,9 @@ public class LoginInterceptor implements HandlerInterceptor {
             return true;
         }
         String token = request.getHeader(HttpContent.Token);
-        String value = RedisUtils.get("token");//获取redis中的token
+        String value = RedisUtils.get(token);//获取redis中的token
 
-        if ("".equals(value) || "".equals(token) || token == null || !value.equals(token)) { //token为空或不匹配
+        if (value == null || "".equals(value)) { //token为空或不匹配
             response.sendRedirect(basePath + "#/login");
             return false;
         }

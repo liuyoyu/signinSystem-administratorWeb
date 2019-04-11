@@ -44,7 +44,8 @@ public class LoginController{
         if (userInfo != null) {
             UserRole defaultRoleByUserId = userRoleService.findDefaultRoleByUserId(userInfo.getId());
             String token = JWTUtils.generateToken(defaultRoleByUserId.getId(),userInfo.getId());//token携带用户id和用户角色id
-            RedisUtils.setex("token",token,RedisUtils.ValidTime);//缓存中加入token，有效时长为7天
+
+            RedisUtils.setex(token,defaultRoleByUserId.getId().toString(),RedisUtils.ValidTime);//缓存中加入token，有效时长为7天
             return ResultUtils.success(token);//返回token
         }
 
