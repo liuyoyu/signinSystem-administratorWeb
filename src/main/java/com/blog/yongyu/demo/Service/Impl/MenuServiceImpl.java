@@ -4,8 +4,10 @@
  **/
 package com.blog.yongyu.demo.Service.Impl;
 
+import com.blog.yongyu.demo.Entity.BaseClass.LoginInfor;
 import com.blog.yongyu.demo.Entity.Menu;
 import com.blog.yongyu.demo.Repository.MenuRepository;
+import com.blog.yongyu.demo.Service.LoginInfoService;
 import com.blog.yongyu.demo.Service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,9 @@ import java.util.Optional;
 public class MenuServiceImpl implements MenuService {
     @Autowired
     MenuRepository menuRepository;
+
+    @Autowired
+    LoginInfoService loginInfoService;
 
     @Override
     public Menu findById(Long id) {
@@ -61,6 +66,12 @@ public class MenuServiceImpl implements MenuService {
         if (menu == null) {
             return 1;//不能修改空对象
         }
+        LoginInfor logiInfo = loginInfoService.getLogiInfo();
+        if (logiInfo == null) {
+            System.out.println("请登陆！");
+            return 2;
+        }
+        menu.setModifyBy(logiInfo.getUser().getId().toString());
         menu.setModifyDate(new Date());
         menuRepository.save(menu);
         return 0;

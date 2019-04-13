@@ -15,4 +15,5 @@ public interface MenuService {
     Integer remove(Long id);
 
     Integer modify(Menu menu);
+
 }

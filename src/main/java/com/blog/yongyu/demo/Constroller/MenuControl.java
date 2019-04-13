@@ -4,8 +4,11 @@
  **/
 package com.blog.yongyu.demo.Constroller;
 
+import com.blog.yongyu.demo.Entity.BaseClass.BaseRole;
 import com.blog.yongyu.demo.Entity.BaseClass.DataResult;
+import com.blog.yongyu.demo.Entity.BaseClass.LoginInfor;
 import com.blog.yongyu.demo.Entity.Menu;
+import com.blog.yongyu.demo.Service.LoginInfoService;
 import com.blog.yongyu.demo.Service.MenuService;
 import com.blog.yongyu.demo.Utils.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +25,19 @@ public class MenuControl{
 
     @Autowired
     MenuService menuService;
+    @Autowired
+    LoginInfoService loginInfoService;
 
+    public Boolean checkAuth(){
+        LoginInfor logiInfo = loginInfoService.getLogiInfo();
+        if (logiInfo == null) {
+            return false;
+        }
+        if (logiInfo.getRoleName().equals(BaseRole.admin)) {
+            return true;
+        }
+        return false;
+    }
     @RequestMapping("/all")
     public DataResult findAll() {
         List<Menu> all = menuService.findAll();
@@ -31,6 +46,9 @@ public class MenuControl{
 
     @RequestMapping("/add")
     public DataResult add(Menu menu) {
+        if (!checkAuth()) {
+            return ResultUtils.error(2, "没有权限");
+        }
         Integer res = menuService.add(menu);
         if (res == 0) {
             return ResultUtils.success();
@@ -40,6 +58,9 @@ public class MenuControl{
 
     @RequestMapping(value = "/remove",method = RequestMethod.POST)
     public DataResult remove(@RequestParam("id") Long id) {
+        if (!checkAuth()) {
+            return ResultUtils.error(2, "没有权限");
+        }
         Integer res = menuService.remove(id);
         if (res == 0) {
             return ResultUtils.success();
@@ -47,8 +68,11 @@ public class MenuControl{
         return ResultUtils.error(1, "删除对象不存在");
     }
 
-    @RequestMapping(value = "/modify",method = RequestMethod.POST)
+    @RequestMapping(value = "/modify")
     public DataResult modify(Menu menu) {
+        if (!checkAuth()) {
+            return ResultUtils.error(2, "没有权限");
+        }
         Integer res = menuService.modify(menu);
         if (res == 0) {
             return ResultUtils.success();

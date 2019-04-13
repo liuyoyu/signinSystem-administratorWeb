@@ -4,19 +4,30 @@
  **/
 package com.blog.yongyu.demo.Entity.BaseClass;
 
+import com.blog.yongyu.demo.Entity.Role;
 import com.blog.yongyu.demo.Entity.UserInfo;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
-@Component("loginInfo")
-@Scope("request")
+
 public class LoginInfor {
 
     private String userRoleId;
 
-    private String role;
+    private Role role;
 
     private UserInfo  user;
+
+    private String status;
+
+    public String getRoleName(){
+        return role.getRoleName();
+    }
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getUserRoleId() {
         return userRoleId;
@@ -26,11 +37,11 @@ public class LoginInfor {
         this.userRoleId = userRoleId;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 

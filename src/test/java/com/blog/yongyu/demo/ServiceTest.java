@@ -1,6 +1,7 @@
 package com.blog.yongyu.demo;
 
 import com.blog.yongyu.demo.Entity.Dictionary;
+import com.blog.yongyu.demo.Entity.Menu;
 import com.blog.yongyu.demo.Entity.UserInfo;
 import com.blog.yongyu.demo.Repository.UserInfoRepository;
 import com.blog.yongyu.demo.Service.*;
@@ -16,6 +17,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.DigestUtils;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RunWith(SpringRunner.class)
@@ -102,6 +105,24 @@ public class ServiceTest {
     public void resetPwd() {
         userInfoService.allResetPwd(new Long[]{11L,18L});
 
+    }
+    @Test
+    public void mapTest(){
+        HashMap<String, String> map = new HashMap<>();
+        System.out.println(map.get("123"));
+    }
+    @Autowired
+    MenuService menuService;
+    @Test
+    public void loginInfoTest(){
+//        Menu m = new Menu();
+//        m.setMenuName("test");
+//        Integer res = menuService.add(m);
+//        System.out.println(res);
+        Menu byId = menuService.findById(21L);
+        System.out.println(byId.getId());
+        byId.setMenuName("lyy_test");
+        menuService.modify(byId);
     }
 
 }
