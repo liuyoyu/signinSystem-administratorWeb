@@ -46,7 +46,7 @@ public class LoginController {
             UserRole defaultRoleByUserId = userRoleService.findDefaultRoleByUserId(userInfo.getId());
             String token = JWTUtils.generateToken(userInfo.getId(),defaultRoleByUserId.getId());//token携带用户id和用户角色id
 
-            RedisUtils.setex(token, defaultRoleByUserId.getId().toString(), RedisUtils.ValidTime);//缓存中加入token，有效时长为7天
+            RedisUtils.setex(HttpContent.Token, token, RedisUtils.ValidTime);//缓存中加入token，有效时长为7天
             return ResultUtils.success(token);//返回token
         }
 
@@ -59,7 +59,7 @@ public class LoginController {
      * @param user
      * @return
      */
-    @RequestMapping(value = "/login_signup", method = RequestMethod.GET)
+    @RequestMapping(value = "/login_signup", method = RequestMethod.POST)
     public DataResult create(UserInfo user) {
         String[] createMsg = {"创建成功", "添加账户不能为空", "账户不能为空", "该账户已被注册", "该邮箱已被注册", "密码不能为空", "邮箱不能为空"};
         Integer res = userInfoService.Insert(user);

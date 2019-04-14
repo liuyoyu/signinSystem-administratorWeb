@@ -74,15 +74,22 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (findUserByEmail(user.getEmail()) != null) {
             return 4;//该邮箱已被注册
         }
+        if (user.getAccount().length() <= 4 || user.getAccount().length() > 10) {
+            return 7;
+        }
 
         user.setCreateDate(new Date());
         user.setModifyDate(new Date());
         user.setPwd(DigestUtils.md5DigestAsHex(user.getPwd().getBytes())); //md5加密
-        Role byRoleName = roleRepository.findByRoleName(Role.ROLE.User.toString());//角色中的正常用户
+        Role byRoleName = roleRepository.findByRoleName(Role.ROLE.User.toString());//角色中的用户
         if (byRoleName == null) {//不存在则创建
             byRoleName = new Role();
             roleService.Insert(byRoleName);
         }
+        user.setCreateDate(new Date());
+        user.setModifyDate(new Date());
+        user.setCreateBy(user.getAccount());
+        user.setModifyBy(user.getAccount());
         userInfoRepository.save(user);
         UserRole userRole = new UserRole(user, byRoleName);
         userRole.setIsDefault(UserRole.ISDEFAULT.isDefault.toString());//设置默认角色

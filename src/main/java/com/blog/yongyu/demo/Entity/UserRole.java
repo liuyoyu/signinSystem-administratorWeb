@@ -54,6 +54,8 @@ public class UserRole implements Serializable {
         this.role = role;
         this.createDate = new Date();
         this.modifyDate = new Date();
+        this.createBy = userInfo.getAccount();
+        this.modifyBy = userInfo.getAccount();
     }
 
     public Long getId() {

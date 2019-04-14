@@ -4,6 +4,7 @@ import com.blog.yongyu.demo.Entity.BaseClass.HttpContent;
 import com.blog.yongyu.demo.Utils.JWTUtils;
 import com.blog.yongyu.demo.Utils.RedisUtils;
 import lombok.extern.log4j.Log4j2;
+import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.method.HandlerMethod;
@@ -13,6 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -33,9 +36,23 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (token != null) {
              value = RedisUtils.get("token");//获取redis中的token
         }
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("application/json; charset=utf-8");
+        PrintWriter writer = response.getWriter();
 
-        if (value == null || !token.equals(value)) { //token为空或不匹配
-            response.sendRedirect(basePath + "#/login");
+        JSONObject map = new JSONObject();
+        if (value == null ) { //token为空或不匹配
+            map.put("status", "99");
+            map.put("msg", "请先登陆");
+            writer.write(map.toString());
+//            response.sendRedirect(basePath + "#/login");
+            return false;
+        }
+        if (!token.equals(value)) {
+            map.put("status", "99");
+            map.put("msg", "登陆超时，请重新登陆");
+            writer.write(map.toString());
+//            response.sendRedirect(basePath + "#/login");
             return false;
         }
         return true;
