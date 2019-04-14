@@ -9,13 +9,19 @@ import org.springframework.util.DigestUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "userInfo", schema = "dbo", catalog = "et")
 public class UserInfo implements Serializable {
+    public enum STATUS{
+        Normal, //正常状态
+        Disable, //禁用状态
+    }
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -39,12 +45,19 @@ public class UserInfo implements Serializable {
     private String phone;
 
     @Column()
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private java.util.Date createDate;
+    private String status = STATUS.Normal.toString();
 
     @Column()
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private java.util.Date modifyDate;
+    private Date lastLogin;
+
+    @Column()
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createDate;
+
+    @Column()
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date modifyDate;
 
     @Column()
     private String createBy;
@@ -154,6 +167,22 @@ public class UserInfo implements Serializable {
 
     public void setUserRoles(List<UserRole> userRoles) {
         this.userRoles = userRoles;
+    }
+
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     /**

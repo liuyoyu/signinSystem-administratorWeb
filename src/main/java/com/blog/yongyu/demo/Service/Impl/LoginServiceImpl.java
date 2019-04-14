@@ -25,7 +25,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public UserInfo checkLogin(String uname, String pwd) {
         UserInfo user = userInfoRepository.findUserByAccountOrEmail(uname);
-        if (user == null) {
+        if (user == null || UserInfo.STATUS.Disable.equals(user.getStatus())) {
             return null;//用户不存在
         }
         if (DigestUtils.md5DigestAsHex(pwd.getBytes()).equals(user.getPwd())) {

@@ -49,8 +49,8 @@ public class MenuServiceImpl implements MenuService {
         }
         menu.setCreateDate(new Date());
         menu.setModifyDate(new Date());
-        menu.setCreateBy(loginInfoService.getLogiInfo().getUser().getId().toString());
-        menu.setModifyBy(loginInfoService.getLogiInfo().getUser().getId().toString());
+        menu.setCreateBy(loginInfoService.getLogiInfo().getUserId().toString());
+        menu.setModifyBy(loginInfoService.getLogiInfo().getUserId().toString());
         menuRepository.save(menu);
         return 0;
     }
@@ -75,7 +75,7 @@ public class MenuServiceImpl implements MenuService {
             System.out.println("请登陆！");
             return 2;
         }
-        menu.setModifyBy(logiInfo.getUser().getId().toString());
+        menu.setModifyBy(logiInfo.getUserId().toString());
         menu.setModifyDate(new Date());
         menuRepository.save(menu);
         return 0;
