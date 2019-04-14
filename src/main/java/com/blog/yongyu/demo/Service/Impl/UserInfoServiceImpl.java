@@ -62,15 +62,22 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (user.getAccount() == null) {
             return 2; //账户不能为空
         }
+        if (user.getPwd() == null) {
+            return 5;//密码不能空
+        }
+        if (user.getEmail() == null) {
+            return 6;//邮箱不能空
+        }
         if (findUserByAccount(user.getAccount())!=null) {
             return 3; //该账户已被注册
         }
         if (findUserByEmail(user.getEmail()) != null) {
             return 4;//该邮箱已被注册
         }
+
         user.setCreateDate(new Date());
         user.setModifyDate(new Date());
-        user.setPwd(DigestUtils.md5DigestAsHex(user.getPwd().getBytes()));
+        user.setPwd(DigestUtils.md5DigestAsHex(user.getPwd().getBytes())); //md5加密
         Role byRoleName = roleRepository.findByRoleName(Role.ROLE.User.toString());//角色中的正常用户
         if (byRoleName == null) {//不存在则创建
             byRoleName = new Role();

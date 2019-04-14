@@ -47,6 +47,10 @@ public class MenuServiceImpl implements MenuService {
         if (menu == null) {
             return 1;//不能添加空对象
         }
+        menu.setCreateDate(new Date());
+        menu.setModifyDate(new Date());
+        menu.setCreateBy(loginInfoService.getLogiInfo().getUser().getId().toString());
+        menu.setModifyBy(loginInfoService.getLogiInfo().getUser().getId().toString());
         menuRepository.save(menu);
         return 0;
     }

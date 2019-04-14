@@ -37,10 +37,10 @@ public class LoginController{
     /**
      * 用户登陆
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/loginCheck")
-    public DataResult loginCheck(@RequestParam("account") String uname,
+    @RequestMapping(method = RequestMethod.GET, value = "/loginCheck")
+    public DataResult loginCheck(@RequestParam("account") String account,
                                  @RequestParam("password") String password){
-        UserInfo userInfo = loginService.checkLogin(uname, password);
+        UserInfo userInfo = loginService.checkLogin(account, password);
         if (userInfo != null) {
             UserRole defaultRoleByUserId = userRoleService.findDefaultRoleByUserId(userInfo.getId());
             String token = JWTUtils.generateToken(defaultRoleByUserId.getId(),userInfo.getId());//token携带用户id和用户角色id
@@ -59,7 +59,7 @@ public class LoginController{
      */
     @RequestMapping(value = "/login_signup",method = RequestMethod.POST)
     public DataResult create(UserInfo user){
-        String[] createMsg = {"创建成功", "添加账户不能为空", "账户不能为空","该账户已被注册","该邮箱已被注册"};
+        String[] createMsg = {"创建成功", "添加账户不能为空", "账户不能为空","该账户已被注册","该邮箱已被注册","密码不能为空","邮箱不能为空"};
         Integer res = userInfoService.Insert(user);
         if (res != 0) {
             return ResultUtils.error(res,createMsg[res]);

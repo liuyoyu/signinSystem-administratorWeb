@@ -34,7 +34,7 @@ public class DictionaryContent implements Serializable {
     private String describe;
 
     @Column()
-    private Integer sequence;
+    private Integer sequence; //序号
 
     @Column()
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
