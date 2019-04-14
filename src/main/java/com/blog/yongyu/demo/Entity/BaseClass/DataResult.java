@@ -4,6 +4,7 @@ public class DataResult<T> {
     private Integer status;
     private String msg;
     private T data;
+    private Integer total;
 
     public Integer getStatus() {
         return status;
@@ -27,5 +28,13 @@ public class DataResult<T> {
 
     public void setData(T data) {
         this.data = data;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
     }
 }

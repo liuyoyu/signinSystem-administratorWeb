@@ -19,4 +19,7 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
     @Query(value = "select u from UserRole u where u.userInfo.id = ?1")
     List<UserRole> findAllByUserId(Long userId);
 
+    @Query(value = "select u from UserRole u order by u.createDate desc ")
+    List<UserRole> findAll();
+
 }

@@ -4,6 +4,7 @@
  **/
 package com.blog.yongyu.demo.Service.Impl;
 
+import com.blog.yongyu.demo.Entity.BaseClass.BaseRole;
 import com.blog.yongyu.demo.Entity.Role;
 import com.blog.yongyu.demo.Entity.UserInfo;
 import com.blog.yongyu.demo.Entity.UserRole;
@@ -92,7 +93,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     public Boolean isAdmin(Long userId) {
         List<UserRole> allByUserId = userRoleRepository.findAllByUserId(userId);
         for (UserRole userrole : allByUserId) {
-            if (userrole.getRole().getRoleName().equals(Role.ROLE.Admin.toString())) {
+            if (userrole.getRole().getRoleName().equals(BaseRole.admin)) {
                 return true;
             }
         }
@@ -113,5 +114,10 @@ public class UserRoleServiceImpl implements UserRoleService {
             }
         }
         return null;
+    }
+
+    @Override
+    public List<UserRole> findAll() {
+        return userRoleRepository.findAll();
     }
 }

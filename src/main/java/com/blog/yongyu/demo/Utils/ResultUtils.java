@@ -11,6 +11,15 @@ public class ResultUtils {
         return dataResult;
     }
 
+    public static DataResult success(Object object, Integer total) {
+        DataResult dataResult = new DataResult();
+        dataResult.setStatus(0);
+        dataResult.setMsg("成功");
+        dataResult.setTotal(total);
+        dataResult.setData(object);
+        return dataResult;
+    }
+
     public static DataResult success(){
         return success(null);
     }

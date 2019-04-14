@@ -13,6 +13,10 @@ import java.util.Date;
 @Entity
 @Table(name = "userRole", schema = "dbo", catalog = "et")
 public class UserRole implements Serializable {
+    public enum STATUS{
+        Normal,
+        Disabled
+    }
     public enum ISDEFAULT {
         isDefault,
         isNotDefault
@@ -20,6 +24,9 @@ public class UserRole implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column()
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "userId")
@@ -120,5 +127,20 @@ public class UserRole implements Serializable {
 
     public void setIsDefault(String isDefault) {
         this.isDefault = isDefault;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getAccount(){
+        if (userInfo != null) {
+            return getUserInfo().getAccount();
+        }
+        return null;
     }
 }

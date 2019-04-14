@@ -1,5 +1,6 @@
 package com.blog.yongyu.demo.Service.Impl;
 
+import com.blog.yongyu.demo.Entity.BaseClass.BaseRole;
 import com.blog.yongyu.demo.Entity.Role;
 import com.blog.yongyu.demo.Entity.UserInfo;
 import com.blog.yongyu.demo.Entity.UserRole;
@@ -81,7 +82,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         user.setCreateDate(new Date());
         user.setModifyDate(new Date());
         user.setPwd(DigestUtils.md5DigestAsHex(user.getPwd().getBytes())); //md5加密
-        Role byRoleName = roleRepository.findByRoleName(Role.ROLE.User.toString());//角色中的用户
+        Role byRoleName = roleRepository.findByRoleName(BaseRole.User);//角色中的用户
         if (byRoleName == null) {//不存在则创建
             byRoleName = new Role();
             roleService.Insert(byRoleName);

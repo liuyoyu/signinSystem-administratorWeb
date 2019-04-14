@@ -13,14 +13,10 @@ import java.util.List;
 @Entity
 @Table(name = "role", schema="dbo", catalog = "et")
 public class Role implements Serializable {
-    public enum ROLE{
-        User,
-        Admin,
-        Student,
-        Teacher
+    public enum STATUS{
+        Normal,
+        Disabled
     }
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long roleId;
@@ -30,6 +26,9 @@ public class Role implements Serializable {
 
     @Column()
     private Long parentRole = 0L;//0表示无父角色
+
+    @Column()
+    private String status;
 
     @Column()
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -59,6 +58,14 @@ public class Role implements Serializable {
         modifyDate = new Date();
         detail = "";
         userRoles = new ArrayList<>();
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Long getRoleId() {

@@ -4,29 +4,50 @@
  **/
 package com.blog.yongyu.demo.Constroller;
 
+import com.blog.yongyu.demo.Entity.BaseClass.BaseRole;
 import com.blog.yongyu.demo.Entity.BaseClass.DataResult;
+import com.blog.yongyu.demo.Entity.BaseClass.LoginInfor;
 import com.blog.yongyu.demo.Entity.UserInfo;
+import com.blog.yongyu.demo.Entity.UserRole;
+import com.blog.yongyu.demo.Service.LoginInfoService;
 import com.blog.yongyu.demo.Service.UserInfoService;
+import com.blog.yongyu.demo.Service.UserRoleService;
 import com.blog.yongyu.demo.Utils.ResultUtils;
+import javafx.geometry.Pos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
     @Autowired
     UserInfoService userInfoService;
+    @Autowired
+    LoginInfoService loginInfoService;
+    @Autowired
+    UserRoleService userRoleService;
 
-    @RequestMapping("/insertUserInfo")
+    /**
+     * 新增用户，由管理员操作
+     * @param userInfo
+     * @return
+     */
+    @RequestMapping(value = "/insertUserInfo",method = RequestMethod.POST)
     public DataResult insertUserInfo(UserInfo userInfo) {
+        LoginInfor logiInfo = loginInfoService.getLogiInfo();
+        if (logiInfo == null) {
+            return ResultUtils.error(8, "请先登陆");
+        }
+        if (!logiInfo.getUserRoleId().equals(BaseRole.AdminId)) {
+            return ResultUtils.error(9, "没有权限");
+        }
         Integer res = userInfoService.Insert(userInfo);
-        String[] msg = {"成功", "不能创建空值", "账户不能为空", "该账户已被注册", "该邮箱已被注册"};
+        String[] msg = {"创建成功", "添加账户不能为空", "账户不能为空", "该账户已被注册", "该邮箱已被注册", "密码不能为空", "邮箱不能为空"};
         if (res == 0) {
             return ResultUtils.success();
         }
@@ -53,8 +74,21 @@ public class UserController {
 
     @RequestMapping("/findAll")
     public DataResult findAll() {
-        List<UserInfo> all = userInfoService.findAll();
-        return ResultUtils.success(all);
+        List<UserRole> allUserRole = userRoleService.findAll();
+        Map<String, Integer> map = new HashMap<>();
+        int i=0;
+        for (UserRole ur : allUserRole) {
+            if (map.containsKey(ur.getAccount())) {
+                if (ur.getIsDefault().equals(UserRole.ISDEFAULT.isDefault.toString())) {
+                    allUserRole.set(map.get(ur.getAccount()), ur);
+                }
+                allUserRole.remove(i);
+            } else {
+                map.put(ur.getAccount(), i++);
+            }
+        }
+//        List<UserInfo> all = userInfoService.findAll();
+        return ResultUtils.success(allUserRole);
     }
     @RequestMapping("/resetPwd")
     public DataResult resetPwd(@RequestParam("id")Long id){

@@ -11,9 +11,11 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,21 +40,27 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
         response.setCharacterEncoding("utf-8");
         response.setContentType("application/json; charset=utf-8");
-        PrintWriter writer = response.getWriter();
+        ServletOutputStream writer = response.getOutputStream();
 
         JSONObject map = new JSONObject();
-        if (value == null ) { //token为空或不匹配
+        if (value == null) { //token为空或不匹配
+//            response.reset();
             map.put("status", "99");
             map.put("msg", "请先登陆");
-            writer.write(map.toString());
-//            response.sendRedirect(basePath + "#/login");
+            writer.print(map.toString());
+//                            response.sendRedirect(basePath + "#/login");
+            writer.flush();
+            writer.close();
             return false;
         }
         if (!token.equals(value)) {
+//            response.reset();
             map.put("status", "99");
             map.put("msg", "登陆超时，请重新登陆");
-            writer.write(map.toString());
-//            response.sendRedirect(basePath + "#/login");
+            writer.print(map.toString());
+//                            response.sendRedirect(basePath + "#/login");
+            writer.flush();
+            writer.close();
             return false;
         }
         return true;

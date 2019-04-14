@@ -16,6 +16,8 @@ public interface UserRoleService {
 
     UserRole findDefaultRoleByUserId(Long userId);
 
+    List<UserRole> findAll();
+
     Boolean isAdmin(Long userId);
 
     Integer addUserRole(UserRole userRole);
