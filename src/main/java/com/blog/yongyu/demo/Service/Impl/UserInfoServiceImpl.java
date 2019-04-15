@@ -130,13 +130,20 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (!"".equals(userInfo.getPwd()) && userInfo.getPwd() != null) {
             userById.setPwd(userInfo.getPwd());
         }
-        if (!"".equals(userInfo.getUserName()) & userInfo.getUserName() != null) {
+        if (!"".equals(userInfo.getUserName()) && userInfo.getUserName() != null) {
             userById.setUserName(userInfo.getUserName());
         }
-        userById.setPhone(userInfo.getPhone());
-        userById.setSex(userInfo.getSex());
+        if (!"".equals(userInfo.getStatus()) && userInfo.getStatus() != null) {
+            userById.setStatus(userInfo.getStatus());
+        }
+        if (!"".equals(userInfo.getPhone()) && userInfo.getPhone() != null) {
+            userById.setPhone(userInfo.getPhone());
+        }
+        if (!"".equals(userInfo.getSex()) && userInfo.getSex() != null) {
+            userById.setSex(userInfo.getSex());
+        }
         userById.setModifyDate(new Date());
-        userById.setModifyBy(loginInfoService.getLogiInfo().getAccount());
+        userById.setModifyBy(loginInfoService.getAccount());
         userInfoRepository.save(userById);
         return 0;//修改成功
     }
