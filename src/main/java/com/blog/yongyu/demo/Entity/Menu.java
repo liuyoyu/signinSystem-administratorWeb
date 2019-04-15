@@ -32,6 +32,9 @@ public class Menu implements Serializable {
     @Column(length = 16)
     private String menuStatus;
 
+    @Column()
+    private String icon;
+
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "menu")
     @JsonIgnore
@@ -134,5 +137,13 @@ public class Menu implements Serializable {
 
     public void setRoleMenus(List<RoleMenu> roleMenus) {
         this.roleMenus = roleMenus;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }

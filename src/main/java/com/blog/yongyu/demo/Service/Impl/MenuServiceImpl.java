@@ -49,8 +49,8 @@ public class MenuServiceImpl implements MenuService {
         }
         menu.setCreateDate(new Date());
         menu.setModifyDate(new Date());
-        menu.setCreateBy(loginInfoService.getLogiInfo().getUserId().toString());
-        menu.setModifyBy(loginInfoService.getLogiInfo().getUserId().toString());
+        menu.setCreateBy(loginInfoService.getAccount());
+        menu.setModifyBy(loginInfoService.getAccount());
         menuRepository.save(menu);
         return 0;
     }

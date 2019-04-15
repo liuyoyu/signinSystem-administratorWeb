@@ -41,7 +41,6 @@ public class DictionaryContentServiceImpl implements DictionaryContentService{
 
     @Override
     public Integer Delete(Long id) {
-
         DictionaryContent byId = findById(id);
         if (byId == null) {
             return 1;//对像不存在
