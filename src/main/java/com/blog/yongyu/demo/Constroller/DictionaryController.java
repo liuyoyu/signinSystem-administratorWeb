@@ -39,7 +39,7 @@ public class DictionaryController {
     @RequestMapping(value = "/selectData")
     public DataResult selectData(){
         List<Dictionary> all = dictionaryService.findAll();
-        return ResultUtils.success(all);
+        return ResultUtils.success(all,all.size());
     }
 
     /**

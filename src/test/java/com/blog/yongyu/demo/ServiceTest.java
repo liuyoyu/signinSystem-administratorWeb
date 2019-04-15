@@ -38,11 +38,8 @@ public class ServiceTest {
 //        userInfo.setPwd("123");
 //        userInfo.setAccount("root");
 //        Integer user = userInfoService.createUser(userInfo);
-        Optional<UserInfo> userById = userInfoService.findUserById(Long.parseLong("7"));
-        if (userById.isPresent()) {
-            System.out.println("1");
-        }
-        Integer res = userInfoService.Delete(userById.get().getId());
+        UserInfo userById = userInfoService.findUserById(Long.parseLong("7"));
+        Integer res = userInfoService.Delete(userById.getId());
         System.out.println(res);
     }
 
