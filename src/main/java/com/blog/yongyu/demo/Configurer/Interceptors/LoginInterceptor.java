@@ -46,7 +46,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (value == null) { //token为空或不匹配
 //            response.reset();
             map.put("status", "99");
-            map.put("msg", "请先登陆");
+            map.put("msg", "sign in, please.");
             writer.print(map.toString());
 //                            response.sendRedirect(basePath + "#/login");
             writer.flush();
@@ -56,7 +56,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (!token.equals(value)) {
 //            response.reset();
             map.put("status", "99");
-            map.put("msg", "登陆超时，请重新登陆");
+            map.put("msg", "Time out!");
             writer.print(map.toString());
 //                            response.sendRedirect(basePath + "#/login");
             writer.flush();
