@@ -35,6 +35,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Autowired
     UserRoleService userRoleService;
 
+    @Autowired
+    LoginInfoServiceImpl loginInfoService;
+
 
     @Override
     public UserInfo findUserByAccount(String account) {
@@ -42,8 +45,12 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public Optional<UserInfo> findUserById(Long id) {
-        return userInfoRepository.findById(id);
+    public UserInfo findUserById(Long id) {
+        Optional<UserInfo> byId = userInfoRepository.findById(id);
+        if (!byId.isPresent()) {
+            return null;
+        }
+        return byId.get();
     }
 
     @Override
@@ -104,30 +111,33 @@ public class UserInfoServiceImpl implements UserInfoService {
             return 1;//删除对象不存在
         }
 //        userRoleService.removeAllUserRoleByUserId(userId);
-        Optional<UserInfo> userInfo = findUserById(userId);
-        if (userInfo.isPresent()){
-            return 0;
+        UserInfo userInfo = findUserById(userId);
+        if (userInfo != null) {
+            userInfoRepository.delete(userInfo);
         }
-        userInfoRepository.delete(userInfo.get());
         return 0;//删除成功
     }
 
     @Override
     public Integer modify(UserInfo userInfo) {
-        if (null == findUserById(userInfo.getId())) {
+        UserInfo userById = findUserById(userInfo.getId());
+        if (null == userById ) {
             return 1;//修改对象不存在
         }
-        if ("".equals(userInfo.getEmail()) || userInfo.getEmail() == null) {
-            return 2; //邮箱不能为空
+        if (!"".equals(userInfo.getEmail()) && userInfo.getEmail() != null) {
+            userById.setEmail(userInfo.getEmail());
         }
-        if ("".equals(userInfo.getPwd()) || userInfo.getPwd() == null) {
-            return 3;//密码不能为空
+        if (!"".equals(userInfo.getPwd()) && userInfo.getPwd() != null) {
+            userById.setPwd(userInfo.getPwd());
         }
-        if ("".equals(userInfo.getUserName()) || userInfo.getUserName() == null) {
-            return 4;//昵称不能为空
+        if (!"".equals(userInfo.getUserName()) & userInfo.getUserName() != null) {
+            userById.setUserName(userInfo.getUserName());
         }
-        userInfo.setModifyDate(new Date());
-        UserInfo save = userInfoRepository.save(userInfo);
+        userById.setPhone(userInfo.getPhone());
+        userById.setSex(userInfo.getSex());
+        userById.setModifyDate(new Date());
+        userById.setModifyBy(loginInfoService.getLogiInfo().getAccount());
+        userInfoRepository.save(userById);
         return 0;//修改成功
     }
 

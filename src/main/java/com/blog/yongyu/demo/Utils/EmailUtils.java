@@ -36,7 +36,7 @@ public class EmailUtils {
         String text = "<h1>亲爱的用户：</h1>" +
                 "<h2>感谢您使用我们的签到Start平台邮箱验证功能</h2>" +
                 "<p>您本次注册验证码为: " + code +
-                "</p><small>若非本人操作，请忽略本条邮件。祝，生活愉快<small><br><br>"+sdf.format(new Date())+
+                "</p><small>若非本人操作，请忽略本条邮件。祝，生活愉快</small><br><br>"+sdf.format(new Date())+
                 "（本邮件由系统自动发出，请勿回复）";
         try {
             EmailUtils.sendEmail(receiver, text);

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserInfoService {
-    Optional<UserInfo> findUserById(Long id);
+    UserInfo findUserById(Long id);
 
     UserInfo findUserByAccount(String account);
 

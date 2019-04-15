@@ -25,9 +25,6 @@ public class UserRole implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column()
-    private String status;
-
     @ManyToOne
     @JoinColumn(name = "userId")
     private UserInfo userInfo;
@@ -127,14 +124,6 @@ public class UserRole implements Serializable {
 
     public void setIsDefault(String isDefault) {
         this.isDefault = isDefault;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getAccount(){
