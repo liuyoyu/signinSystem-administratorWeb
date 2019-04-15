@@ -89,7 +89,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         user.setCreateDate(new Date());
         user.setModifyDate(new Date());
         user.setPwd(DigestUtils.md5DigestAsHex(user.getPwd().getBytes())); //md5加密
-        Role byRoleName = roleRepository.findByRoleName(BaseRole.User);//角色中的用户
+        Role byRoleName = roleRepository.findByRoleId(BaseRole.UserId);//角色中的用户
         if (byRoleName == null) {//不存在则创建
             byRoleName = new Role();
             roleService.Insert(byRoleName);

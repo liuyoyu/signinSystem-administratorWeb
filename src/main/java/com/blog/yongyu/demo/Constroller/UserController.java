@@ -41,10 +41,7 @@ public class UserController {
     @RequestMapping(value = "/insertUserInfo",method = RequestMethod.POST)
     public DataResult insertUserInfo(UserInfo userInfo) {
         LoginInfor logiInfo = loginInfoService.getLogiInfo();
-        if (logiInfo == null) {
-            return ResultUtils.error(8, "请先登陆");
-        }
-        if (!logiInfo.getUserRoleId().equals(BaseRole.AdminId)) {
+        if (!logiInfo.getRoleId().equals(BaseRole.AdminId)) {
             return ResultUtils.error(9, "没有权限");
         }
         Integer res = userInfoService.Insert(userInfo);

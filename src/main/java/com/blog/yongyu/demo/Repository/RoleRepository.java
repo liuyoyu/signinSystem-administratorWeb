@@ -16,4 +16,6 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 
     @Query("select r from Role r order by r.createDate")
     List<Role> findAll();
+
+    Role findByRoleId(Long roleId);
 }
