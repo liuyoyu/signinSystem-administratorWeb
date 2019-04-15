@@ -14,8 +14,8 @@ public class MyConfigurer implements WebMvcConfigurer {
     //用来注册拦截器，写好的拦截器在这儿添加注册才能生效
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor()).excludePathPatterns("/login_signup","/loginCheck","/logOut").addPathPatterns("/**");
         registry.addInterceptor(new AccessInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(new LoginInterceptor()).excludePathPatterns("/login_signup","/loginCheck","/logOut").addPathPatterns("/**");
     }
 
     //用来配置静态资源:html，js，css等
