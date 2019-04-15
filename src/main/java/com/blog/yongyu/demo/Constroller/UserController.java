@@ -35,27 +35,28 @@ public class UserController {
 
     /**
      * 新增用户，由管理员操作
+     *
      * @param userInfo
      * @return
      */
-    @RequestMapping(value = "/insertUserInfo",method = RequestMethod.POST)
+    @RequestMapping(value = "/insertUserInfo", method = RequestMethod.POST)
     public DataResult insertUserInfo(UserInfo userInfo) {
         LoginInfor logiInfo = loginInfoService.getLogiInfo();
-        if (!logiInfo.getRoleId().equals(BaseRole.AdminId)) {
+        if (logiInfo == null || !logiInfo.getRoleId().equals(BaseRole.AdminId)) {
             return ResultUtils.error(9, "没有权限");
         }
         Integer res = userInfoService.Insert(userInfo);
-        String[] msg = {"创建成功", "添加账户不能为空", "账户不能为空", "该账户已被注册", "该邮箱已被注册", "密码不能为空", "邮箱不能为空"};
+        String[] msg = {"创建成功", "添加账户不能为空", "账户不能为空", "该账户已被注册", "该邮箱已被注册", "密码不能为空", "邮箱不能为空","账号长度要大于4小于10"};
         if (res == 0) {
             return ResultUtils.success();
         }
         return ResultUtils.error(res, msg[res]);
     }
 
-    @RequestMapping(value = "/deleteUserInfo",method = RequestMethod.POST)
+    @RequestMapping(value = "/deleteUserInfo", method = RequestMethod.POST)
     public DataResult deleteUserInfo(@RequestParam("uid") Long uid) {
         LoginInfor logiInfo = loginInfoService.getLogiInfo();
-        if (logiInfo == null ||!Objects.equals(logiInfo.getRoleId(), BaseRole.AdminId)) {
+        if (logiInfo == null || !Objects.equals(logiInfo.getRoleId(), BaseRole.AdminId)) {
             return ResultUtils.error(2, "没有权限");
         }
         Integer res = userInfoService.Delete(uid);
@@ -79,7 +80,7 @@ public class UserController {
         List<UserRole> allUserRole = userRoleService.findAll();
         Map<String, Integer> map = new HashMap<>();
         List<JSONObject> list = new ArrayList<>();
-        int i=0;
+        int i = 0;
         for (UserRole ur : allUserRole) {
             JSONObject jsonObject = new JSONObject();
             if (map.containsKey(ur.getAccount())) {
@@ -106,12 +107,13 @@ public class UserController {
             list.add(jsonObject);
         }
 //        List<UserInfo> all = userInfoService.findAll();
-        return ResultUtils.success(list,list.size());
+        return ResultUtils.success(list, list.size());
     }
+
     @RequestMapping("/resetPwd")
-    public DataResult resetPwd(@RequestParam("id")Long id){
+    public DataResult resetPwd(@RequestParam("id") Long id) {
         UserInfo userById = userInfoService.findUserById(id);
-        if (userById==null) {
+        if (userById == null) {
             return ResultUtils.error(1, "用户不存在");
         }
         userById.setInitPassword();
