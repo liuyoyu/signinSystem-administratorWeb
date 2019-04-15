@@ -4,11 +4,14 @@
  **/
 package com.blog.yongyu.demo.Constroller;
 
+import com.blog.yongyu.demo.Entity.BaseClass.BaseRole;
 import com.blog.yongyu.demo.Entity.BaseClass.DataResult;
+import com.blog.yongyu.demo.Entity.BaseClass.LoginInfor;
 import com.blog.yongyu.demo.Entity.Dictionary;
 import com.blog.yongyu.demo.Entity.DictionaryContent;
 import com.blog.yongyu.demo.Service.DictionaryContentService;
 import com.blog.yongyu.demo.Service.DictionaryService;
+import com.blog.yongyu.demo.Service.LoginInfoService;
 import com.blog.yongyu.demo.Utils.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,10 +28,27 @@ public class DictionaryController {
     DictionaryService dictionaryService;
     @Autowired
     DictionaryContentService dicContentService;
+    @Autowired
+    LoginInfoService loginInfoService;
 
+    Boolean checkAuth(){
+        LoginInfor logiInfo = loginInfoService.getLogiInfo();
+        if (logiInfo == null) {
+            return false;
+        }
+        if (logiInfo.getRoleId().equals(BaseRole.AdminId)) {
+            return true;
+        }
+        return false;
+    }
 
     @RequestMapping(value = "/addData")
     public DataResult addData(Dictionary dictionary){
+        if (!checkAuth()) {
+            return ResultUtils.error(3, "没有权限");
+        }
+
+        dictionary.setCreateBy(loginInfoService.getAccount());
         Integer res = dictionaryService.insert(dictionary);
         if (res == 1) {
             return ResultUtils.error(1, "不能添加空对象");
@@ -50,16 +70,21 @@ public class DictionaryController {
     @RequestMapping(value = "/selectDataContent")
     public DataResult selecDataContent(@RequestParam("dicId")Long dicId){
         List<DictionaryContent> dicContentByDicId = dicContentService.findDicContentByDicId(dicId);
-        return ResultUtils.success(dicContentByDicId);
+        return ResultUtils.success(dicContentByDicId,dicContentByDicId.size());
     }
 
     @RequestMapping(value = "/addDataContent")
     public DataResult addDataContent(DictionaryContent dicontent,
                                      @RequestParam("dicId")Long dicId){
+        LoginInfor logiInfo = loginInfoService.getLogiInfo();
+        if (logiInfo == null) {
+            return ResultUtils.error(1,"请先登陆");
+        }
         Dictionary byId = dictionaryService.findById(dicId);
         if (byId == null) {
             return ResultUtils.error(2,"字典不存在");
         }
+        dicontent.setCreateBy(logiInfo.getAccount());
         dicontent.setDictionary(byId);
         Integer res = dicContentService.insert(dicontent);
         if (res == 1) {
@@ -76,10 +101,11 @@ public class DictionaryController {
     @RequestMapping(value = "/delDataContent")
     public DataResult delDataContent(@RequestParam("id")Long id){
         Integer res = dicContentService.Delete(id);
-        if (res == 1) {
-            return ResultUtils.error(1, "不能删除空对象");
+        if (res == 0) {
+            return ResultUtils.success();
         }
-        return ResultUtils.success();
+        String[] msg = {"成功", "不能删除空对象", "该数据不能删除"};
+        return ResultUtils.error(res, msg[res]);
     }
 
     @RequestMapping(value = "/delData")

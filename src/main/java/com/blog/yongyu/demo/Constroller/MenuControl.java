@@ -33,7 +33,7 @@ public class MenuControl{
         if (logiInfo == null) {
             return false;
         }
-        if (logiInfo.getRoleName().equals(BaseRole.admin)) {
+        if (logiInfo.getRoleName().equals(BaseRole.Admin)) {
             return true;
         }
         return false;

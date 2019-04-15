@@ -5,10 +5,13 @@
 package com.blog.yongyu.demo.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "menu", schema = "dbo", catalog = "et")
@@ -30,9 +33,9 @@ public class Menu implements Serializable {
     private String menuStatus;
 
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "master")
-    private Role role;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "menu")
+    @JsonIgnore
+    private List<RoleMenu> roleMenus;
 
     @Column()
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -50,6 +53,7 @@ public class Menu implements Serializable {
 
     public Menu() {
         parentMenuId = Long.parseLong("0");
+        roleMenus = new ArrayList<>();
     }
 
     public Long getId() {
@@ -124,11 +128,11 @@ public class Menu implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public Role getRole() {
-        return role;
+    public List<RoleMenu> getRoleMenus() {
+        return roleMenus;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRoleMenus(List<RoleMenu> roleMenus) {
+        this.roleMenus = roleMenus;
     }
 }

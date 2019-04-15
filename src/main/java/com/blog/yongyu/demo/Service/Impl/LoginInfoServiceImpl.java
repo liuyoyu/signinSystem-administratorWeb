@@ -76,4 +76,13 @@ public class LoginInfoServiceImpl implements LoginInfoService {
         }
         return null;
     }
+
+    @Override
+    public String getAccount() {
+        LoginInfor logiInfo = getLogiInfo();
+        if (logiInfo == null) {
+            return null;
+        }
+        return logiInfo.getAccount();
+    }
 }

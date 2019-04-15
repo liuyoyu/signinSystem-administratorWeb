@@ -15,4 +15,5 @@ public interface LoginInfoService {
     HttpServletResponse getResponse();
     String getRequestPath();
     LoginInfor getLogiInfo();
+    String getAccount();
 }

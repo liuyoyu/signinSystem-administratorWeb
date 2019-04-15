@@ -4,12 +4,14 @@
  **/
 package com.blog.yongyu.demo.Service.Impl;
 
+import com.blog.yongyu.demo.Entity.BaseClass.HttpContent;
 import com.blog.yongyu.demo.Entity.DictionaryContent;
 import com.blog.yongyu.demo.Repository.DictionaryContentRepository;
 import com.blog.yongyu.demo.Service.DictionaryContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,15 +34,20 @@ public class DictionaryContentServiceImpl implements DictionaryContentService{
         if (dictionaryContent == null) {
             return 1; //不能为空
         }
+        dictionaryContent.setCreateDate(new Date());
         dictionaryContentRepository.save(dictionaryContent);
         return 0;
     }
 
     @Override
     public Integer Delete(Long id) {
+
         DictionaryContent byId = findById(id);
         if (byId == null) {
             return 1;//对像不存在
+        }
+        if (HttpContent.removeIngoreSet.contains(byId.getContentKey())) {
+            return 2; //不可删除
         }
         dictionaryContentRepository.delete(byId);
         return 0;

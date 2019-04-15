@@ -1,7 +1,9 @@
 package com.blog.yongyu.demo;
 
+import com.blog.yongyu.demo.Entity.BaseClass.BaseRole;
 import com.blog.yongyu.demo.Entity.Dictionary;
 import com.blog.yongyu.demo.Entity.Menu;
+import com.blog.yongyu.demo.Entity.Role;
 import com.blog.yongyu.demo.Entity.UserInfo;
 import com.blog.yongyu.demo.Repository.UserInfoRepository;
 import com.blog.yongyu.demo.Service.*;
@@ -86,7 +88,7 @@ public class ServiceTest {
     @Test
     public void dictionaryTest(){
         Dictionary dc = new Dictionary();
-        dc.setDataName("lyy");
+        dc.setDataKey("lyy");
         dictionaryService.insert(dc);
     }
 
@@ -121,5 +123,13 @@ public class ServiceTest {
         byId.setMenuName("lyy_test");
         menuService.modify(byId);
     }
+
+//    @Test
+//    public roleTest(){
+//        Role role = new Role();
+//        role.setRoleName(BaseRole.User);
+//        role.setParentRole(0L);
+//        roleService.Insert()
+//    }
 
 }

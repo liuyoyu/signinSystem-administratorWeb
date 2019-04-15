@@ -4,12 +4,14 @@
  **/
 package com.blog.yongyu.demo.Service.Impl;
 
+import com.blog.yongyu.demo.Entity.BaseClass.HttpContent;
 import com.blog.yongyu.demo.Entity.Dictionary;
 import com.blog.yongyu.demo.Repository.DictionaryRepository;
 import com.blog.yongyu.demo.Service.DictionaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +41,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (dictionary == null) {
             return 1;//用户不能为空
         }
+        dictionary.setCreateDate(new Date());
         dictionaryRepository.save(dictionary);
         return 0;
     }
@@ -48,6 +51,9 @@ public class DictionaryServiceImpl implements DictionaryService {
         Dictionary dictionary = findById(id);
         if (dictionary == null) {
             return 1;//删除对象不存在
+        }
+        if (HttpContent.removeIngoreSet.contains(dictionary.getDataKey())) {
+            return 2; //不可删除
         }
         dictionaryRepository.delete(dictionary);
         return 0;

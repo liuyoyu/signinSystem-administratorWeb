@@ -52,12 +52,17 @@ public class Role implements Serializable {
     @JsonIgnore
     private List<UserRole> userRoles;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "role", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<RoleMenu> roleMenus;
+
     public Role() {
         roleName = "User";
         createDate = new Date();
         modifyDate = new Date();
         detail = "";
         userRoles = new ArrayList<>();
+        roleMenus = new ArrayList<>();
     }
 
     public String getStatus() {
@@ -138,5 +143,13 @@ public class Role implements Serializable {
 
     public void setParentRole(Long parentRole) {
         this.parentRole = parentRole;
+    }
+
+    public List<RoleMenu> getRoleMenus() {
+        return roleMenus;
+    }
+
+    public void setRoleMenus(List<RoleMenu> roleMenus) {
+        this.roleMenus = roleMenus;
     }
 }

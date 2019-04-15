@@ -93,7 +93,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     public Boolean isAdmin(Long userId) {
         List<UserRole> allByUserId = userRoleRepository.findAllByUserId(userId);
         for (UserRole userrole : allByUserId) {
-            if (userrole.getRole().getRoleName().equals(BaseRole.admin)) {
+            if (userrole.getRole().getRoleName().equals(BaseRole.Admin)) {
                 return true;
             }
         }

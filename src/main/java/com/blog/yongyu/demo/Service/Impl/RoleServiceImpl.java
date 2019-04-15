@@ -1,5 +1,6 @@
 package com.blog.yongyu.demo.Service.Impl;
 
+import com.blog.yongyu.demo.Entity.BaseClass.BaseRole;
 import com.blog.yongyu.demo.Entity.Role;
 import com.blog.yongyu.demo.Repository.RoleRepository;
 import com.blog.yongyu.demo.Service.RoleService;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service("roleService")
@@ -40,6 +42,9 @@ public class RoleServiceImpl implements RoleService {
         Role role = findRoleById(roleId);
         if (role == null) {
             return 1;//删除对象不存在
+        }
+        if (Objects.equals(roleId, BaseRole.AdminId) || Objects.equals(roleId, BaseRole.UserId)) {
+            return 2; //基本角色不能删除
         }
         roleRepository.delete(role);
         return 0;

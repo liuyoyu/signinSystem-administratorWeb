@@ -17,6 +17,11 @@ import java.util.List;
 @Entity
 @Table(name = "dictionary", schema = "dbo", catalog = "et")
 public class Dictionary implements Serializable {
+    public enum DATATYPE{
+        System,
+        Standard
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -69,14 +74,6 @@ public class Dictionary implements Serializable {
         DataType = dataType;
     }
 
-    public String getDataName() {
-        return DataKey;
-    }
-
-    public void setDataName(String dataName) {
-        DataKey = dataName;
-    }
-
     public String getDataDesc() {
         return DataDesc;
     }
@@ -124,6 +121,22 @@ public class Dictionary implements Serializable {
 //    public void setDictionaryContents(List<DictionaryContent> dictionaryContents) {
 //        this.dictionaryContents = dictionaryContents;
 //    }
+
+    public String getDataKey() {
+        return DataKey;
+    }
+
+    public void setDataKey(String dataKey) {
+        DataKey = dataKey;
+    }
+
+    public List<DictionaryContent> getDictionaryContents() {
+        return dictionaryContents;
+    }
+
+    public void setDictionaryContents(List<DictionaryContent> dictionaryContents) {
+        this.dictionaryContents = dictionaryContents;
+    }
 
     public String getDataValue() {
         return DataValue;
