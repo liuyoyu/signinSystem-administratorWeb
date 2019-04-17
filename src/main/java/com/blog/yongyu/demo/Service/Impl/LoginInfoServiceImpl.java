@@ -6,8 +6,10 @@ package com.blog.yongyu.demo.Service.Impl;
 
 import com.blog.yongyu.demo.Entity.BaseClass.HttpContent;
 import com.blog.yongyu.demo.Entity.BaseClass.LoginInfor;
+import com.blog.yongyu.demo.Entity.UserInfo;
 import com.blog.yongyu.demo.Entity.UserRole;
 import com.blog.yongyu.demo.Service.LoginInfoService;
+import com.blog.yongyu.demo.Service.UserInfoService;
 import com.blog.yongyu.demo.Service.UserRoleService;
 import com.blog.yongyu.demo.Utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,8 @@ import java.util.Map;
 public class LoginInfoServiceImpl implements LoginInfoService {
     @Autowired
     UserRoleService userRoleService;
+    @Autowired
+    UserInfoService userInfoService;
 
 
     @Override
@@ -84,5 +88,12 @@ public class LoginInfoServiceImpl implements LoginInfoService {
             return null;
         }
         return logiInfo.getAccount();
+    }
+
+    @Override
+    public Boolean checkAdmin() {
+        String account = getAccount();
+        UserInfo user = userInfoService.findUserByAccount(account);
+        return userRoleService.isAdmin(user.getId());
     }
 }

@@ -22,4 +22,7 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
     @Query(value = "select u from UserRole u order by u.createDate desc ")
     List<UserRole> findAll();
 
+    @Query(value = "select u from UserRole u where u.userInfo.id = ?1 and u.role.id = ?2")
+    UserRole findByUserIdRoleId(Long userId, Long roleId);
+
 }

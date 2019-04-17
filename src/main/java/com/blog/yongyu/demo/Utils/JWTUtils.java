@@ -47,7 +47,7 @@ public class JWTUtils {
         Parse,      //语法错误
         JoseError   //格式错误
     }
-    private static final Integer expirationMillis = 60*60*24*7;
+    private static final Integer expirationMillis = 60*60*24*7*1000;
 
     /**
      * 生成Token

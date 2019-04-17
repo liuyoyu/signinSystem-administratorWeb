@@ -16,4 +16,5 @@ public interface LoginInfoService {
     String getRequestPath();
     LoginInfor getLogiInfo();
     String getAccount();
+    Boolean checkAdmin();
 }

@@ -5,16 +5,15 @@
 package com.blog.yongyu.demo.Service.Impl;
 
 import com.blog.yongyu.demo.Entity.BaseClass.BaseRole;
-import com.blog.yongyu.demo.Entity.Role;
-import com.blog.yongyu.demo.Entity.UserInfo;
 import com.blog.yongyu.demo.Entity.UserRole;
 import com.blog.yongyu.demo.Repository.UserRoleRepository;
+import com.blog.yongyu.demo.Service.LoginInfoService;
 import com.blog.yongyu.demo.Service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +21,8 @@ import java.util.Optional;
 public class UserRoleServiceImpl implements UserRoleService {
     @Autowired
     UserRoleRepository userRoleRepository;
+    @Autowired
+    LoginInfoService loginInfoService;
 
     @Override
     public UserRole findById(Long id) {
@@ -40,12 +41,14 @@ public class UserRoleServiceImpl implements UserRoleService {
         if (userRole == null) {
             return 1; // 对象不存在
         }
-        UserRole byId = findById(userRole.getId());
-        if (byId != null) {
-            return 2; //对象已存在
+        if (!loginInfoService.checkAdmin()) {
+            return 2;//没有权限
         }
-        long time = System.currentTimeMillis();
-        userRole.setCreateDate(new Date(time));
+        if (userRoleRepository.findByUserIdRoleId(userRole.getUserId(), userRole.getRoleId())!=null) {
+            return 3;//用户该角色已存在
+        }
+        userRole.setCreateDate(new Date());
+        userRole.setCreateBy(loginInfoService.getAccount());
         userRoleRepository.save(userRole);
         return 0;
     }

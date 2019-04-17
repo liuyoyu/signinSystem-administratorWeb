@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import java.util.Date;
+
 
 @Service("loginService")
 public class LoginServiceImpl implements LoginService {
@@ -29,6 +31,8 @@ public class LoginServiceImpl implements LoginService {
             return null;//用户不存在
         }
         if (DigestUtils.md5DigestAsHex(pwd.getBytes()).equals(user.getPwd())) {
+            user.setLastLogin(new Date());
+            userInfoService.modify(user);
             return user;//账户密码正确
         }
         return null;//密码错误

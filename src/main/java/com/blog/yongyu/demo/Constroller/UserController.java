@@ -7,9 +7,11 @@ package com.blog.yongyu.demo.Constroller;
 import com.blog.yongyu.demo.Entity.BaseClass.BaseRole;
 import com.blog.yongyu.demo.Entity.BaseClass.DataResult;
 import com.blog.yongyu.demo.Entity.BaseClass.LoginInfor;
+import com.blog.yongyu.demo.Entity.Role;
 import com.blog.yongyu.demo.Entity.UserInfo;
 import com.blog.yongyu.demo.Entity.UserRole;
 import com.blog.yongyu.demo.Service.LoginInfoService;
+import com.blog.yongyu.demo.Service.RoleService;
 import com.blog.yongyu.demo.Service.UserInfoService;
 import com.blog.yongyu.demo.Service.UserRoleService;
 import com.blog.yongyu.demo.Utils.ResultUtils;
@@ -32,6 +34,8 @@ public class UserController {
     LoginInfoService loginInfoService;
     @Autowired
     UserRoleService userRoleService;
+    @Autowired
+    RoleService roleService;
 
     /**
      * 新增用户，由管理员操作
@@ -75,36 +79,37 @@ public class UserController {
         return ResultUtils.error(res, "修改对象不存在");
     }
 
-    @RequestMapping("/findAll")
+    @RequestMapping(value = "/findAll",method = RequestMethod.GET)
     public DataResult findAll() {
+
         List<UserRole> allUserRole = userRoleService.findAll();
         Map<String, Integer> map = new HashMap<>();
         List<JSONObject> list = new ArrayList<>();
-        int i = 0;
-        for (UserRole ur : allUserRole) {
+        for (int i=0; i<allUserRole.size(); i++) {
+            UserRole ur = allUserRole.get(i);
             JSONObject jsonObject = new JSONObject();
             if (map.containsKey(ur.getAccount())) {
-                if (ur.getIsDefault().equals(UserRole.ISDEFAULT.isDefault.toString())) {
-                    allUserRole.set(map.get(ur.getAccount()), ur);
-                    jsonObject.put("account", ur.getAccount());
-                    jsonObject.put("userName", ur.getUserInfo().getUserName());
-                    jsonObject.put("sex", ur.getUserInfo().getSex());
-                    jsonObject.put("email", ur.getUserInfo().getEmail());
-                    jsonObject.put("phone", ur.getUserInfo().getPhone());
-                    jsonObject.put("status", ur.getUserInfo().getStatus());
-                    jsonObject.put("roleName", ur.getRole().getRoleName());
-                }
+                int loc = map.get(ur.getAccount());
+                JSONObject tmp = list.get(loc);
+                List<String> rn = (List<String>) tmp.get("roleName");
+                rn.add(ur.getRoleName());
+                tmp.put("roleName", rn);
             } else {
-                map.put(ur.getAccount(), i++);
+                //未出现重复账户时
+                List<String> roleName = new ArrayList<>();
+                roleName.add(ur.getRoleName());
+                jsonObject.put("roleName", roleName);
+                jsonObject.put("userId", ur.getUserId());
                 jsonObject.put("account", ur.getAccount());
-                jsonObject.put("userName", ur.getUserInfo().getUserName());
-                jsonObject.put("sex", ur.getUserInfo().getSex());
-                jsonObject.put("email", ur.getUserInfo().getEmail());
-                jsonObject.put("phone", ur.getUserInfo().getPhone());
-                jsonObject.put("UserStatus", ur.getUserInfo().getStatus());
-                jsonObject.put("roleName", ur.getRole().getRoleName());
+                jsonObject.put("userName", ur.getUserName());
+                jsonObject.put("sex", ur.getSex());
+                jsonObject.put("email", ur.getEmail());
+                jsonObject.put("phone", ur.getPhone());
+                jsonObject.put("status", ur.getUserStatus());
+                jsonObject.put("lastLogin", ur.getLastLogin());
+                map.put(ur.getAccount(),i);
+                list.add(jsonObject);
             }
-            list.add(jsonObject);
         }
 //        List<UserInfo> all = userInfoService.findAll();
         return ResultUtils.success(list, list.size());
@@ -128,5 +133,24 @@ public class UserController {
         }
         userInfoService.allResetPwd(idList);
         return ResultUtils.success();
+    }
+
+    @RequestMapping("/addUserRole")
+    public DataResult addUserRole(@RequestParam("userId")Long userId,@RequestParam("roleId")Long roleId){
+        UserInfo user = userInfoService.findUserById(userId);
+        if (user == null) {
+            return ResultUtils.error(2, "必须选择一个用户");
+        }
+        Role role = roleService.findRoleById(roleId);
+        if (role == null) {
+            return ResultUtils.error(2, "必须选择一个角色");
+        }
+        UserRole userRole = new UserRole(user,role);
+        Integer res = userRoleService.addUserRole(userRole);
+        if (res == 0) {
+            return ResultUtils.success();
+        }
+        String[] msg = {"成功","添加对象不存在","没有权限","用户已存在该角色"};
+        return ResultUtils.error(res, msg[res]);
     }
 }

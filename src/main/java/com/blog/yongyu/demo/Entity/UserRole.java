@@ -56,10 +56,6 @@ public class UserRole implements Serializable {
     public UserRole(UserInfo userInfo, Role role) {
         this.userInfo = userInfo;
         this.role = role;
-        this.createDate = new Date();
-        this.modifyDate = new Date();
-        this.createBy = userInfo.getAccount();
-        this.modifyBy = userInfo.getAccount();
     }
 
     public Long getId() {
@@ -131,5 +127,59 @@ public class UserRole implements Serializable {
             return getUserInfo().getAccount();
         }
         return null;
+    }
+    public Long getUserId(){
+        if (userInfo == null) {
+            return null;
+        }
+        return userInfo.getId();
+    }
+    public String getRoleName(){
+        if (role == null) {
+            return null;
+        }
+        return role.getRoleName();
+    }
+    public Long getRoleId(){
+        if (role == null) {
+            return null;
+        }
+        return role.getRoleId();
+    }
+    public Date getLastLogin(){
+        if (userInfo == null) {
+            return null;
+        }
+        return userInfo.getLastLogin();
+    }
+    public String getUserStatus(){
+        if (userInfo == null) {
+            return null;
+        }
+        return userInfo.getStatus();
+    }
+    public String getPhone(){
+        if (userInfo == null) {
+            return null;
+        }
+        return userInfo.getPhone();
+    }
+    public String getEmail(){
+        if (userInfo == null) {
+            return null;
+        }
+        return userInfo.getEmail();
+    }
+    public String getSex(){
+        if (userInfo == null) {
+            return null;
+        }
+        return userInfo.getSex();
+    }
+    public String getUserName(){
+        if (userInfo == null) {
+            return null;
+        }
+        return userInfo.getUserName();
     }
 }
