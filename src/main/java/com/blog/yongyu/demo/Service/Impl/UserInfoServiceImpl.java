@@ -131,6 +131,9 @@ public class UserInfoServiceImpl implements UserInfoService {
             return 1;//修改对象不存在
         }
         if (!"".equals(userInfo.getEmail()) && userInfo.getEmail() != null) {
+            if (findUserByEmail(userInfo.getEmail())!=null && userInfo.getEmail()!=userById.getEmail()) {
+                return 2; //邮箱已被占用
+            }
             userById.setEmail(userInfo.getEmail());
         }
         if (!"".equals(userInfo.getPwd()) && userInfo.getPwd() != null) {

@@ -75,7 +75,8 @@ public class UserController {
         if (res == 0) {
             return ResultUtils.success();
         }
-        return ResultUtils.error(res, "修改对象不存在");
+        String[] msg = {"修改成功", "修改对象不存在", "邮箱已被占用"};
+        return ResultUtils.error(res, msg[res]);
     }
 
     @RequestMapping(value = "/findAll",method = RequestMethod.GET)

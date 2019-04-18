@@ -74,7 +74,6 @@ public class LoginController {
 
     /**
      * 发送邮箱验证码
-     *
      * @param receiver
      * @param
      * @return
@@ -141,8 +140,8 @@ public class LoginController {
     @RequestMapping("/logOut")
     public DataResult loginOut(HttpServletRequest request, HttpServletResponse response) {
         String token = request.getHeader(HttpContent.Token);
-        if (token != null || "".equals(token)) {
-            RedisUtils.del("token");
+        if (token != null || !"".equals(token)) {
+            RedisUtils.del(token);
         }
 //        String path = request.getContextPath();
 //        String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
