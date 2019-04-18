@@ -118,6 +118,12 @@ public class UserInfoServiceImpl implements UserInfoService {
         return 0;//删除成功
     }
 
+    /**
+     * 修改用户信息，不能修改用户账户信息
+     * 管理员界面调用
+     * @param userInfo
+     * @return
+     */
     @Override
     public Integer modify(UserInfo userInfo) {
         UserInfo userById = findUserById(userInfo.getId());
