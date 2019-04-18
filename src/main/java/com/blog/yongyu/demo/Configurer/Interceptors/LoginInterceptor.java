@@ -36,7 +36,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         String token = request.getHeader(HttpContent.Token);
         String value = null;
         if (token != null) {
-             value = RedisUtils.get(HttpContent.Token);//获取redis中的token
+             value = RedisUtils.get(token);//获取redis中的token
         }
         response.setCharacterEncoding("utf-8");
         response.setContentType("application/json; charset=utf-8");
@@ -48,7 +48,6 @@ public class LoginInterceptor implements HandlerInterceptor {
             map.put("status", "99");
             map.put("msg", "sign in, please.");
             writer.print(map.toString());
-//                            response.sendRedirect(basePath + "#/login");
             writer.flush();
             writer.close();
             return false;
@@ -58,7 +57,6 @@ public class LoginInterceptor implements HandlerInterceptor {
             map.put("status", "99");
             map.put("msg", "Time out!");
             writer.print(map.toString());
-//                            response.sendRedirect(basePath + "#/login");
             writer.flush();
             writer.close();
             return false;

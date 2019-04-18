@@ -15,7 +15,6 @@ import com.blog.yongyu.demo.Service.RoleService;
 import com.blog.yongyu.demo.Service.UserInfoService;
 import com.blog.yongyu.demo.Service.UserRoleService;
 import com.blog.yongyu.demo.Utils.ResultUtils;
-import javafx.geometry.Pos;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

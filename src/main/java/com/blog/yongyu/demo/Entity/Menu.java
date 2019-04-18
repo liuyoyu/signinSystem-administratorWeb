@@ -35,6 +35,9 @@ public class Menu implements Serializable {
     @Column()
     private String icon;
 
+    @Column()
+    private Integer sequence;
+
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "menu")
     @JsonIgnore
@@ -145,5 +148,13 @@ public class Menu implements Serializable {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public Integer getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(Integer sequence) {
+        this.sequence = sequence;
     }
 }

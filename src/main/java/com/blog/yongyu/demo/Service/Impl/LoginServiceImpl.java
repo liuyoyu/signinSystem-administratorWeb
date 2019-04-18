@@ -32,7 +32,7 @@ public class LoginServiceImpl implements LoginService {
         }
         if (DigestUtils.md5DigestAsHex(pwd.getBytes()).equals(user.getPwd())) {
             user.setLastLogin(new Date());
-            userInfoService.modify(user);
+            userInfoRepository.save(user);
             return user;//账户密码正确
         }
         return null;//密码错误
