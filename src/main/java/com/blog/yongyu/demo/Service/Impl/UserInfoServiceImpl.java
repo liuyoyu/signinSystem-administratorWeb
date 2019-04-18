@@ -128,7 +128,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             userById.setEmail(userInfo.getEmail());
         }
         if (!"".equals(userInfo.getPwd()) && userInfo.getPwd() != null) {
-            userById.setPwd(userInfo.getPwd());
+            userById.setNewPassword(userInfo.getPwd());
         }
         if (!"".equals(userInfo.getUserName()) && userInfo.getUserName() != null) {
             userById.setUserName(userInfo.getUserName());

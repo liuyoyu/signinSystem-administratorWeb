@@ -153,4 +153,13 @@ public class UserController {
         String[] msg = {"成功","添加对象不存在","没有权限","用户已存在该角色"};
         return ResultUtils.error(res, msg[res]);
     }
+
+    @RequestMapping("/findById")
+    public DataResult findById(@RequestParam("userId")Long userId){
+        UserInfo user = userInfoService.findUserById(userId);
+        if (user == null) {
+            return ResultUtils.error(1, "用户不存在");
+        }
+        return ResultUtils.success(user);
+    }
 }
