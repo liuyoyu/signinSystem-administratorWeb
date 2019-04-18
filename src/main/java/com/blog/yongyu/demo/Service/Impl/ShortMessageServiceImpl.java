@@ -49,8 +49,8 @@ public class ShortMessageServiceImpl implements ShortMessageService {
      */
     @Override
     public Integer verifyEmailMessage(String code, String account, String email) {
-        ShortMessage msgList = shortMessageRepository.findShortMessagesByAccountEmail(account, email);
-        if (msgList.getCode().equals(code)) {
+        List<ShortMessage> msgList = shortMessageRepository.findShortMessagesByAccountEmail(account, email);//最新的短信
+        if (msgList.get(0).getCode().equals(code)) {
             return 0;
         }
         return 1; //验证错误

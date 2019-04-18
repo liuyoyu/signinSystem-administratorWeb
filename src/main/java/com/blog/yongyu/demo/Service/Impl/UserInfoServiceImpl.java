@@ -96,8 +96,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
         user.setCreateDate(new Date());
         user.setModifyDate(new Date());
-        user.setCreateBy(user.getAccount());
-        user.setModifyBy(user.getAccount());
+        user.setCreateBy(loginInfoService.getAccount());
+        user.setModifyBy(loginInfoService.getAccount());
         userInfoRepository.save(user);
         UserRole userRole = new UserRole(user, byRoleName);
         userRole.setIsDefault(UserRole.ISDEFAULT.isDefault.toString());//设置默认角色

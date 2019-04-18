@@ -6,6 +6,7 @@ import com.blog.yongyu.demo.Entity.BaseClass.LoginInfor;
 import com.blog.yongyu.demo.Entity.Role;
 import com.blog.yongyu.demo.Entity.UserInfo;
 import com.blog.yongyu.demo.Entity.UserRole;
+import com.blog.yongyu.demo.Repository.UserInfoRepository;
 import com.blog.yongyu.demo.Service.*;
 import com.blog.yongyu.demo.Utils.EmailUtils;
 import com.blog.yongyu.demo.Utils.JWTUtils;
@@ -34,6 +35,8 @@ public class LoginController {
     ShortMessageService shortMessageService;
     @Autowired
     LoginInfoService loginInfoService;
+    @Autowired
+    UserInfoRepository userInfoRepository;
 
     /**
      * 用户登陆
@@ -77,20 +80,17 @@ public class LoginController {
      * @return
      */
     @RequestMapping(value = "/login_sendEmail",method = RequestMethod.POST)
-    public DataResult sendEmail(@RequestParam("receiver") String receiver) {
-        LoginInfor logiInfo = loginInfoService.getLogiInfo();
-        if (logiInfo == null) {
-            return ResultUtils.error(1, "请先登陆");
-        }
-        UserInfo userByAccount = userInfoService.findUserByAccount(logiInfo.getAccount());
+    public DataResult sendEmail(@RequestParam("receiver") String receiver,
+                                @RequestParam("account") String account) {
+        UserInfo userByAccount = userInfoService.findUserByAccount(account);
         if (userByAccount == null) {
-            return ResultUtils.error(2, "账号不存在");
+            return ResultUtils.error(3, "账号不存在");
         }
         if (userByAccount.getEmail() == null || !userByAccount.getEmail().equals(receiver)) {
-            return ResultUtils.error(3, "该邮箱不是注册邮箱");
+            return ResultUtils.error(4, "该邮箱不是注册邮箱");
         }
 
-        Integer res = shortMessageService.sendEmailMessage(logiInfo.getAccount(), receiver, "重置密码");
+        Integer res = shortMessageService.sendEmailMessage(account, receiver, "重置密码");
         String[] msg = {"成功", "接收人不能为空", "短信功能异常"};
         if (res == 0) {
             return ResultUtils.success();
@@ -99,23 +99,21 @@ public class LoginController {
     }
 
     /**
-     * 初始化密码：8888
+     * 重置密码
      * @param code
      * @return
      */
     @RequestMapping(value = "/login_resetPwd", method = RequestMethod.POST)
-    public DataResult VerifyMsgCode(@RequestParam("code") String code) {
-        LoginInfor logiInfo = loginInfoService.getLogiInfo();
-        if (logiInfo == null) {
-            return ResultUtils.error(2, "请先登陆");
-        }
-        String account = logiInfo.getAccount();
-        String email = logiInfo.getEmail();
+    public DataResult VerifyMsgCode(@RequestParam("code") String code,
+                                    @RequestParam("pwd") String pwd,
+                                    @RequestParam("account")String account,
+                                    @RequestParam("email")String email) {
+
         Integer res = shortMessageService.verifyEmailMessage(code, account, email);
         if (res == 0) {
             UserInfo userByAccount = userInfoService.findUserByAccount(account);
-            userByAccount.setInitPassword();
-            userInfoService.modify(userByAccount);
+            userByAccount.setNewPassword(pwd);
+            userInfoRepository.save(userByAccount);
             return ResultUtils.success();
         }
         return ResultUtils.error(1, "验证码错误");
