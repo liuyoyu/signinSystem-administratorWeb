@@ -75,7 +75,7 @@ public class UserController {
         if (res == 0) {
             return ResultUtils.success();
         }
-        String[] msg = {"修改成功", "修改对象不存在", "邮箱已被占用"};
+        String[] msg = {"修改成功", "修改对象不存在", "邮箱已被占用","邮箱不能为空"};
         return ResultUtils.error(res, msg[res]);
     }
 
