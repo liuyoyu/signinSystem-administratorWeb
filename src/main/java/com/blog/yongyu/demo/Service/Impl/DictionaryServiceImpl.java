@@ -9,6 +9,7 @@ import com.blog.yongyu.demo.Entity.Dictionary;
 import com.blog.yongyu.demo.Repository.DictionaryRepository;
 import com.blog.yongyu.demo.Service.DictionaryService;
 import com.blog.yongyu.demo.Service.LoginInfoService;
+import com.blog.yongyu.demo.Utils.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,9 +70,11 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (dictionary == null){
             return 1; //对象不能为空
         }
-        dictionary.setModifyDate(new Date());
-        dictionary.setModifyBy(loginInfoService.getAccount());
-        dictionaryRepository.save(dictionary);
+        Dictionary byId = findById(dictionary.getId());
+        byId.setModifyDate(new Date());
+        byId.setModifyBy(loginInfoService.getAccount());
+        DataUtils.copyProperty(dictionary, byId);
+        dictionaryRepository.save(byId);
         return 0;
     }
 }

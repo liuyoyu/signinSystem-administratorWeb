@@ -5,6 +5,7 @@ import com.blog.yongyu.demo.Entity.Role;
 import com.blog.yongyu.demo.Repository.RoleRepository;
 import com.blog.yongyu.demo.Service.LoginInfoService;
 import com.blog.yongyu.demo.Service.RoleService;
+import com.blog.yongyu.demo.Utils.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,9 +63,10 @@ public class RoleServiceImpl implements RoleService {
         if (oldRole == null) {
             return 2; // 修改对象不存在
         }
-        role.setModifyBy(loginInfoService.getAccount());
-        role.setModifyDate(new Date());
-        roleRepository.save(role);
+        oldRole.setModifyBy(loginInfoService.getAccount());
+        oldRole.setModifyDate(new Date());
+        DataUtils.copyProperty(role, oldRole);
+        roleRepository.save(oldRole);
         return 0;
     }
 
