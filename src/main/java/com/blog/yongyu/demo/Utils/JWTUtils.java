@@ -88,14 +88,15 @@ public class JWTUtils {
             JWSVerifier verifier = new MACVerifier(SECRET);
             if (jwsObject.verify(verifier)) {
                 JSONObject jsObject = payload.toJSONObject();
-                if (jsObject.containsKey(params.DATA_EXT.toString())) {
-                    Long extTime = Long.valueOf(jsObject.get(params.DATA_EXT.toString()).toString());
-                    Long curTime = new Date().getTime();
-                    if (curTime > extTime) {
-                        resultMap.put(params.STATUS.toString(), TokenStatus.Expired.toString());
-                        return resultMap;
-                    }
-                }
+                //不要设置时长，由redis进行有效时间控制
+//                if (jsObject.containsKey(params.DATA_EXT.toString())) {
+//                    Long extTime = Long.valueOf(jsObject.get(params.DATA_EXT.toString()).toString());
+//                    Long curTime = new Date().getTime();
+//                    if (curTime > extTime) {
+//                        resultMap.put(params.STATUS.toString(), TokenStatus.Expired.toString());
+//                        return resultMap;
+//                    }
+//                }
                 resultMap.put(params.STATUS.toString(), TokenStatus.Valid.toString());
                 resultMap.put(params.DATA.toString(), jsObject);
             } else {

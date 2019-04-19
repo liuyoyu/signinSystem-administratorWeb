@@ -8,6 +8,7 @@ import com.blog.yongyu.demo.Entity.BaseClass.HttpContent;
 import com.blog.yongyu.demo.Entity.Dictionary;
 import com.blog.yongyu.demo.Repository.DictionaryRepository;
 import com.blog.yongyu.demo.Service.DictionaryService;
+import com.blog.yongyu.demo.Service.LoginInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,8 @@ import java.util.Optional;
 public class DictionaryServiceImpl implements DictionaryService {
     @Autowired
     DictionaryRepository dictionaryRepository;
-
+    @Autowired
+    LoginInfoService loginInfoService;
 
     @Override
     public Dictionary findById(Long id) {
@@ -41,6 +43,9 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (dictionary == null) {
             return 1;//用户不能为空
         }
+        if (dictionaryRepository.findByDataKey(dictionary.getDataKey()) != null) {
+            return 2; //键名已存在
+        }
         dictionary.setCreateDate(new Date());
         dictionaryRepository.save(dictionary);
         return 0;
@@ -52,7 +57,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (dictionary == null) {
             return 1;//删除对象不存在
         }
-        if (HttpContent.removeIngoreSet.contains(dictionary.getDataKey())) {
+        if (dictionary.getDataTypeKey()!=null && dictionary.getDataTypeKey().equals(Dictionary.DATATYPE.System.toString())) {
             return 2; //不可删除
         }
         dictionaryRepository.delete(dictionary);
@@ -64,6 +69,8 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (dictionary == null){
             return 1; //对象不能为空
         }
+        dictionary.setModifyBy(loginInfoService.getAccount());
+        dictionary.setModifyDate(new Date());
         dictionaryRepository.save(dictionary);
         return 0;
     }

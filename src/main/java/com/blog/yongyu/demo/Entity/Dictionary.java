@@ -30,6 +30,9 @@ public class Dictionary implements Serializable {
     private String DataType;
 
     @Column()
+    private String DataTypeKey;
+
+    @Column()
     private String DataKey;
 
     @Column()
@@ -114,13 +117,6 @@ public class Dictionary implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-//    public List<DictionaryContent> getDictionaryContents() {
-//        return dictionaryContents;
-//    }
-//
-//    public void setDictionaryContents(List<DictionaryContent> dictionaryContents) {
-//        this.dictionaryContents = dictionaryContents;
-//    }
 
     public String getDataKey() {
         return DataKey;
@@ -130,13 +126,13 @@ public class Dictionary implements Serializable {
         DataKey = dataKey;
     }
 
-    public List<DictionaryContent> getDictionaryContents() {
-        return dictionaryContents;
-    }
-
-    public void setDictionaryContents(List<DictionaryContent> dictionaryContents) {
-        this.dictionaryContents = dictionaryContents;
-    }
+//    public List<DictionaryContent> getDictionaryContents() {
+//        return dictionaryContents;
+//    }
+//
+//    public void setDictionaryContents(List<DictionaryContent> dictionaryContents) {
+//        this.dictionaryContents = dictionaryContents;
+//    }
 
     public String getDataValue() {
         return DataValue;
@@ -144,5 +140,13 @@ public class Dictionary implements Serializable {
 
     public void setDataValue(String dataValue) {
         DataValue = dataValue;
+    }
+
+    public String getDataTypeKey() {
+        return DataTypeKey;
+    }
+
+    public void setDataTypeKey(String dataTypeKey) {
+        DataTypeKey = dataTypeKey;
     }
 }

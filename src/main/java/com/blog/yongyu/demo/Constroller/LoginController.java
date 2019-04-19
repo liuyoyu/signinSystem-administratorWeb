@@ -12,6 +12,7 @@ import com.blog.yongyu.demo.Utils.EmailUtils;
 import com.blog.yongyu.demo.Utils.JWTUtils;
 import com.blog.yongyu.demo.Utils.RedisUtils;
 import com.blog.yongyu.demo.Utils.ResultUtils;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +51,12 @@ public class LoginController {
             String token = JWTUtils.generateToken(userInfo.getId(),defaultRoleByUserId.getId());//token携带用户id和用户角色id
 
             RedisUtils.setex(token, token, RedisUtils.ValidTime);//缓存中加入token，有效时长为7天 ；以token为键来存
-            return ResultUtils.success(token);//返回token
+            JSONObject js = new JSONObject();
+            js.put("token", token);
+            js.put("account", account);
+            js.put("userName", defaultRoleByUserId.getUserName());
+            js.put("userId", defaultRoleByUserId.getUserId());
+            return ResultUtils.success(js);
         }
 
         return ResultUtils.error(1, "用户不存在或密码错误");

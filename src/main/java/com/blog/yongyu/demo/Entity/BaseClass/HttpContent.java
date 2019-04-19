@@ -19,8 +19,8 @@ public class HttpContent {
 
         add(UserRole.STATUS.Normal.toString());
         add(UserRole.STATUS.Disabled.toString());
-        add(BaseRole.UserId.toString());
-        add(BaseRole.AdminId.toString());
+//        add(BaseRole.UserId.toString());
+//        add(BaseRole.AdminId.toString());
         add(BaseRole.Admin);
         add(BaseRole.User);
         add(Dictionary.DATATYPE.System.toString());

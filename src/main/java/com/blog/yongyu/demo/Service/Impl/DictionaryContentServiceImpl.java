@@ -8,6 +8,8 @@ import com.blog.yongyu.demo.Entity.BaseClass.HttpContent;
 import com.blog.yongyu.demo.Entity.DictionaryContent;
 import com.blog.yongyu.demo.Repository.DictionaryContentRepository;
 import com.blog.yongyu.demo.Service.DictionaryContentService;
+import com.blog.yongyu.demo.Service.LoginInfoService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ import java.util.Optional;
 public class DictionaryContentServiceImpl implements DictionaryContentService{
     @Autowired
     DictionaryContentRepository dictionaryContentRepository;
+    @Autowired
+    LoginInfoService loginInfoService;
 
     @Override
     public DictionaryContent findById(Long id) {
@@ -57,7 +61,10 @@ public class DictionaryContentServiceImpl implements DictionaryContentService{
         if (dictionaryContent == null) {
             return 1;//对象不能为空
         }
-        dictionaryContentRepository.save(dictionaryContent);
+        DictionaryContent byId = findById(dictionaryContent.getId());
+        dictionaryContent.setModifyBy(loginInfoService.getAccount());
+        dictionaryContent.setModifyDate(new Date());
+        BeanUtils.copyProperties(dictionaryContent,byId);
         return 0;
     }
 
@@ -65,5 +72,21 @@ public class DictionaryContentServiceImpl implements DictionaryContentService{
     public List<DictionaryContent> findDicContentByDicId(Long dicId) {
         List<DictionaryContent> dicContentByDicId = dictionaryContentRepository.findDicContentByDicId(dicId);
         return dicContentByDicId;
+    }
+
+    @Override
+    public DictionaryContent findDicCntByDicIdCntId(Long dicId, Long cntId) {
+        return dictionaryContentRepository.findDicCntByDicIdCntId(dicId, cntId);
+    }
+
+    /**
+     * 通过contentkey查找dictionaryContent
+     * @param dicId
+     * @param key
+     * @return
+     */
+    @Override
+    public DictionaryContent findDicCntByDicIdCntKey(Long dicId, String key) {
+        return dictionaryContentRepository.findDicCntByDicIdCntKey(dicId, key);
     }
 }

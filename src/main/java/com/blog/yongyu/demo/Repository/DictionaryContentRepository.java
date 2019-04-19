@@ -12,4 +12,10 @@ public interface DictionaryContentRepository extends JpaRepository<DictionaryCon
 
     @Query("select dc from DictionaryContent dc where dc.dictionary.id = ?1")
     List<DictionaryContent> findDicContentByDicId(Long dicId);
+
+    @Query("select dc from DictionaryContent dc where dc.dictionary.id = ?1 and dc.id = ?2")
+    DictionaryContent findDicCntByDicIdCntId(Long dicId, Long cntId);
+
+    @Query("select dc from DictionaryContent dc where dc.dictionary.id = ?1 and dc.contentKey = ?2")
+    DictionaryContent findDicCntByDicIdCntKey(Long dicId, String key);
 }

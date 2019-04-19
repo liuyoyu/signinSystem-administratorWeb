@@ -12,4 +12,6 @@ public interface DictionaryRepository extends JpaRepository<Dictionary, Long> {
 
     @Query("select d from Dictionary d order by d.createDate desc ")
     List<Dictionary> findAll();
+    @Query("select d from Dictionary d where d.DataKey = ?1")
+    Dictionary findByDataKey(String dataKey);
 }
