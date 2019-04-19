@@ -27,11 +27,15 @@ public class RoleController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public DataResult add(Role role){
         if (role.getParentRole() == null ) {
-            return ResultUtils.error(2, "必须继承一个角色");
+            return ResultUtils.error(3, "必须继承一个角色");
+        }
+        if (role.getParentRole() == null || role.getRoleName() == null || role.getStatus() == null) {
+            return ResultUtils.error(4, "必填项不能为空");
         }
         Integer res = roleService.Insert(role);
-        if (res == 1) {
-            return ResultUtils.error(1, "添加角色不能为空");
+        if (res != 0) {
+            String[] msg = {"成功", "添加角色不能为空", "角色名称重复"};
+            return ResultUtils.error(res,msg[res]);
         }
         return ResultUtils.success();
     }
@@ -42,7 +46,7 @@ public class RoleController {
         if (res == 0) {
             return ResultUtils.success();
         }
-        String[] msg = {"删除对象不存在", "不能删除基本角色"};
+        String[] msg = {"成功","删除对象不存在", "不能删除基本角色"};
         return ResultUtils.error(res, msg[res]);
     }
 
@@ -52,12 +56,13 @@ public class RoleController {
         if (res == 0) {
             return ResultUtils.success();
         }
-        return ResultUtils.error(res, "修改对象不存在");
+        String[] msg = {"成功","修改对象不存在","修改对象不存在"}
+        return ResultUtils.error(res,msg[res]);
     }
 
-    @RequestMapping("/findAll")
+    @RequestMapping(value = "/findAll",method = RequestMethod.POST)
     public DataResult findAll(){
         List<Role> all = roleService.findAll();
-        return ResultUtils.success(all);
+        return ResultUtils.success(all, all.size());
     }
 }

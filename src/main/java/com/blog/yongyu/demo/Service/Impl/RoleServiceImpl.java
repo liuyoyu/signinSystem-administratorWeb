@@ -35,6 +35,9 @@ public class RoleServiceImpl implements RoleService {
         if (role == null) {
             return 1;//角色不能为空
         }
+        if (roleRepository.findByRoleName(role.getRoleName()) != null) {
+            return 2; //角色名称重复
+        }
         role.setCreateDate(new Date());
         role.setCreateBy(loginInfoService.getAccount());
         roleRepository.save(role);
