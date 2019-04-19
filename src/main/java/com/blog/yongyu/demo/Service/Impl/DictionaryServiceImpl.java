@@ -69,8 +69,8 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (dictionary == null){
             return 1; //对象不能为空
         }
-        dictionary.setModifyBy(loginInfoService.getAccount());
         dictionary.setModifyDate(new Date());
+        dictionary.setModifyBy(loginInfoService.getAccount());
         dictionaryRepository.save(dictionary);
         return 0;
     }

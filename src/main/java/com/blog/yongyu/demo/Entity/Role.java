@@ -58,8 +58,6 @@ public class Role implements Serializable {
 
     public Role() {
         roleName = "User";
-        createDate = new Date();
-        modifyDate = new Date();
         detail = "";
         userRoles = new ArrayList<>();
         roleMenus = new ArrayList<>();

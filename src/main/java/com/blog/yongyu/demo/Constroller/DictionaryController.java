@@ -144,7 +144,6 @@ public class DictionaryController {
         if (dicCntByDicIdCntId == null) {
             return ResultUtils.error(2, "修改对象不存在");
         }
-        dicCntByDicIdCntId.setDictionary(dicCntByDicIdCntId.getDictionary());
         Integer res = dicContentService.modify(dicContent);
         if (res == 1) {
             return ResultUtils.error(1, "输入为空");

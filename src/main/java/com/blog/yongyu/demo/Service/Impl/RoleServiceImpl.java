@@ -3,6 +3,7 @@ package com.blog.yongyu.demo.Service.Impl;
 import com.blog.yongyu.demo.Entity.BaseClass.BaseRole;
 import com.blog.yongyu.demo.Entity.Role;
 import com.blog.yongyu.demo.Repository.RoleRepository;
+import com.blog.yongyu.demo.Service.LoginInfoService;
 import com.blog.yongyu.demo.Service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,8 @@ import java.util.Optional;
 public class RoleServiceImpl implements RoleService {
     @Autowired
     RoleRepository roleRepository;
+    @Autowired
+    LoginInfoService loginInfoService;
 
     @Override
     public Role findRoleById(Long id) {
@@ -32,7 +35,7 @@ public class RoleServiceImpl implements RoleService {
             return 1;//角色不能为空
         }
         role.setCreateDate(new Date());
-        role.setModifyDate(new Date());
+        role.setCreateBy(loginInfoService.getAccount());
         roleRepository.save(role);
         return 0;
     }
@@ -59,6 +62,8 @@ public class RoleServiceImpl implements RoleService {
         if (oldRole == null) {
             return 2; // 修改对象不存在
         }
+        role.setModifyBy(loginInfoService.getAccount());
+        role.setModifyDate(new Date());
         roleRepository.save(role);
         return 0;
     }

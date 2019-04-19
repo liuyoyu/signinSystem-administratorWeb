@@ -11,6 +11,7 @@ import com.blog.yongyu.demo.Service.RoleService;
 import com.blog.yongyu.demo.Utils.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,11 +24,9 @@ public class RoleController {
     @Autowired
     RoleService roleService;
 
-    @RequestMapping("/add")
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public DataResult add(Role role){
-        if (role.getParentRole() == null ||
-                !Objects.equals(role.getRoleId(), BaseRole.AdminId) ||
-                !Objects.equals(role.getRoleId(), BaseRole.UserId)) {
+        if (role.getParentRole() == null ) {
             return ResultUtils.error(2, "必须继承一个角色");
         }
         Integer res = roleService.Insert(role);
@@ -37,7 +36,7 @@ public class RoleController {
         return ResultUtils.success();
     }
 
-    @RequestMapping("/delete")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public DataResult delete(@RequestParam("id") Long id){
         Integer res = roleService.Delete(id);
         if (res == 0) {
@@ -47,7 +46,7 @@ public class RoleController {
         return ResultUtils.error(res, msg[res]);
     }
 
-    @RequestMapping("/modify")
+    @RequestMapping(value = "/modify", method = RequestMethod.POST)
     public DataResult modify(Role role){
         Integer res = roleService.modify(role);
         if (res == 0) {

@@ -62,9 +62,24 @@ public class DictionaryContentServiceImpl implements DictionaryContentService{
             return 1;//对象不能为空
         }
         DictionaryContent byId = findById(dictionaryContent.getId());
-        dictionaryContent.setModifyBy(loginInfoService.getAccount());
-        dictionaryContent.setModifyDate(new Date());
-        BeanUtils.copyProperties(dictionaryContent,byId);
+        byId.setModifyBy(loginInfoService.getAccount());
+        byId.setModifyDate(new Date());
+        if (dictionaryContent.getContentValue() != null && "".equals(dictionaryContent.getContentValue())) {
+            byId.setContentValue(dictionaryContent.getContentValue());
+        }
+        if (dictionaryContent.getContentKey() != null && "".equals(dictionaryContent.getContentKey())) {
+            byId.setContentKey(dictionaryContent.getContentKey());
+        }
+        if (dictionaryContent.getStatus() != null && "".equals(dictionaryContent.getStatus())) {
+            byId.setStatus(dictionaryContent.getStatus());
+        }
+        if (dictionaryContent.getDescribe() != null && "".equals(dictionaryContent.getDescribe())) {
+            byId.setDescribe(dictionaryContent.getDescribe());
+        }
+        if (dictionaryContent.getSequence() != null && "".equals(dictionaryContent.getSequence())) {
+            byId.setSequence(dictionaryContent.getSequence());
+        }
+        dictionaryContentRepository.save(byId);
         return 0;
     }
 
