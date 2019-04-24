@@ -150,4 +150,13 @@ public class DictionaryController {
         }
         return ResultUtils.success();
     }
+
+    @RequestMapping(value = "/findByDicId",method = RequestMethod.POST)
+    public DataResult findByDicId(@RequestParam("dicID")Long dicID){
+        Dictionary byId = dictionaryService.findById(dicID);
+        if (byId == null) {
+            return ResultUtils.error(1, "字典不存在");
+        }
+        return ResultUtils.success(byId);
+    }
 }

@@ -56,7 +56,7 @@ public class RoleController {
         if (res == 0) {
             return ResultUtils.success();
         }
-        String[] msg = {"成功","修改对象不存在","修改对象不存在"}
+        String[] msg = {"成功","修改对象不存在","修改对象不存在"};
         return ResultUtils.error(res,msg[res]);
     }
 

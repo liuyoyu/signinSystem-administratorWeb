@@ -74,6 +74,9 @@ public class DictionaryServiceImpl implements DictionaryService {
         byId.setModifyDate(new Date());
         byId.setModifyBy(loginInfoService.getAccount());
         DataUtils.copyProperty(dictionary, byId);
+        if (dictionary.getDataDesc() == null || dictionary.getDataDesc() == "") {
+            byId.setDataDesc("");
+        }
         dictionaryRepository.save(byId);
         return 0;
     }
