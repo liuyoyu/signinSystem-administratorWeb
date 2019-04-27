@@ -1,6 +1,7 @@
 package com.blog.yongyu.demo.Service.Impl;
 
-import com.blog.yongyu.demo.Entity.BaseClass.BaseRole;
+import com.blog.yongyu.demo.Entity.BaseClass.BaseSetting;
+import com.blog.yongyu.demo.Entity.BaseClass.LoginInfor;
 import com.blog.yongyu.demo.Entity.Role;
 import com.blog.yongyu.demo.Entity.UserInfo;
 import com.blog.yongyu.demo.Entity.UserRole;
@@ -9,8 +10,6 @@ import com.blog.yongyu.demo.Repository.UserInfoRepository;
 import com.blog.yongyu.demo.Service.RoleService;
 import com.blog.yongyu.demo.Service.UserInfoService;
 import com.blog.yongyu.demo.Service.UserRoleService;
-import com.blog.yongyu.demo.Utils.ResultUtils;
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +54,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public List<UserInfo> findUserByEmail(String email) {
-        List<UserInfo>user =  userInfoRepository.findUserByEmail(email);
+        List<UserInfo> user = userInfoRepository.findUserByEmail(email);
         if (user.size() < 1 || user == null) {
             return null;
         }
@@ -76,39 +75,43 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (user.getEmail() == null) {
             return 6;//邮箱不能空
         }
-        if (findUserByAccount(user.getAccount())!=null) {
+        if (findUserByAccount(user.getAccount()) != null) {
             return 3; //该账户已被注册
         }
         if (findUserByEmail(user.getEmail()) != null) {
             return 4;//该邮箱已被注册
         }
         if (user.getAccount().length() <= 4 || user.getAccount().length() > 10) {
-            return 7;
+            return 7;//账户长度限制
         }
 
         user.setCreateDate(new Date());
-        user.setModifyDate(new Date());
+        user.setCreateBy(loginInfoService.getAccount());
         user.setPwd(DigestUtils.md5DigestAsHex(user.getPwd().getBytes())); //md5加密
-        Role byRoleName = roleRepository.findByRoleId(BaseRole.UserId);//角色中的用户
+        Role byRoleName = roleRepository.findByRoleName(BaseSetting.ROLE.User_SYS.toString());//角色中的用户
         if (byRoleName == null) {//不存在则创建
             byRoleName = new Role();
             roleService.Insert(byRoleName);
         }
-        user.setCreateDate(new Date());
-        user.setModifyDate(new Date());
-        user.setCreateBy(loginInfoService.getAccount());
-        user.setModifyBy(loginInfoService.getAccount());
         userInfoRepository.save(user);
         UserRole userRole = new UserRole(user, byRoleName);
-        userRole.setIsDefault(UserRole.ISDEFAULT.isDefault.toString());//设置默认角色
+        userRole.setIsDefault(BaseSetting.ISDEFAULT.isDefault_SYS.toString());//设置默认角色
         userRoleService.addUserRole(userRole);
         return 0;
     }
 
     @Override
     public Integer Delete(Long userId) {
-        if (userId == null) {
+        LoginInfor logiInfo = loginInfoService.getLogiInfo();
+        UserInfo userById = findUserById(userId);
+        if (userById == null) {
             return 1;//删除对象不存在
+        }
+        if (!userRoleService.isAdmin(logiInfo.getUserId())) {
+            return 2; //没有权限
+        }
+        if (userRoleService.isAdmin(logiInfo.getUserId()) && userRoleService.isAdmin(userById.getId())) {
+            return 2; //管理员不能相互删除
         }
 //        userRoleService.removeAllUserRoleByUserId(userId);
         UserInfo userInfo = findUserById(userId);
@@ -121,15 +124,24 @@ public class UserInfoServiceImpl implements UserInfoService {
     /**
      * 修改用户信息，不能修改用户账户信息
      * 管理员界面调用
+     *
      * @param userInfo
      * @return
      */
     @Override
     public Integer modify(UserInfo userInfo) {
+        LoginInfor logiInfo = loginInfoService.getLogiInfo();
         UserInfo userById = findUserById(userInfo.getId());
-        if (null == userById ) {
+        if (null == userById) {
             return 1;//修改对象不存在
         }
+        if (!userRoleService.isAdmin(logiInfo.getUserId())) {
+            return 4; //没有权限
+        }
+        if (userRoleService.isAdmin(logiInfo.getUserId()) && userRoleService.isAdmin(userById.getId())) {
+            return 5; //管理员不能相互删除
+        }
+
         if (!"".equals(userInfo.getEmail()) && userInfo.getEmail() != null) {
             if (findUserByEmail(userInfo.getEmail()) != null && !userInfo.getEmail().equals(userById.getEmail())) {
                 return 2; //邮箱已被占用
@@ -165,6 +177,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     @Transactional
     public void allResetPwd(Long[] list) {
-        userInfoRepository.allResetPwd(DigestUtils.md5DigestAsHex("8888".getBytes()), new Date(),list);
+        userInfoRepository.allResetPwd(DigestUtils.md5DigestAsHex("8888".getBytes()), new Date(), list);
     }
+
+
 }

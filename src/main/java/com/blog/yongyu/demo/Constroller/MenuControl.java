@@ -4,11 +4,10 @@
  **/
 package com.blog.yongyu.demo.Constroller;
 
-import com.blog.yongyu.demo.Entity.BaseClass.BaseRole;
+import com.blog.yongyu.demo.Entity.BaseClass.BaseSetting;
 import com.blog.yongyu.demo.Entity.BaseClass.DataResult;
 import com.blog.yongyu.demo.Entity.BaseClass.LoginInfor;
 import com.blog.yongyu.demo.Entity.Menu;
-import com.blog.yongyu.demo.Entity.Role;
 import com.blog.yongyu.demo.Entity.RoleMenu;
 import com.blog.yongyu.demo.Service.LoginInfoService;
 import com.blog.yongyu.demo.Service.MenuService;
@@ -40,7 +39,7 @@ public class MenuControl{
         if (logiInfo == null) {
             return false;
         }
-        if (logiInfo.getRoleName().equals(BaseRole.Admin)) {
+        if (logiInfo.getRoleName().equals(BaseSetting.ROLE.Admin_SYS.toString())) {
             return true;
         }
         return false;

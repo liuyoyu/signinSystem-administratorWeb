@@ -3,6 +3,7 @@ package com.blog.yongyu.demo.Service;
 import com.blog.yongyu.demo.Entity.Dictionary;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DictionaryService {
 
@@ -15,4 +16,6 @@ public interface DictionaryService {
     Integer Delete(Long id);
 
     Integer modify(Dictionary dictionary);
+
+    List<Map<String,Object>> getDicIdValue();
 }

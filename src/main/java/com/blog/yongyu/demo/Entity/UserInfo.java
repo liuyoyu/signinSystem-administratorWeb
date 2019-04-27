@@ -3,6 +3,7 @@
  */
 package com.blog.yongyu.demo.Entity;
 
+import com.blog.yongyu.demo.Entity.BaseClass.BaseSetting;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.util.DigestUtils;
@@ -16,12 +17,6 @@ import java.util.List;
 @Entity
 @Table(name = "userInfo", schema = "dbo", catalog = "et")
 public class UserInfo implements Serializable {
-    public enum STATUS{
-        Normal, //正常状态
-        Disable, //禁用状态
-    }
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -45,7 +40,7 @@ public class UserInfo implements Serializable {
     private String phone;
 
     @Column()
-    private String status = STATUS.Normal.toString();
+    private String status = BaseSetting.STATUS.Normal_SYS.toString();
 
     @Column()
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

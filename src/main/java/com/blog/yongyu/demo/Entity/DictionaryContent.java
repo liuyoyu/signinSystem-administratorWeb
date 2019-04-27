@@ -4,6 +4,7 @@
  **/
 package com.blog.yongyu.demo.Entity;
 
+import com.blog.yongyu.demo.Entity.BaseClass.BaseSetting;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
@@ -13,10 +14,6 @@ import java.util.Date;
 @Entity
 @Table(name = "dicContent", schema = "dbo", catalog = "et")
 public class DictionaryContent implements Serializable {
-    private enum STATUS{
-        Normal,
-        Disabled
-    }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -28,7 +25,7 @@ public class DictionaryContent implements Serializable {
     private String contentKey;
 
     @Column()
-    private String status=STATUS.Normal.toString();
+    private String status= BaseSetting.STATUS.Normal_SYS.toString();
 
     @Column()
     private String describe;
@@ -50,7 +47,7 @@ public class DictionaryContent implements Serializable {
     @Column()
     private String modifyBy;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "dictionaryID")
     Dictionary dictionary;
 

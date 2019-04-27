@@ -35,7 +35,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
         String token = request.getHeader(HttpContent.Token);
         String value = null;
-        if (token != null) {
+        if (token != null && !"undefined".equalsIgnoreCase(token)) {
              value = RedisUtils.get(token);//获取redis中的token
         }
         response.setCharacterEncoding("utf-8");

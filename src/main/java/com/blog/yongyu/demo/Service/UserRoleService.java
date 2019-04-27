@@ -20,6 +20,8 @@ public interface UserRoleService {
 
     Boolean isAdmin(Long userId);
 
+    Boolean isSupperAdmin(Long userId);
+
     Integer addUserRole(UserRole userRole);
 
     Integer removeUserRole(Long id);
@@ -27,4 +29,6 @@ public interface UserRoleService {
     Integer removeAllUserRoleByUserId(Long userId);
 
     Integer modifyUserRole(UserRole userRole);
+
+    List<UserRole> findByUserID(Long id);
 }

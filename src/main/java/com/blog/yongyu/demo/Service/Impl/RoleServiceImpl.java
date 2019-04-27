@@ -1,6 +1,6 @@
 package com.blog.yongyu.demo.Service.Impl;
 
-import com.blog.yongyu.demo.Entity.BaseClass.BaseRole;
+import com.blog.yongyu.demo.Entity.BaseClass.BaseSetting;
 import com.blog.yongyu.demo.Entity.Role;
 import com.blog.yongyu.demo.Repository.RoleRepository;
 import com.blog.yongyu.demo.Service.LoginInfoService;
@@ -50,7 +50,9 @@ public class RoleServiceImpl implements RoleService {
         if (role == null) {
             return 1;//删除对象不存在
         }
-        if (Objects.equals(roleId, BaseRole.AdminId) || Objects.equals(roleId, BaseRole.UserId)) {
+        if (BaseSetting.ROLE.Admin_SYS.toString().equals(role.getRoleName()) ||
+                BaseSetting.ROLE.User_SYS.toString().equals(role.getRoleName()) ||
+                BaseSetting.ROLE.SupperAdmin_SYS.toString().equals(role.getRoleName())) {
             return 2; //基本角色不能删除
         }
         roleRepository.delete(role);

@@ -64,19 +64,19 @@ public class DictionaryContentServiceImpl implements DictionaryContentService{
         DictionaryContent byId = findById(dictionaryContent.getId());
         byId.setModifyBy(loginInfoService.getAccount());
         byId.setModifyDate(new Date());
-        if (dictionaryContent.getContentValue() != null && "".equals(dictionaryContent.getContentValue())) {
+        if (dictionaryContent.getContentValue() != null && !"".equals(dictionaryContent.getContentValue())) {
             byId.setContentValue(dictionaryContent.getContentValue());
         }
-        if (dictionaryContent.getContentKey() != null && "".equals(dictionaryContent.getContentKey())) {
+        if (dictionaryContent.getContentKey() != null && !"".equals(dictionaryContent.getContentKey())) {
             byId.setContentKey(dictionaryContent.getContentKey());
         }
-        if (dictionaryContent.getStatus() != null && "".equals(dictionaryContent.getStatus())) {
+        if (dictionaryContent.getStatus() != null && !"".equals(dictionaryContent.getStatus())) {
             byId.setStatus(dictionaryContent.getStatus());
         }
-        if (dictionaryContent.getDescribe() != null && "".equals(dictionaryContent.getDescribe())) {
+        if (dictionaryContent.getDescribe() != null && !"".equals(dictionaryContent.getDescribe())) {
             byId.setDescribe(dictionaryContent.getDescribe());
         }
-        if (dictionaryContent.getSequence() != null && "".equals(dictionaryContent.getSequence())) {
+        if (dictionaryContent.getSequence() != null && !"".equals(dictionaryContent.getSequence())) {
             byId.setSequence(dictionaryContent.getSequence());
         }
         dictionaryContentRepository.save(byId);

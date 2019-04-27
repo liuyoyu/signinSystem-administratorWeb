@@ -1,10 +1,9 @@
 package com.blog.yongyu.demo;
 
-import com.blog.yongyu.demo.Entity.BaseClass.BaseRole;
 import com.blog.yongyu.demo.Entity.Dictionary;
 import com.blog.yongyu.demo.Entity.Menu;
-import com.blog.yongyu.demo.Entity.Role;
 import com.blog.yongyu.demo.Entity.UserInfo;
+import com.blog.yongyu.demo.Repository.DictionaryRepository;
 import com.blog.yongyu.demo.Repository.UserInfoRepository;
 import com.blog.yongyu.demo.Service.*;
 import com.blog.yongyu.demo.Utils.RedisUtils;
@@ -12,16 +11,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.DigestUtils;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -131,5 +124,15 @@ public class ServiceTest {
 //        role.setParentRole(0L);
 //        roleService.Insert()
 //    }
+
+    @Autowired
+    DictionaryRepository dicRepository;
+    @Test()
+    public void RepositoryTest(){
+        List<Map<String, Object>> map = dicRepository.getDicIdValue();
+        for (Map<String, Object> m : map) {
+            System.out.println(m.get("id"));
+        }
+    }
 
 }

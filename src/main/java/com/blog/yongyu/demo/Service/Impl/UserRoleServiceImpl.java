@@ -4,7 +4,7 @@
  **/
 package com.blog.yongyu.demo.Service.Impl;
 
-import com.blog.yongyu.demo.Entity.BaseClass.BaseRole;
+import com.blog.yongyu.demo.Entity.BaseClass.BaseSetting;
 import com.blog.yongyu.demo.Entity.UserRole;
 import com.blog.yongyu.demo.Repository.UserRoleRepository;
 import com.blog.yongyu.demo.Service.LoginInfoService;
@@ -88,7 +88,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     /**
-     * 判断是否有管理员身份
+     * 判断是否有管理员或超管身份
      * @param userId
      * @return
      */
@@ -96,7 +96,24 @@ public class UserRoleServiceImpl implements UserRoleService {
     public Boolean isAdmin(Long userId) {
         List<UserRole> allByUserId = userRoleRepository.findAllByUserId(userId);
         for (UserRole userrole : allByUserId) {
-            if (userrole.getRole().getRoleName().equals(BaseRole.Admin)) {
+            if (userrole.getRoleName().equals(BaseSetting.ROLE.Admin_SYS.toString()) ||
+                    userrole.getRoleName().equals(BaseSetting.ROLE.SupperAdmin_SYS.toString())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 检查是否有超级管理员的身份
+     * @param userId
+     * @return
+     */
+    @Override
+    public Boolean isSupperAdmin(Long userId) {
+        List<UserRole> allByUserId = userRoleRepository.findAllByUserId(userId);
+        for (UserRole userrole : allByUserId) {
+            if (userrole.getRoleName().equals(BaseSetting.ROLE.SupperAdmin_SYS.toString())) {
                 return true;
             }
         }
@@ -112,7 +129,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     public UserRole findDefaultRoleByUserId(Long userId) {
         List<UserRole> allByUserId = userRoleRepository.findAllByUserId(userId);
         for (UserRole userRole : allByUserId) {
-            if (userRole.getIsDefault().equals(UserRole.ISDEFAULT.isDefault.toString())) {
+            if (userRole.getIsDefault().equals(BaseSetting.ISDEFAULT.isDefault_SYS.toString())) {
                 return userRole;
             }
         }
@@ -122,5 +139,10 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     public List<UserRole> findAll() {
         return userRoleRepository.findAll();
+    }
+
+    @Override
+    public List<UserRole> findByUserID(Long id) {
+        return userRoleRepository.findByUserId(id);
     }
 }

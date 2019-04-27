@@ -4,6 +4,7 @@
  **/
 package com.blog.yongyu.demo.Entity;
 
+import com.blog.yongyu.demo.Entity.BaseClass.BaseSetting;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
@@ -13,14 +14,6 @@ import java.util.Date;
 @Entity
 @Table(name = "userRole", schema = "dbo", catalog = "et")
 public class UserRole implements Serializable {
-    public enum STATUS{
-        Normal,
-        Disabled
-    }
-    public enum ISDEFAULT {
-        isDefault,
-        isNotDefault
-    }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -51,7 +44,7 @@ public class UserRole implements Serializable {
     }
 
     @Column()
-    private String isDefault = ISDEFAULT.isNotDefault.toString();
+    private String isDefault = BaseSetting.ISDEFAULT.isNotDefault_SYS.toString();
 
     public UserRole(UserInfo userInfo, Role role) {
         this.userInfo = userInfo;

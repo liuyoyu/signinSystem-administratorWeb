@@ -2,6 +2,7 @@ package com.blog.yongyu.demo.Repository;
 
 import com.blog.yongyu.demo.Entity.UserInfo;
 import com.blog.yongyu.demo.Entity.UserRole;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -25,4 +26,6 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
     @Query(value = "select u from UserRole u where u.userInfo.id = ?1 and u.role.id = ?2")
     UserRole findByUserIdRoleId(Long userId, Long roleId);
 
+    @Query(value = "select u from UserRole u where u.userInfo.id = ?1")
+    List<UserRole> findByUserId(Long id);
 }

@@ -4,6 +4,7 @@
  **/
 package com.blog.yongyu.demo.Service.Impl;
 
+import com.blog.yongyu.demo.Entity.BaseClass.BaseSetting;
 import com.blog.yongyu.demo.Entity.BaseClass.HttpContent;
 import com.blog.yongyu.demo.Entity.Dictionary;
 import com.blog.yongyu.demo.Repository.DictionaryRepository;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service("dictionaryService")
@@ -58,7 +60,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (dictionary == null) {
             return 1;//删除对象不存在
         }
-        if (dictionary.getDataTypeKey()!=null && dictionary.getDataTypeKey().equals(Dictionary.DATATYPE.System.toString())) {
+        if (dictionary.getDataTypeKey()!=null && dictionary.getDataTypeKey().equals(BaseSetting.DATATYPE.System_SYS.toString())) {
             return 2; //不可删除
         }
         dictionaryRepository.delete(dictionary);
@@ -79,5 +81,11 @@ public class DictionaryServiceImpl implements DictionaryService {
         }
         dictionaryRepository.save(byId);
         return 0;
+    }
+
+    @Override
+    public List<Map<String, Object>> getDicIdValue() {
+        return  dictionaryRepository.getDicIdValue();
+
     }
 }

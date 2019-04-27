@@ -17,11 +17,6 @@ import java.util.List;
 @Entity
 @Table(name = "dictionary", schema = "dbo", catalog = "et")
 public class Dictionary implements Serializable {
-    public enum DATATYPE{
-        System,
-        Standard
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

@@ -4,9 +4,9 @@
  **/
 package com.blog.yongyu.demo.Constroller;
 
-import com.blog.yongyu.demo.Entity.BaseClass.BaseRole;
 import com.blog.yongyu.demo.Entity.BaseClass.DataResult;
 import com.blog.yongyu.demo.Entity.Role;
+import com.blog.yongyu.demo.Service.LoginInfoService;
 import com.blog.yongyu.demo.Service.RoleService;
 import com.blog.yongyu.demo.Utils.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/role")
@@ -24,8 +23,14 @@ public class RoleController {
     @Autowired
     RoleService roleService;
 
+    @Autowired
+    LoginInfoService loginInfoService;
+
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public DataResult add(Role role){
+        if (!loginInfoService.checkSupperAdimn()) {
+            return ResultUtils.error(5, "没有权限，只有超级管理员才能添加角色");
+        }
         if (role.getParentRole() == null ) {
             return ResultUtils.error(3, "必须继承一个角色");
         }
@@ -42,6 +47,9 @@ public class RoleController {
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public DataResult delete(@RequestParam("id") Long id){
+        if (!loginInfoService.checkSupperAdimn()) {
+            return ResultUtils.error(1, "没有权限，只有超级管理员才能删除角色");
+        }
         Integer res = roleService.Delete(id);
         if (res == 0) {
             return ResultUtils.success();
@@ -52,6 +60,9 @@ public class RoleController {
 
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     public DataResult modify(Role role){
+        if (!loginInfoService.checkSupperAdimn()) {
+            return ResultUtils.error(1, "没有权限，只有超级管理员才能修改角色");
+        }
         Integer res = roleService.modify(role);
         if (res == 0) {
             return ResultUtils.success();

@@ -17,13 +17,13 @@ public class HttpContent {
     //不能删除的数据
     public static Set<String> removeIngoreSet = new HashSet<String>(){{
 
-        add(UserRole.STATUS.Normal.toString());
-        add(UserRole.STATUS.Disabled.toString());
+        add(BaseSetting.STATUS.Normal_SYS.toString());
+        add(BaseSetting.STATUS.Disabled_SYS.toString());
 //        add(BaseRole.UserId.toString());
 //        add(BaseRole.AdminId.toString());
-        add(BaseRole.Admin);
-        add(BaseRole.User);
-        add(Dictionary.DATATYPE.System.toString());
-        add(Dictionary.DATATYPE.Standard.toString());
+        add(BaseSetting.ROLE.Admin_SYS.toString());
+        add(BaseSetting.ROLE.User_SYS.toString());
+        add(BaseSetting.DATATYPE.System_SYS.toString());
+        add(BaseSetting.DATATYPE.Standard_SYS.toString());
     }};
 }

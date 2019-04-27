@@ -68,6 +68,7 @@ public class LoginInfoServiceImpl implements LoginInfoService {
             if (byId != null) {
                 login.setUname(byId.getUserInfo().getUserName());
                 login.setAccount(byId.getUserInfo().getAccount());
+                login.setUserId(byId.getUserId());
                 login.setUserRoleId(byId.getId());
                 login.setRole(byId.getRole());
                 login.setLoginDate(new Date());
@@ -94,6 +95,19 @@ public class LoginInfoServiceImpl implements LoginInfoService {
     public Boolean checkAdmin() {
         String account = getAccount();
         UserInfo user = userInfoService.findUserByAccount(account);
+        if (user == null) {
+            return false;
+        }
         return userRoleService.isAdmin(user.getId());
+    }
+
+    @Override
+    public Boolean checkSupperAdimn() {
+        String account = getAccount();
+        UserInfo user = userInfoService.findUserByAccount(account);
+        if (user == null) {
+            return false;
+        }
+        return userRoleService.isSupperAdmin(user.getId());
     }
 }

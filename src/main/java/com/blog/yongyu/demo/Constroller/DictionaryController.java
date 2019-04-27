@@ -4,7 +4,7 @@
  **/
 package com.blog.yongyu.demo.Constroller;
 
-import com.blog.yongyu.demo.Entity.BaseClass.BaseRole;
+import com.blog.yongyu.demo.Entity.BaseClass.BaseSetting;
 import com.blog.yongyu.demo.Entity.BaseClass.DataResult;
 import com.blog.yongyu.demo.Entity.BaseClass.LoginInfor;
 import com.blog.yongyu.demo.Entity.Dictionary;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/dic")
@@ -36,7 +37,7 @@ public class DictionaryController {
         if (logiInfo == null) {
             return false;
         }
-        if (logiInfo.getRoleId().equals(BaseRole.AdminId)) {
+        if (loginInfoService.checkAdmin()) {
             return true;
         }
         return false;
@@ -104,7 +105,6 @@ public class DictionaryController {
 
     /**
      * 删除数据字典内容
-     *
      * @param id
      * @return
      */
@@ -156,6 +156,24 @@ public class DictionaryController {
         Dictionary byId = dictionaryService.findById(dicID);
         if (byId == null) {
             return ResultUtils.error(1, "字典不存在");
+        }
+        return ResultUtils.success(byId);
+    }
+
+    @RequestMapping(value = "/getDicIdValue",method = RequestMethod.POST)
+    public DataResult getDicIdValue(){
+        List<Map<String, Object>> value = dictionaryService.getDicIdValue();
+        if (value == null) {
+            return ResultUtils.error(1, "没有数据");
+        }
+        return ResultUtils.success(value);
+    }
+
+    @RequestMapping(value = "/getDicCntById",method = RequestMethod.POST)
+    public DataResult getDicCntById(@RequestParam("dicCntID") Long dicCntID) {
+        DictionaryContent byId = dicContentService.findById(dicCntID);
+        if (byId == null) {
+            return ResultUtils.error(1, "数据不存在");
         }
         return ResultUtils.success(byId);
     }

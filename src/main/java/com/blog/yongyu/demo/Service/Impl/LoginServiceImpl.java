@@ -1,5 +1,6 @@
 package com.blog.yongyu.demo.Service.Impl;
 
+import com.blog.yongyu.demo.Entity.BaseClass.BaseSetting;
 import com.blog.yongyu.demo.Entity.UserInfo;
 import com.blog.yongyu.demo.Repository.UserInfoRepository;
 import com.blog.yongyu.demo.Service.LoginService;
@@ -27,7 +28,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public UserInfo checkLogin(String uname, String pwd) {
         UserInfo user = userInfoRepository.findUserByAccountOrEmail(uname);
-        if (user == null || UserInfo.STATUS.Disable.equals(user.getStatus())) {
+        if (user == null || BaseSetting.STATUS.Disabled_SYS.equals(user.getStatus())) {
             return null;//用户不存在
         }
         if (DigestUtils.md5DigestAsHex(pwd.getBytes()).equals(user.getPwd())) {

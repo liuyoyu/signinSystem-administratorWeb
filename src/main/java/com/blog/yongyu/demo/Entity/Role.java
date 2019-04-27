@@ -1,5 +1,6 @@
 package com.blog.yongyu.demo.Entity;
 
+import com.blog.yongyu.demo.Entity.BaseClass.BaseSetting;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Type;
@@ -13,10 +14,6 @@ import java.util.List;
 @Entity
 @Table(name = "role", schema="dbo", catalog = "et")
 public class Role implements Serializable {
-    public enum STATUS{
-        Normal,
-        Disabled
-    }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long roleId;
@@ -25,7 +22,7 @@ public class Role implements Serializable {
     private String roleName;
 
     @Column()
-    private Long parentRole = 0L;//0表示无父角色
+    private Long parentRole = 0L; //0表示无父角色
 
     @Column()
     private String status;
@@ -57,7 +54,7 @@ public class Role implements Serializable {
     private List<RoleMenu> roleMenus;
 
     public Role() {
-        roleName = "User";
+        roleName = BaseSetting.ROLE.User_SYS.toString();
         detail = "";
         userRoles = new ArrayList<>();
         roleMenus = new ArrayList<>();

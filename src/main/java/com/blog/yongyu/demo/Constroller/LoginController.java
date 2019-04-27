@@ -1,5 +1,6 @@
 package com.blog.yongyu.demo.Constroller;
 
+import com.blog.yongyu.demo.Entity.BaseClass.BaseSetting;
 import com.blog.yongyu.demo.Entity.BaseClass.DataResult;
 import com.blog.yongyu.demo.Entity.BaseClass.HttpContent;
 import com.blog.yongyu.demo.Entity.BaseClass.LoginInfor;
@@ -47,6 +48,9 @@ public class LoginController {
                                  @RequestParam("password") String password) {
         UserInfo userInfo = loginService.checkLogin(account, password);
         if (userInfo != null) {
+            if (userInfo.getStatus().equals(BaseSetting.STATUS.Disabled_SYS.toString())) {
+                return ResultUtils.error(2, "该用户被禁用");
+            }
             UserRole defaultRoleByUserId = userRoleService.findDefaultRoleByUserId(userInfo.getId());
             String token = JWTUtils.generateToken(userInfo.getId(),defaultRoleByUserId.getId());//token携带用户id和用户角色id
 

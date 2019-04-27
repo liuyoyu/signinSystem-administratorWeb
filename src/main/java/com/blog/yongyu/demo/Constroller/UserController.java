@@ -4,7 +4,7 @@
  **/
 package com.blog.yongyu.demo.Constroller;
 
-import com.blog.yongyu.demo.Entity.BaseClass.BaseRole;
+import com.blog.yongyu.demo.Entity.BaseClass.BaseSetting;
 import com.blog.yongyu.demo.Entity.BaseClass.DataResult;
 import com.blog.yongyu.demo.Entity.BaseClass.LoginInfor;
 import com.blog.yongyu.demo.Entity.Role;
@@ -44,8 +44,7 @@ public class UserController {
      */
     @RequestMapping(value = "/insertUserInfo", method = RequestMethod.POST)
     public DataResult insertUserInfo(UserInfo userInfo) {
-        LoginInfor logiInfo = loginInfoService.getLogiInfo();
-        if (logiInfo == null || !logiInfo.getRoleId().equals(BaseRole.AdminId)) {
+        if (!loginInfoService.checkAdmin()) {
             return ResultUtils.error(9, "没有权限");
         }
         Integer res = userInfoService.Insert(userInfo);
@@ -58,15 +57,15 @@ public class UserController {
 
     @RequestMapping(value = "/deleteUserInfo", method = RequestMethod.POST)
     public DataResult deleteUserInfo(@RequestParam("uid") Long uid) {
-        LoginInfor logiInfo = loginInfoService.getLogiInfo();
-        if (logiInfo == null || !Objects.equals(logiInfo.getRoleId(), BaseRole.AdminId)) {
+        if (!loginInfoService.checkAdmin()) {
             return ResultUtils.error(2, "没有权限");
         }
         Integer res = userInfoService.Delete(uid);
         if (res == 0) {
             return ResultUtils.success();
         }
-        return ResultUtils.error(res, "删除对象不存在");
+        String[] msg = {"成功", "删除对象不存在", "没有权限"};
+        return ResultUtils.error(res, msg[res]);
     }
 
     @RequestMapping("/modifyUserInfo")
@@ -75,7 +74,7 @@ public class UserController {
         if (res == 0) {
             return ResultUtils.success();
         }
-        String[] msg = {"修改成功", "修改对象不存在", "邮箱已被占用","邮箱不能为空"};
+        String[] msg = {"修改成功", "修改对象不存在", "邮箱已被占用","邮箱不能为空","没有权限","该用户为管理员，没有权限修改"};
         return ResultUtils.error(res, msg[res]);
     }
 

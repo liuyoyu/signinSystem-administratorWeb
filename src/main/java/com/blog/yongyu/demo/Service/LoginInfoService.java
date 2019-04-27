@@ -12,9 +12,16 @@ import javax.servlet.http.HttpServletResponse;
 public interface LoginInfoService {
 
     HttpServletRequest getRequest();
+
     HttpServletResponse getResponse();
+
     String getRequestPath();
+
     LoginInfor getLogiInfo();
+
     String getAccount();
+
     Boolean checkAdmin();
+
+    Boolean checkSupperAdimn();
 }
