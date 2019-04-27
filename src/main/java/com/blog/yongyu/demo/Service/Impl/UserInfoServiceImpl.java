@@ -177,7 +177,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     @Transactional
     public void allResetPwd(Long[] list) {
-        userInfoRepository.allResetPwd(DigestUtils.md5DigestAsHex("8888".getBytes()), new Date(), list);
+        userInfoRepository.allResetPwd(DigestUtils.md5DigestAsHex("8888".getBytes()), new Date(),loginInfoService.getAccount(), list);
     }
 
 

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface DictionaryContentRepository extends JpaRepository<DictionaryContent,Long>{
@@ -18,4 +19,7 @@ public interface DictionaryContentRepository extends JpaRepository<DictionaryCon
 
     @Query("select dc from DictionaryContent dc where dc.dictionary.id = ?1 and dc.contentKey = ?2")
     DictionaryContent findDicCntByDicIdCntKey(Long dicId, String key);
+
+    @Query(value = "select dc.contentKey as key, dc.contentValue as value from DictionaryContent dc where dc.dictionary.DataKey = ?1")
+    List<Map<String,String>> findDicCntKeyValueByDicKey(String dicKey);
 }

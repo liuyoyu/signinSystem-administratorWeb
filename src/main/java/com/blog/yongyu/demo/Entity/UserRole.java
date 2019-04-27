@@ -40,15 +40,15 @@ public class UserRole implements Serializable {
     @Column()
     private String modifyBy;
 
-    public UserRole() {
-    }
-
     @Column()
     private String isDefault = BaseSetting.ISDEFAULT.isNotDefault_SYS.toString();
 
     public UserRole(UserInfo userInfo, Role role) {
         this.userInfo = userInfo;
         this.role = role;
+    }
+
+    public UserRole() {
     }
 
     public Long getId() {

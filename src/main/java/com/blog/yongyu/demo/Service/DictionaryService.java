@@ -18,4 +18,6 @@ public interface DictionaryService {
     Integer modify(Dictionary dictionary);
 
     List<Map<String,Object>> getDicIdValue();
+
+    List<Map<String,String>> getDicCntKeyValueByDicKey(String dicKey);
 }

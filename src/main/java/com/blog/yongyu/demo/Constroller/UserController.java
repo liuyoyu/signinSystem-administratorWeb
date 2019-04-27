@@ -42,20 +42,26 @@ public class UserController {
      * @param userInfo
      * @return
      */
-    @RequestMapping(value = "/insertUserInfo", method = RequestMethod.POST)
+    @RequestMapping(value = "/userInfo", method = RequestMethod.POST)
     public DataResult insertUserInfo(UserInfo userInfo) {
         if (!loginInfoService.checkAdmin()) {
             return ResultUtils.error(9, "没有权限");
         }
         Integer res = userInfoService.Insert(userInfo);
-        String[] msg = {"创建成功", "添加账户不能为空", "账户不能为空", "该账户已被注册", "该邮箱已被注册", "密码不能为空", "邮箱不能为空","账号长度要大于4小于10"};
+        String[] msg = {"创建成功", "添加账户不能为空", "账户不能为空", "该账户已被注册", "该邮箱已被注册", "密码不能为空", "邮箱不能为空", "账号长度要大于4小于10"};
         if (res == 0) {
             return ResultUtils.success();
         }
         return ResultUtils.error(res, msg[res]);
     }
 
-    @RequestMapping(value = "/deleteUserInfo", method = RequestMethod.POST)
+    /**
+     * 删除用户
+     *
+     * @param uid
+     * @return
+     */
+    @RequestMapping(value = "/userInfo", method = RequestMethod.DELETE)
     public DataResult deleteUserInfo(@RequestParam("uid") Long uid) {
         if (!loginInfoService.checkAdmin()) {
             return ResultUtils.error(2, "没有权限");
@@ -68,36 +74,46 @@ public class UserController {
         return ResultUtils.error(res, msg[res]);
     }
 
-    @RequestMapping("/modifyUserInfo")
+    /**
+     * 修改用户信息
+     *
+     * @param userInfo
+     * @return
+     */
+    @RequestMapping(value = "/userInfo", method = RequestMethod.PUT)
     public DataResult modifyUserInfo(UserInfo userInfo) {
         Integer res = userInfoService.modify(userInfo);
         if (res == 0) {
             return ResultUtils.success();
         }
-        String[] msg = {"修改成功", "修改对象不存在", "邮箱已被占用","邮箱不能为空","没有权限","该用户为管理员，没有权限修改"};
+        String[] msg = {"修改成功", "修改对象不存在", "邮箱已被占用", "邮箱不能为空", "没有权限", "该用户为管理员，没有权限修改"};
         return ResultUtils.error(res, msg[res]);
     }
 
-    @RequestMapping(value = "/findAll",method = RequestMethod.GET)
+    /**
+     * 获取所有用户
+     *
+     * @return
+     */
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
     public DataResult findAll() {
-
         List<UserRole> allUserRole = userRoleService.findAll();
         Map<String, Integer> map = new HashMap<>();
         List<JSONObject> list = new ArrayList<>();
-        for (int i=0; i<allUserRole.size(); i++) {
+        for (int i = 0; i < allUserRole.size(); i++) {
             UserRole ur = allUserRole.get(i);
             JSONObject jsonObject = new JSONObject();
             if (map.containsKey(ur.getAccount())) {
                 int loc = map.get(ur.getAccount());
                 JSONObject tmp = list.get(loc);
-                List<String> rn = (List<String>) tmp.get("roleName");
+                List<String> rn = (List<String>) tmp.get("userType");
                 rn.add(ur.getRoleName());
-                tmp.put("roleName", rn);
+                tmp.put("userType", rn);
             } else {
                 //未出现重复账户时
                 List<String> roleName = new ArrayList<>();
                 roleName.add(ur.getRoleName());
-                jsonObject.put("roleName", roleName);
+                jsonObject.put("userType", roleName);
                 jsonObject.put("userId", ur.getUserId());
                 jsonObject.put("account", ur.getAccount());
                 jsonObject.put("userName", ur.getUserName());
@@ -106,15 +122,20 @@ public class UserController {
                 jsonObject.put("phone", ur.getPhone());
                 jsonObject.put("status", ur.getUserStatus());
                 jsonObject.put("lastLogin", ur.getLastLogin());
-                map.put(ur.getAccount(),i);
+                map.put(ur.getAccount(), i);
                 list.add(jsonObject);
             }
         }
-//        List<UserInfo> all = userInfoService.findAll();
         return ResultUtils.success(list, list.size());
     }
 
-    @RequestMapping("/resetPwd")
+    /**
+     * 重置密码
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/pwd", method = RequestMethod.PUT)
     public DataResult resetPwd(@RequestParam("id") Long id) {
         UserInfo userById = userInfoService.findUserById(id);
         if (userById == null) {
@@ -125,7 +146,13 @@ public class UserController {
         return ResultUtils.success();
     }
 
-    @RequestMapping("/allResetPwd")
+    /**
+     * 批量重置密码
+     *
+     * @param idList
+     * @return
+     */
+    @RequestMapping(value = "/allPwd", method = RequestMethod.PUT)
     public DataResult allResetPwd(@RequestParam("idList") Long[] idList) {
         if (idList == null || idList.length < 1) {
             return ResultUtils.error(1, "重置密码名单为空");
@@ -134,8 +161,8 @@ public class UserController {
         return ResultUtils.success();
     }
 
-    @RequestMapping("/addUserRole")
-    public DataResult addUserRole(@RequestParam("userId")Long userId,@RequestParam("roleId")Long roleId){
+    @RequestMapping(value = "/userRole",method = RequestMethod.POST)
+    public DataResult addUserRole(@RequestParam("userId") Long userId, @RequestParam("roleId") Long roleId) {
         UserInfo user = userInfoService.findUserById(userId);
         if (user == null) {
             return ResultUtils.error(2, "必须选择一个用户");
@@ -144,17 +171,17 @@ public class UserController {
         if (role == null) {
             return ResultUtils.error(2, "必须选择一个角色");
         }
-        UserRole userRole = new UserRole(user,role);
+        UserRole userRole = new UserRole(user, role);
         Integer res = userRoleService.addUserRole(userRole);
         if (res == 0) {
             return ResultUtils.success();
         }
-        String[] msg = {"成功","添加对象不存在","没有权限","用户已存在该角色"};
+        String[] msg = {"成功", "添加对象不存在", "没有权限", "用户已存在该角色"};
         return ResultUtils.error(res, msg[res]);
     }
 
-    @RequestMapping("/findById")
-    public DataResult findById(@RequestParam("userId")Long userId){
+    @RequestMapping(value = "/userInfo", method = RequestMethod.GET)
+    public DataResult findById(@RequestParam("userId") Long userId) {
         UserInfo user = userInfoService.findUserById(userId);
         if (user == null) {
             return ResultUtils.error(1, "用户不存在");

@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/register")
 public class LoginController {
     @Autowired
     LoginService loginService;
@@ -43,7 +44,7 @@ public class LoginController {
     /**
      * 用户登陆
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/loginCheck")
+    @RequestMapping(method = RequestMethod.POST, value = "/signup")
     public DataResult loginCheck(@RequestParam("account") String account,
                                  @RequestParam("password") String password) {
         UserInfo userInfo = loginService.checkLogin(account, password);
@@ -72,7 +73,7 @@ public class LoginController {
      * @param user
      * @return
      */
-    @RequestMapping(value = "/login_signup", method = RequestMethod.POST)
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
     public DataResult create(UserInfo user) {
         String[] createMsg = {"创建成功", "添加账户不能为空", "账户不能为空", "该账户已被注册", "该邮箱已被注册", "密码不能为空", "邮箱不能为空"};
         Integer res = userInfoService.Insert(user);
@@ -88,7 +89,7 @@ public class LoginController {
      * @param
      * @return
      */
-    @RequestMapping(value = "/login_sendEmail",method = RequestMethod.POST)
+    @RequestMapping(value = "/email",method = RequestMethod.GET)
     public DataResult sendEmail(@RequestParam("receiver") String receiver,
                                 @RequestParam("account") String account) {
         UserInfo userByAccount = userInfoService.findUserByAccount(account);
@@ -112,7 +113,7 @@ public class LoginController {
      * @param code
      * @return
      */
-    @RequestMapping(value = "/login_resetPwd", method = RequestMethod.POST)
+    @RequestMapping(value = "/pwd", method = RequestMethod.PUT)
     public DataResult VerifyMsgCode(@RequestParam("code") String code,
                                     @RequestParam("pwd") String pwd,
                                     @RequestParam("account")String account,
@@ -147,7 +148,7 @@ public class LoginController {
      *
      * @return
      */
-    @RequestMapping("/logOut")
+    @RequestMapping(value = "/logOut",method = RequestMethod.GET)
     public DataResult loginOut(HttpServletRequest request, HttpServletResponse response) {
         String token = request.getHeader(HttpContent.Token);
         if (token != null || !"".equals(token)) {
@@ -163,7 +164,7 @@ public class LoginController {
         return ResultUtils.success();//return "/login.html";
     }
 
-    @RequestMapping("/getLoginRole")
+    @RequestMapping(value = "/loginRole",method = RequestMethod.GET)
     public DataResult getLoginRole(HttpServletRequest request) {
         String token = request.getHeader(HttpContent.Token);
         if (token == null || token.equals("")) {

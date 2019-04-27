@@ -25,7 +25,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/menu")
-public class MenuControl{
+public class MenuControl {
 
     @Autowired
     MenuService menuService;
@@ -34,7 +34,7 @@ public class MenuControl{
     @Autowired
     LoginInfoService loginInfoService;
 
-    public Boolean checkAuth(){
+    public Boolean checkAuth() {
         LoginInfor logiInfo = loginInfoService.getLogiInfo();
         if (logiInfo == null) {
             return false;
@@ -44,14 +44,15 @@ public class MenuControl{
         }
         return false;
     }
-    @RequestMapping(value = "/all",method = RequestMethod.POST)
+
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
     public DataResult findAll() {
         List<Menu> all = menuService.findAll();
-        return ResultUtils.success(all,all.size());
+        return ResultUtils.success(all, all.size());
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public DataResult add(Menu menu,@RequestParam("roleId") Long roleId) {
+    @RequestMapping(value = "/roleMenu", method = RequestMethod.POST)
+    public DataResult add(Menu menu, @RequestParam("roleId") Long roleId) {
         if (!checkAuth()) {
             return ResultUtils.error(2, "没有权限");
         }
@@ -71,10 +72,11 @@ public class MenuControl{
 
     /**
      * 删除菜单
+     *
      * @param id 菜单id
      * @return
      */
-    @RequestMapping(value = "/remove",method = RequestMethod.POST)
+    @RequestMapping(value = "/roleMenu", method = RequestMethod.DELETE)
     public DataResult remove(@RequestParam("id") Long id) {
         if (!checkAuth()) {
             return ResultUtils.error(2, "没有权限");
@@ -88,10 +90,11 @@ public class MenuControl{
 
     /**
      * 删除某个角色的菜单权限
+     *
      * @param roleMenuId
      * @return
      */
-    @RequestMapping(value = "/delRoleMenu", method = RequestMethod.POST)
+    @RequestMapping(value = "/role", method = RequestMethod.DELETE)
     public DataResult delRoleMenu(@RequestParam("roleMenuId") Long roleMenuId) {
         if (!checkAuth()) {
             return ResultUtils.error(2, "没有权限");
@@ -105,10 +108,11 @@ public class MenuControl{
 
     /**
      * 修改菜单
+     *
      * @param menu
      * @return
      */
-    @RequestMapping(value = "/modify")
+    @RequestMapping(value = "/roleMenu", method = RequestMethod.PUT)
     public DataResult modify(Menu menu) {
         if (!checkAuth()) {
             return ResultUtils.error(2, "没有权限");
@@ -120,8 +124,8 @@ public class MenuControl{
         return ResultUtils.error(1, "对象不能为空");
     }
 
-    @RequestMapping(value = "/getRole",method = RequestMethod.POST)
-    public DataResult getMenuRole(@RequestParam("id")Long id) {
+    @RequestMapping(value = "/role", method = RequestMethod.GET)
+    public DataResult getMenuRole(@RequestParam("id") Long id) {
         List<RoleMenu> roleMenuByRoleId = roleMenuService.findRoleMenuByMenuId(id);
         if (roleMenuByRoleId == null) {
             return ResultUtils.error(1, "没有分配角色");

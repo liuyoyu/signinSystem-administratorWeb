@@ -26,7 +26,7 @@ public class RoleController {
     @Autowired
     LoginInfoService loginInfoService;
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/roleInfo", method = RequestMethod.POST)
     public DataResult add(Role role){
         if (!loginInfoService.checkSupperAdimn()) {
             return ResultUtils.error(5, "没有权限，只有超级管理员才能添加角色");
@@ -45,7 +45,7 @@ public class RoleController {
         return ResultUtils.success();
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/roleInfo", method = RequestMethod.DELETE)
     public DataResult delete(@RequestParam("id") Long id){
         if (!loginInfoService.checkSupperAdimn()) {
             return ResultUtils.error(1, "没有权限，只有超级管理员才能删除角色");
@@ -58,7 +58,7 @@ public class RoleController {
         return ResultUtils.error(res, msg[res]);
     }
 
-    @RequestMapping(value = "/modify", method = RequestMethod.POST)
+    @RequestMapping(value = "/roleInfo", method = RequestMethod.PUT)
     public DataResult modify(Role role){
         if (!loginInfoService.checkSupperAdimn()) {
             return ResultUtils.error(1, "没有权限，只有超级管理员才能修改角色");
@@ -71,7 +71,7 @@ public class RoleController {
         return ResultUtils.error(res,msg[res]);
     }
 
-    @RequestMapping(value = "/findAll",method = RequestMethod.POST)
+    @RequestMapping(value = "/all",method = RequestMethod.GET)
     public DataResult findAll(){
         List<Role> all = roleService.findAll();
         return ResultUtils.success(all, all.size());

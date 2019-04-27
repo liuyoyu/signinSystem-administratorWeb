@@ -7,6 +7,7 @@ package com.blog.yongyu.demo.Service.Impl;
 import com.blog.yongyu.demo.Entity.BaseClass.BaseSetting;
 import com.blog.yongyu.demo.Entity.BaseClass.HttpContent;
 import com.blog.yongyu.demo.Entity.Dictionary;
+import com.blog.yongyu.demo.Repository.DictionaryContentRepository;
 import com.blog.yongyu.demo.Repository.DictionaryRepository;
 import com.blog.yongyu.demo.Service.DictionaryService;
 import com.blog.yongyu.demo.Service.LoginInfoService;
@@ -23,6 +24,8 @@ import java.util.Optional;
 public class DictionaryServiceImpl implements DictionaryService {
     @Autowired
     DictionaryRepository dictionaryRepository;
+    @Autowired
+    DictionaryContentRepository dicContentRepository;
     @Autowired
     LoginInfoService loginInfoService;
 
@@ -86,6 +89,10 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Override
     public List<Map<String, Object>> getDicIdValue() {
         return  dictionaryRepository.getDicIdValue();
+    }
 
+    @Override
+    public List<Map<String, String>> getDicCntKeyValueByDicKey(String dicKey) {
+        return dicContentRepository.findDicCntKeyValueByDicKey(dicKey);
     }
 }

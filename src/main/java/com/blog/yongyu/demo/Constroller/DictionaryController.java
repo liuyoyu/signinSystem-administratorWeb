@@ -13,6 +13,7 @@ import com.blog.yongyu.demo.Service.DictionaryContentService;
 import com.blog.yongyu.demo.Service.DictionaryService;
 import com.blog.yongyu.demo.Service.LoginInfoService;
 import com.blog.yongyu.demo.Utils.ResultUtils;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,7 +44,7 @@ public class DictionaryController {
         return false;
     }
 
-    @RequestMapping(value = "/addData", method = RequestMethod.POST)
+    @RequestMapping(value = "/data", method = RequestMethod.POST)
     public DataResult addData(Dictionary dictionary) {
         if (!checkAuth()) {
             return ResultUtils.error(3, "没有权限");
@@ -60,7 +61,7 @@ public class DictionaryController {
         return ResultUtils.success();
     }
 
-    @RequestMapping(value = "/selectData", method = RequestMethod.POST)
+    @RequestMapping(value = "/data", method = RequestMethod.GET)
     public DataResult selectData() {
         List<Dictionary> all = dictionaryService.findAll();
         return ResultUtils.success(all, all.size());
@@ -72,13 +73,13 @@ public class DictionaryController {
      * @param dicId
      * @return
      */
-    @RequestMapping(value = "/selectDataContent", method = RequestMethod.POST)
+    @RequestMapping(value = "/dataContent", method = RequestMethod.GET)
     public DataResult selecDataContent(@RequestParam("dicId") Long dicId) {
         List<DictionaryContent> dicContentByDicId = dicContentService.findDicContentByDicId(dicId);
         return ResultUtils.success(dicContentByDicId, dicContentByDicId.size());
     }
 
-    @RequestMapping(value = "/addDataContent", method = RequestMethod.POST)
+    @RequestMapping(value = "/dataContent", method = RequestMethod.POST)
     public DataResult addDataContent(DictionaryContent dicontent,
                                      @RequestParam("dicId") Long dicId) {
         LoginInfor logiInfo = loginInfoService.getLogiInfo();
@@ -108,7 +109,7 @@ public class DictionaryController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/delDataContent", method = RequestMethod.POST)
+    @RequestMapping(value = "/dataContent", method = RequestMethod.DELETE)
     public DataResult delDataContent(@RequestParam("id") Long id) {
         Integer res = dicContentService.Delete(id);
         if (res == 0) {
@@ -118,7 +119,7 @@ public class DictionaryController {
         return ResultUtils.error(res, msg[res]);
     }
 
-    @RequestMapping(value = "/delData", method = RequestMethod.POST)
+    @RequestMapping(value = "/data", method = RequestMethod.DELETE)
     public DataResult delData(@RequestParam("id") Long id) {
         Integer res = dictionaryService.Delete(id);
         if (res != 0) {
@@ -128,7 +129,7 @@ public class DictionaryController {
         return ResultUtils.success();
     }
 
-    @RequestMapping(value = "/modifyData", method = RequestMethod.POST)
+    @RequestMapping(value = "/data", method = RequestMethod.PUT)
     public DataResult modifyData(Dictionary dictionary) {
         Integer res = dictionaryService.modify(dictionary);
         if (res == 1) {
@@ -137,7 +138,7 @@ public class DictionaryController {
         return ResultUtils.success();
     }
 
-    @RequestMapping(value = "/modifyDataContent", method = RequestMethod.POST)
+    @RequestMapping(value = "/dataContent", method = RequestMethod.PUT)
     public DataResult modifyDataContent(DictionaryContent dicContent,
                                         @RequestParam("dicId") Long dicId) {
         DictionaryContent dicCntByDicIdCntId = dicContentService.findDicCntByDicIdCntId(dicId, dicContent.getId());
@@ -151,7 +152,12 @@ public class DictionaryController {
         return ResultUtils.success();
     }
 
-    @RequestMapping(value = "/findByDicId",method = RequestMethod.POST)
+    /**
+     * 通过字典ID获取字典数据
+     * @param dicID
+     * @return
+     */
+    @RequestMapping(value = "/dicId",method = RequestMethod.GET)
     public DataResult findByDicId(@RequestParam("dicID")Long dicID){
         Dictionary byId = dictionaryService.findById(dicID);
         if (byId == null) {
@@ -160,7 +166,7 @@ public class DictionaryController {
         return ResultUtils.success(byId);
     }
 
-    @RequestMapping(value = "/getDicIdValue",method = RequestMethod.POST)
+    @RequestMapping(value = "/dicIdValue",method = RequestMethod.GET)
     public DataResult getDicIdValue(){
         List<Map<String, Object>> value = dictionaryService.getDicIdValue();
         if (value == null) {
@@ -169,7 +175,7 @@ public class DictionaryController {
         return ResultUtils.success(value);
     }
 
-    @RequestMapping(value = "/getDicCntById",method = RequestMethod.POST)
+    @RequestMapping(value = "/dicCnt/dicCntId",method = RequestMethod.GET)
     public DataResult getDicCntById(@RequestParam("dicCntID") Long dicCntID) {
         DictionaryContent byId = dicContentService.findById(dicCntID);
         if (byId == null) {
@@ -177,4 +183,10 @@ public class DictionaryController {
         }
         return ResultUtils.success(byId);
     }
+    @RequestMapping(value = "/dicCnt/dicKey",method = RequestMethod.GET)
+    public DataResult getDicCntBydicKey(@RequestParam("dicKey")String dicKey){
+        List<Map<String, String>> dicCntKeyValueByDicKey = dictionaryService.getDicCntKeyValueByDicKey(dicKey);
+        return ResultUtils.success(dicCntKeyValueByDicKey,dicCntKeyValueByDicKey.size());
+    }
+
 }
