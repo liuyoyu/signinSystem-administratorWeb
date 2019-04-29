@@ -15,7 +15,7 @@ public class MyConfigurer implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AccessInterceptor()).addPathPatterns("/**");
-        registry.addInterceptor(new LoginInterceptor()).excludePathPatterns("/login_signup","/loginCheck","/logOut").addPathPatterns("/**");
+        registry.addInterceptor(new LoginInterceptor()).excludePathPatterns("/register/signup","/register/register","/register/logOut").addPathPatterns("/**");
     }
 
     //用来配置静态资源:html，js，css等
