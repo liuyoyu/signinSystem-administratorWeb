@@ -21,8 +21,11 @@ public class Role implements Serializable {
     @Column(nullable = false)
     private String roleName;
 
+//    @Column()
+//    private Long parentRole = 0L; //0表示无父角色     //废弃
+
     @Column()
-    private Long parentRole = 0L; //0表示无父角色
+    private String UserType = BaseSetting.ROLE.User_SYS.toString();
 
     @Column()
     private String status;
@@ -132,16 +135,24 @@ public class Role implements Serializable {
         this.detail = detail;
     }
 
-    public Long getParentRole() {
-        return parentRole;
-    }
+//    public Long getParentRole() {
+//        return parentRole;
+//    }
 
-    public void setParentRole(Long parentRole) {
-        this.parentRole = parentRole;
-    }
-
+//    public void setParentRole(Long parentRole) {
+//        this.parentRole = parentRole;
+//    }
+//
     public List<RoleMenu> getRoleMenus() {
         return roleMenus;
+    }
+
+    public String getUserType() {
+        return UserType;
+    }
+
+    public void setUserType(String userType) {
+        UserType = userType;
     }
 
     public void setRoleMenus(List<RoleMenu> roleMenus) {

@@ -16,7 +16,7 @@ public class RedisUtils{
 
     private static String addr = "59.77.134.183";
     private static int PORT = 6379;
-    private static String auth = "123";
+    private static String auth = "#@.2019&liuyy&";
 
     //可用连接实例的最大数目，默认值为8；
     //如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)。

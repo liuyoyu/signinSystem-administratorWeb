@@ -68,9 +68,9 @@ public class RoleServiceImpl implements RoleService {
         if (oldRole == null) {
             return 2; // 修改对象不存在
         }
+        DataUtils.copyProperty(role, oldRole);
         oldRole.setModifyBy(loginInfoService.getAccount());
         oldRole.setModifyDate(new Date());
-        DataUtils.copyProperty(role, oldRole);
         roleRepository.save(oldRole);
         return 0;
     }

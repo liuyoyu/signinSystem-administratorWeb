@@ -28,13 +28,13 @@ public class RoleController {
 
     @RequestMapping(value = "/roleInfo", method = RequestMethod.POST)
     public DataResult add(Role role){
-        if (!loginInfoService.checkSupperAdimn()) {
+        if (!loginInfoService.checkAdmin()) {
             return ResultUtils.error(5, "没有权限，只有超级管理员才能添加角色");
         }
-        if (role.getParentRole() == null ) {
+        if (role.getUserType() == null || "".equals(role.getUserType())) {
             return ResultUtils.error(3, "必须继承一个角色");
         }
-        if (role.getParentRole() == null || role.getRoleName() == null || role.getStatus() == null) {
+        if (role.getRoleName() == null || role.getStatus() == null) {
             return ResultUtils.error(4, "必填项不能为空");
         }
         Integer res = roleService.Insert(role);
@@ -47,7 +47,7 @@ public class RoleController {
 
     @RequestMapping(value = "/roleInfo", method = RequestMethod.DELETE)
     public DataResult delete(@RequestParam("id") Long id){
-        if (!loginInfoService.checkSupperAdimn()) {
+        if (!loginInfoService.checkAdmin()) {
             return ResultUtils.error(1, "没有权限，只有超级管理员才能删除角色");
         }
         Integer res = roleService.Delete(id);
@@ -60,7 +60,7 @@ public class RoleController {
 
     @RequestMapping(value = "/roleInfo", method = RequestMethod.PUT)
     public DataResult modify(Role role){
-        if (!loginInfoService.checkSupperAdimn()) {
+        if (!loginInfoService.checkAdmin()) {
             return ResultUtils.error(1, "没有权限，只有超级管理员才能修改角色");
         }
         Integer res = roleService.modify(role);

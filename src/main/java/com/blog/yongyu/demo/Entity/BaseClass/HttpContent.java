@@ -25,5 +25,7 @@ public class HttpContent {
         add(BaseSetting.ROLE.User_SYS.toString());
         add(BaseSetting.DATATYPE.System_SYS.toString());
         add(BaseSetting.DATATYPE.Standard_SYS.toString());
+        add("userType");
+
     }};
 }
