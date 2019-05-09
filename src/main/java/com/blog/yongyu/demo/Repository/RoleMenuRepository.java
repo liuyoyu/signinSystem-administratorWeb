@@ -2,6 +2,7 @@ package com.blog.yongyu.demo.Repository;
 
 import com.blog.yongyu.demo.Entity.RoleMenu;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +16,8 @@ public interface RoleMenuRepository extends JpaRepository<RoleMenu, Long> {
 
     @Query("select rm from RoleMenu rm where rm.menu.id = ?1 order by rm.createDate desc ")
     List<RoleMenu> findRoleMenuByRoleId(Long id);
+
+    @Modifying
+    @Query("delete from RoleMenu rm where rm.menu.id = ?1")
+    Integer deleteByMenuID(Long menuID);
 }

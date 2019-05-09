@@ -9,12 +9,11 @@ import com.blog.yongyu.demo.Entity.Menu;
 import com.blog.yongyu.demo.Repository.MenuRepository;
 import com.blog.yongyu.demo.Service.LoginInfoService;
 import com.blog.yongyu.demo.Service.MenuService;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service("menuService")
 public class MenuServiceImpl implements MenuService {
@@ -47,6 +46,9 @@ public class MenuServiceImpl implements MenuService {
         if (menu == null) {
             return 1;//不能添加空对象
         }
+        if (menu.getMenuURL() != null && menuRepository.existURL(menu.getMenuURL()) != null) {
+            return 2; //URL已存在
+        }
         menu.setCreateDate(new Date());
         menu.setModifyDate(new Date());
         menu.setCreateBy(loginInfoService.getAccount());
@@ -70,11 +72,11 @@ public class MenuServiceImpl implements MenuService {
         if (menu == null) {
             return 1;//不能修改空对象
         }
-        LoginInfor logiInfo = loginInfoService.getLogiInfo();
-        if (logiInfo == null) {
-            System.out.println("请登陆！");
-            return 2;
+        List<Menu> exist = menuRepository.existURL(menu.getMenuURL());
+        if (menu.getMenuURL() != null && ( exist!= null || exist.size() < 1)) {
+            return 2; //URL已存在
         }
+        LoginInfor logiInfo = loginInfoService.getLogiInfo();
         menu.setModifyBy(logiInfo.getUserId().toString());
         menu.setModifyDate(new Date());
         menuRepository.save(menu);

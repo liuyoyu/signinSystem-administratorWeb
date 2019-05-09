@@ -51,12 +51,19 @@ public class MenuControl {
         return ResultUtils.success(all, all.size());
     }
 
+    /**
+     * 添加菜单，设置菜单权限
+     *
+     * @param menu
+     * @param userTypes
+     * @return
+     */
     @RequestMapping(value = "/roleMenu", method = RequestMethod.POST)
-    public DataResult add(Menu menu, @RequestParam("roleId") Long roleId) {
+    public DataResult add(Menu menu, @RequestParam("userType") String[] userTypes) {
         if (!checkAuth()) {
             return ResultUtils.error(2, "没有权限");
         }
-        if (roleId == null) {
+        if (userTypes == null || userTypes.length < 1) {
             return ResultUtils.error(3, "必须设置菜单权限的角色");
         }
         if (menu == null) {
@@ -64,10 +71,11 @@ public class MenuControl {
         }
         Integer res = menuService.add(menu);
         if (res == 0) {
-            roleMenuService.add(menu, roleId);
+            roleMenuService.add(menu, userTypes);
             return ResultUtils.success();
         }
-        return ResultUtils.error(1, "不能为空");
+        String[] msg = {"必填项不能为空", "该URL已被占用"};
+        return ResultUtils.error(res, msg[res - 1]);
     }
 
     /**
@@ -113,15 +121,17 @@ public class MenuControl {
      * @return
      */
     @RequestMapping(value = "/roleMenu", method = RequestMethod.PUT)
-    public DataResult modify(Menu menu) {
+    public DataResult modify(Menu menu, @RequestParam("userTypes") String[] userTypes) {
         if (!checkAuth()) {
             return ResultUtils.error(2, "没有权限");
         }
         Integer res = menuService.modify(menu);
         if (res == 0) {
+            roleMenuService.modify(menu, userTypes);
             return ResultUtils.success();
         }
-        return ResultUtils.error(1, "对象不能为空");
+        String[] msg = {"对象不能为空", "该URL已经被占用"};
+        return ResultUtils.error(res, msg[res - 1]);
     }
 
     @RequestMapping(value = "/role", method = RequestMethod.GET)

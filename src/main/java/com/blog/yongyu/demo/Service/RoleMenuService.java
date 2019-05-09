@@ -21,7 +21,11 @@ public interface RoleMenuService {
 
     Integer modify(RoleMenu menu);
 
+    Integer modify(Menu menu, String[] roleNames);
+
     Integer add(Menu menu, Long roleId);
+
+    Integer add(Menu menu, String[] roleNames);
 
     List<RoleMenu> findRoleMenuByMenuId(Long id);
 }

@@ -53,7 +53,7 @@ public class Role implements Serializable {
     private List<UserRole> userRoles;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "role", cascade = CascadeType.REMOVE)
-    @JsonIgnore
+    @JsonIgnore()
     private List<RoleMenu> roleMenus;
 
     public Role() {

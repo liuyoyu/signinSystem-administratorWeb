@@ -48,7 +48,7 @@ public class RoleController {
     @RequestMapping(value = "/roleInfo", method = RequestMethod.DELETE)
     public DataResult delete(@RequestParam("id") Long id){
         if (!loginInfoService.checkAdmin()) {
-            return ResultUtils.error(1, "没有权限，只有超级管理员才能删除角色");
+            return ResultUtils.error(1, "没有权限，只有管理员才能删除角色");
         }
         Integer res = roleService.Delete(id);
         if (res == 0) {
@@ -61,7 +61,7 @@ public class RoleController {
     @RequestMapping(value = "/roleInfo", method = RequestMethod.PUT)
     public DataResult modify(Role role){
         if (!loginInfoService.checkAdmin()) {
-            return ResultUtils.error(1, "没有权限，只有超级管理员才能修改角色");
+            return ResultUtils.error(1, "没有权限，只有管理员才能修改角色");
         }
         Integer res = roleService.modify(role);
         if (res == 0) {

@@ -96,4 +96,11 @@ public class RoleMenu implements Serializable {
         this.modifyBy = modifyBy;
     }
 
+    public String getRoleName(){
+        if (role == null) {
+            return null;
+        }
+        return role.getRoleName();
+    }
+
 }

@@ -9,6 +9,8 @@ public interface RoleService {
 
     List<Role> findAll();
 
+    List<Role> findByRoleNames(String[] names);
+
     Integer Insert(Role role);
 
     Integer Delete(Long roleId);

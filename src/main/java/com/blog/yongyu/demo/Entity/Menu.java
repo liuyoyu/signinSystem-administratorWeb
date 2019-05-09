@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "menu", schema = "dbo", catalog = "et")
@@ -157,4 +158,17 @@ public class Menu implements Serializable {
     public void setSequence(Integer sequence) {
         this.sequence = sequence;
     }
+
+    public List<String> getMenuMasterName(){
+        if (roleMenus == null || roleMenus.size() < 1) {
+            return null;
+        }
+//        List<String> res = roleMenus.stream().map(RoleMenu::getRoleName).collect(Collectors.toList());
+        List<String> res = new ArrayList<>();
+        for (RoleMenu rm : roleMenus) {
+            res.add(rm.getRoleName());
+        }
+        return res;
+    }
+
 }
