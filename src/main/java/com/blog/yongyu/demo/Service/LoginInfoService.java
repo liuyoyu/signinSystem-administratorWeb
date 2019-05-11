@@ -5,6 +5,7 @@
 package com.blog.yongyu.demo.Service;
 
 import com.blog.yongyu.demo.Entity.BaseClass.LoginInfor;
+import com.blog.yongyu.demo.Entity.Role;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,4 +25,6 @@ public interface LoginInfoService {
     Boolean checkAdmin();
 
     Boolean checkSupperAdimn();
+
+    Long getCurrRoleID();
 }

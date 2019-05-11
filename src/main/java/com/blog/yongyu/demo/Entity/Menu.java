@@ -22,7 +22,7 @@ public class Menu implements Serializable {
     private Long id; //菜单编号
 
     @Column()
-    private Long parentMenuId ; // 根节点的父节点默认为0
+    private Long parentMenuId = 0L ; // 根节点的父节点默认为0
 
     @Column()
     private String menuName;
@@ -58,8 +58,10 @@ public class Menu implements Serializable {
     @Column()
     private String modifyBy;
 
+    @Transient
+    private List<Menu> ChildrenMenu;
+
     public Menu() {
-        parentMenuId = Long.parseLong("0");
         roleMenus = new ArrayList<>();
     }
 
@@ -157,6 +159,14 @@ public class Menu implements Serializable {
 
     public void setSequence(Integer sequence) {
         this.sequence = sequence;
+    }
+
+    public List<Menu> getChildrenMenu() {
+        return ChildrenMenu;
+    }
+
+    public void setChildrenMenu(List<Menu> childrenMenu) {
+        ChildrenMenu = childrenMenu;
     }
 
     public List<String> getMenuMasterName(){

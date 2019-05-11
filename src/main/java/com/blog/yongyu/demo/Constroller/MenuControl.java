@@ -6,6 +6,7 @@ package com.blog.yongyu.demo.Constroller;
 
 import com.blog.yongyu.demo.Entity.BaseClass.BaseSetting;
 import com.blog.yongyu.demo.Entity.BaseClass.DataResult;
+import com.blog.yongyu.demo.Entity.BaseClass.FriendLyException;
 import com.blog.yongyu.demo.Entity.BaseClass.LoginInfor;
 import com.blog.yongyu.demo.Entity.Menu;
 import com.blog.yongyu.demo.Entity.RoleMenu;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/menu")
@@ -34,7 +36,7 @@ public class MenuControl {
     @Autowired
     LoginInfoService loginInfoService;
 
-    public Boolean checkAuth() {
+    private Boolean checkAuth() {
         LoginInfor logiInfo = loginInfoService.getLogiInfo();
         if (logiInfo == null) {
             return false;
@@ -149,4 +151,31 @@ public class MenuControl {
         }
         return ResultUtils.success(list, list.size());
     }
+
+    /**
+     * 获取所有根菜单
+     *
+     * @return
+     */
+    @RequestMapping(value = "/allRootMenu", method = RequestMethod.GET)
+    public DataResult findAllRootMenu() {
+        List<Map<String, String>> allRootMenu = menuService.findAllRootMenu();
+        return ResultUtils.success(allRootMenu, allRootMenu.size());
+    }
+
+    /**
+     * 获取侧边栏
+     * 二级侧边栏
+     * @return
+     */
+    @RequestMapping(value = "/sidebar", method = RequestMethod.GET)
+    public DataResult getSideBar() {
+        try {
+            List<Menu> sidebar = menuService.getSidebar();
+            return ResultUtils.success(sidebar);
+        } catch (FriendLyException e) {
+            return ResultUtils.error(e.getErrorCode(), e.getMessage());
+        }
+    }
+
 }

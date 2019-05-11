@@ -4,6 +4,7 @@
  **/
 package com.blog.yongyu.demo.Service.Impl;
 
+import com.blog.yongyu.demo.Entity.BaseClass.FriendLyException;
 import com.blog.yongyu.demo.Entity.BaseClass.LoginInfor;
 import com.blog.yongyu.demo.Entity.Menu;
 import com.blog.yongyu.demo.Repository.MenuRepository;
@@ -73,7 +74,7 @@ public class MenuServiceImpl implements MenuService {
             return 1;//不能修改空对象
         }
         List<Menu> exist = menuRepository.existURL(menu.getMenuURL());
-        if (menu.getMenuURL() != null && ( exist!= null || exist.size() < 1)) {
+        if (menu.getMenuURL() != null && (exist != null || exist.size() < 1)) {
             return 2; //URL已存在
         }
         LoginInfor logiInfo = loginInfoService.getLogiInfo();
@@ -81,5 +82,37 @@ public class MenuServiceImpl implements MenuService {
         menu.setModifyDate(new Date());
         menuRepository.save(menu);
         return 0;
+    }
+
+    /**
+     * 查找所有根菜单
+     *
+     * @return
+     */
+    @Override
+    public List<Map<String, String>> findAllRootMenu() {
+        return menuRepository.findRootMenu();
+    }
+
+    /**
+     * 根据角色获取侧边栏
+     *  二级侧边栏
+     * @return
+     */
+    @Override
+    public List<Menu> getSidebar() throws FriendLyException {
+        Long currRoleID = loginInfoService.getCurrRoleID();
+        if (currRoleID == null) {
+            throw new FriendLyException("请先登陆",1);
+        }
+        List<Menu> allRootMenu = menuRepository.getAllRootMenuByRoleID(currRoleID);
+
+        List<Menu> sidebar = new ArrayList<>();
+        for (Menu m : allRootMenu) {
+            List<Menu> all = menuRepository.findChildMenu(m.getId());
+            m.setChildrenMenu(all);
+            sidebar.add(m);
+        }
+        return sidebar;
     }
 }

@@ -110,4 +110,13 @@ public class LoginInfoServiceImpl implements LoginInfoService {
         }
         return userRoleService.isSupperAdmin(user.getId());
     }
+
+    @Override
+    public Long getCurrRoleID() {
+        LoginInfor logiInfo = getLogiInfo();
+        if (logiInfo == null) {
+            return null;
+        }
+        return logiInfo.getRoleId();
+    }
 }

@@ -103,4 +103,11 @@ public class RoleMenu implements Serializable {
         return role.getRoleName();
     }
 
+    public Long getRoleID(){
+        if (role == null) {
+            return null;
+        }
+        return role.getRoleId();
+    }
+
 }

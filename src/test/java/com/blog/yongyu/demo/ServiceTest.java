@@ -2,8 +2,10 @@ package com.blog.yongyu.demo;
 
 import com.blog.yongyu.demo.Entity.Dictionary;
 import com.blog.yongyu.demo.Entity.Menu;
+import com.blog.yongyu.demo.Entity.Organization;
 import com.blog.yongyu.demo.Entity.UserInfo;
 import com.blog.yongyu.demo.Repository.DictionaryRepository;
+import com.blog.yongyu.demo.Repository.OrganizationRepository;
 import com.blog.yongyu.demo.Repository.UserInfoRepository;
 import com.blog.yongyu.demo.Service.*;
 import com.blog.yongyu.demo.Utils.RedisUtils;
@@ -133,6 +135,20 @@ public class ServiceTest {
         for (Map<String, Object> m : map) {
             System.out.println(m.get("id"));
         }
+    }
+
+    @Autowired
+    OrganizationService organizationService;
+    @Test()
+    public void OrganizationTest(){
+        Organization o = new Organization();
+        try {
+            organizationService.insert(o);
+        } catch (Exception e) {
+            System.out.println("------------");
+            System.out.println("messsge: "+e.getMessage());
+        }
+
     }
 
 }
