@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.ArrayList;
@@ -24,8 +25,13 @@ public class Role implements Serializable {
 //    @Column()
 //    private Long parentRole = 0L; //0表示无父角色     //废弃
 
+    //角色所属类型：普通用户、管理员、超级管理员; 角色类型决定用户具有哪些权限；
     @Column()
     private String UserType = BaseSetting.ROLE.User_SYS.toString();
+
+//    //角色所属分组
+//    @Column()
+//    private String groupBy;
 
     @Column()
     private String status;
@@ -135,14 +141,6 @@ public class Role implements Serializable {
         this.detail = detail;
     }
 
-//    public Long getParentRole() {
-//        return parentRole;
-//    }
-
-//    public void setParentRole(Long parentRole) {
-//        this.parentRole = parentRole;
-//    }
-//
     public List<RoleMenu> getRoleMenus() {
         return roleMenus;
     }
@@ -158,4 +156,5 @@ public class Role implements Serializable {
     public void setRoleMenus(List<RoleMenu> roleMenus) {
         this.roleMenus = roleMenus;
     }
+
 }

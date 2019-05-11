@@ -14,6 +14,12 @@ import java.lang.reflect.Field;
  */
 @Log4j2
 public class DataUtils {
+    /**
+     * 复制数据，将source中的非空数据拷贝到target中
+     * @param source
+     * @param target
+     * @return
+     */
     public static Boolean copyProperty(Object source, Object target) {
         Class s = source.getClass();
         Class t = target.getClass();
@@ -37,5 +43,13 @@ public class DataUtils {
         return true;
     }
 
+    /**
+     * 判断字符串是否为空
+     * @param s
+     * @return
+     */
+    public static Boolean isEmptyString(String s) {
+        return s == null || "".equals(s);
+    }
 
 }

@@ -175,4 +175,10 @@ public class UserRole implements Serializable {
         }
         return userInfo.getUserName();
     }
+    public String getUserType(){
+        if (role == null) {
+            return null;
+        }
+        return role.getUserType();
+    }
 }

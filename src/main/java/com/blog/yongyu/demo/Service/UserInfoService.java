@@ -1,5 +1,6 @@
 package com.blog.yongyu.demo.Service;
 
+import com.blog.yongyu.demo.Entity.BaseClass.FriendLyException;
 import com.blog.yongyu.demo.Entity.UserInfo;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -11,7 +12,7 @@ public interface UserInfoService {
 
     UserInfo findUserByAccount(String account);
 
-    Integer Insert(UserInfo user);
+    Integer Insert(UserInfo user) throws FriendLyException;
 
     Integer Delete(Long userId);
 

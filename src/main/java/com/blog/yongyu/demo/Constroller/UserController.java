@@ -6,6 +6,7 @@ package com.blog.yongyu.demo.Constroller;
 
 import com.blog.yongyu.demo.Entity.BaseClass.BaseSetting;
 import com.blog.yongyu.demo.Entity.BaseClass.DataResult;
+import com.blog.yongyu.demo.Entity.BaseClass.FriendLyException;
 import com.blog.yongyu.demo.Entity.BaseClass.LoginInfor;
 import com.blog.yongyu.demo.Entity.Role;
 import com.blog.yongyu.demo.Entity.UserInfo;
@@ -43,7 +44,7 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/userInfo", method = RequestMethod.POST)
-    public DataResult insertUserInfo(UserInfo userInfo) {
+    public DataResult insertUserInfo(UserInfo userInfo) throws FriendLyException {
         if (!loginInfoService.checkAdmin()) {
             return ResultUtils.error(9, "没有权限");
         }

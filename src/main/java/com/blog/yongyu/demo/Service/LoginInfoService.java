@@ -27,4 +27,6 @@ public interface LoginInfoService {
     Boolean checkSupperAdimn();
 
     Long getCurrRoleID();
+
+    Boolean checkUser();
 }

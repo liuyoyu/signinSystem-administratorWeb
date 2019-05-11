@@ -1,6 +1,7 @@
 package com.blog.yongyu.demo.Service.Impl;
 
 import com.blog.yongyu.demo.Entity.BaseClass.BaseSetting;
+import com.blog.yongyu.demo.Entity.BaseClass.FriendLyException;
 import com.blog.yongyu.demo.Entity.BaseClass.LoginInfor;
 import com.blog.yongyu.demo.Entity.Role;
 import com.blog.yongyu.demo.Entity.UserInfo;
@@ -62,7 +63,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public Integer Insert(UserInfo user) {
+    public Integer Insert(UserInfo user) throws FriendLyException{
         if (user == null) {
             return 1; //不能为空
         }
@@ -88,7 +89,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         user.setCreateDate(new Date());
         user.setCreateBy(loginInfoService.getAccount());
         user.setPwd(DigestUtils.md5DigestAsHex(user.getPwd().getBytes())); //md5加密
-        Role byRoleName = roleRepository.findByRoleName(BaseSetting.ROLE.User_SYS.toString());//角色中的用户
+
+        Role byRoleName = roleRepository.findByRoleName(BaseSetting.ROLE.User_SYS.toString());
         if (byRoleName == null) {//不存在则创建
             byRoleName = new Role();
             roleService.Insert(byRoleName);

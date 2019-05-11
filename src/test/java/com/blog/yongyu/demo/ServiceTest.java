@@ -75,8 +75,8 @@ public class ServiceTest {
         userInfo.setInitPassword();
         userInfo.setUserName("管理员");
 
-        Integer user = userInfoService.Insert(userInfo);
-        System.out.println(user);
+//        Integer user = userInfoService.Insert(userInfo);
+//        System.out.println(user);
     }
     @Autowired
     DictionaryService dictionaryService;

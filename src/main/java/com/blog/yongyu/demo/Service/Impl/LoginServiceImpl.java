@@ -1,6 +1,7 @@
 package com.blog.yongyu.demo.Service.Impl;
 
 import com.blog.yongyu.demo.Entity.BaseClass.BaseSetting;
+import com.blog.yongyu.demo.Entity.BaseClass.FriendLyException;
 import com.blog.yongyu.demo.Entity.UserInfo;
 import com.blog.yongyu.demo.Repository.UserInfoRepository;
 import com.blog.yongyu.demo.Service.LoginService;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import java.lang.reflect.Field;
 import java.util.Date;
 
 
@@ -45,7 +47,7 @@ public class LoginServiceImpl implements LoginService {
      * @return
      */
     @Override
-    public Integer createUser(UserInfo user) {
+    public Integer createUser(UserInfo user) throws FriendLyException{
 //        if (user == null) {
 //            return null;
 //        }

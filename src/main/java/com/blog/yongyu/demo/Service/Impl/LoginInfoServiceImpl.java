@@ -119,4 +119,9 @@ public class LoginInfoServiceImpl implements LoginInfoService {
         }
         return logiInfo.getRoleId();
     }
+
+    @Override
+    public Boolean checkUser() {
+        return !checkAdmin() && !checkSupperAdimn();
+    }
 }

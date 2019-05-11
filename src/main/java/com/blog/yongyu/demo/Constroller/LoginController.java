@@ -1,9 +1,6 @@
 package com.blog.yongyu.demo.Constroller;
 
-import com.blog.yongyu.demo.Entity.BaseClass.BaseSetting;
-import com.blog.yongyu.demo.Entity.BaseClass.DataResult;
-import com.blog.yongyu.demo.Entity.BaseClass.HttpContent;
-import com.blog.yongyu.demo.Entity.BaseClass.LoginInfor;
+import com.blog.yongyu.demo.Entity.BaseClass.*;
 import com.blog.yongyu.demo.Entity.Role;
 import com.blog.yongyu.demo.Entity.UserInfo;
 import com.blog.yongyu.demo.Entity.UserRole;
@@ -21,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -74,7 +72,7 @@ public class LoginController {
      * @return
      */
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public DataResult create(UserInfo user) {
+    public DataResult create(UserInfo user) throws FriendLyException {
         String[] createMsg = {"创建成功", "添加账户不能为空", "账户不能为空", "该账户已被注册", "该邮箱已被注册", "密码不能为空", "邮箱不能为空"};
         Integer res = userInfoService.Insert(user);
         if (res != 0) {

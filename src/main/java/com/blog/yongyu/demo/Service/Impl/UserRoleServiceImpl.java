@@ -96,7 +96,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     public Boolean isAdmin(Long userId) {
         List<UserRole> allByUserId = userRoleRepository.findAllByUserId(userId);
         for (UserRole userrole : allByUserId) {
-            if (userrole.getRoleName().equals(BaseSetting.ROLE.Admin_SYS.toString()) ||
+            if (userrole.getUserType().equals(BaseSetting.ROLE.Admin_SYS.toString()) ||
                     userrole.getRoleName().equals(BaseSetting.ROLE.SupperAdmin_SYS.toString())) {
                 return true;
             }
@@ -113,7 +113,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     public Boolean isSupperAdmin(Long userId) {
         List<UserRole> allByUserId = userRoleRepository.findAllByUserId(userId);
         for (UserRole userrole : allByUserId) {
-            if (userrole.getRoleName().equals(BaseSetting.ROLE.SupperAdmin_SYS.toString())) {
+            if (userrole.getUserType().equals(BaseSetting.ROLE.SupperAdmin_SYS.toString())) {
                 return true;
             }
         }

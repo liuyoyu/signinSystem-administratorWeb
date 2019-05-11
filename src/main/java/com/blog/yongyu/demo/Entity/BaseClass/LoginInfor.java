@@ -23,6 +23,7 @@ public class LoginInfor {
     private String email;
     private Date lastLogin;
 
+
 //    private UserInfo  user;
 
     private String status;
@@ -113,5 +114,12 @@ public class LoginInfor {
 
     public Long getUserId() {
         return userId;
+    }
+
+    public String getUserType() {
+        if (role == null) {
+            return null;
+        }
+        return role.getUserType();
     }
 }
