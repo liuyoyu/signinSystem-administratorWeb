@@ -1,0 +1,122 @@
+/**
+ * created by liuyoyu
+ *
+ * 废弃不用，由于角色权限判断的逻辑改变，这个表废弃不用了，，菜单权限判断直接在Menu.class中查看
+ * Date:2019/4/15
+ **/
+package com.signInStart.Entity;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+
+@Entity
+@Table(name = "RoleMenu", schema = "dbo", catalog = "et")
+public class RoleMenu implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @ManyToOne()
+    @JoinColumn(name = "roleId")
+    private Role role;
+
+    @ManyToOne()
+    @JoinColumn(name = "menuId")
+    private Menu menu;
+
+    @Column()
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createDate;
+
+    @Column()
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date modifyDate;
+
+    @Column()
+    private String createBy;
+
+    @Column()
+    private String modifyBy;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public String getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(String modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
+    public String getRoleName(){
+        if (role == null) {
+            return null;
+        }
+        return role.getRoleName();
+    }
+
+    public Long getRoleID(){
+        if (role == null) {
+            return null;
+        }
+        return role.getRoleId();
+    }
+
+    public String  getUserType(){
+        if (role == null) {
+            return null;
+        }
+        return role.getUserType();
+    }
+
+}
