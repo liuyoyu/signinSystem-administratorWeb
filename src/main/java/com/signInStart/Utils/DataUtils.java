@@ -4,6 +4,7 @@
  **/
 package com.signInStart.Utils;
 
+import com.signInStart.Entity.BaseClass.BaseSetting;
 import lombok.extern.log4j.Log4j2;
 
 import java.lang.reflect.Field;
@@ -50,6 +51,34 @@ public class DataUtils {
      */
     public static Boolean isEmptyString(String s) {
         return s == null || "".equals(s);
+    }
+
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  判断是否属于usertype
+     * @Date 21:14 2019/6/2
+     * @Param [userType]
+     * @return java.lang.Boolean
+     **/
+    public static Boolean containsUserType(String userType) {
+        return BaseSetting.USRTYPE.Admin_SYS.toString().equals(userType) ||
+                BaseSetting.USRTYPE.SupperAdmin_SYS.toString().equals(userType) ||
+                BaseSetting.USRTYPE.User_SYS.toString().equals(userType);
+    }
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  判断是否属于usertype
+     * @Date 21:14 2019/6/2
+     * @Param [userType]
+     * @return java.lang.Boolean
+     **/
+    public static Boolean containsUserType(String[] userType) {
+        for (String u : userType) {
+            if (!containsUserType(u)) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

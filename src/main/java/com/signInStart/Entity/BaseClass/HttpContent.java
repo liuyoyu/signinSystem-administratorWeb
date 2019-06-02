@@ -25,4 +25,19 @@ public class HttpContent {
         add("userType");
 
     }};
+
+    public static Set<String> USERTYPE = new HashSet<String>(){{
+
+//        add(BaseSetting.STATUS.Normal_SYS.toString());
+//        add(BaseSetting.STATUS.Disabled_SYS.toString());
+//        add(BaseRole.UserId.toString());
+//        add(BaseRole.AdminId.toString());
+        add(BaseSetting.ROLE.Admin_SYS.toString());
+        add(BaseSetting.ROLE.User_SYS.toString());
+        add(BaseSetting.ROLE.SupperAdmin_SYS.toString());
+//        add(BaseSetting.DATATYPE.System_SYS.toString());
+//        add(BaseSetting.DATATYPE.Standard_SYS.toString());
+//        add("userType");
+
+    }};
 }

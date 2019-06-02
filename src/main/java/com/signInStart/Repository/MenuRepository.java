@@ -40,4 +40,7 @@ public interface MenuRepository extends JpaRepository<Menu,Long>{
             "and m.menuStatus = 'Normal_SYS' order by m.sequence asc")
     List<Menu> findAllRootMenuByUserType();
 
+    List<Menu> findByMenuURL(String menuURL);
+
+    List<Menu> findByMenuValue(String menuValue);
 }

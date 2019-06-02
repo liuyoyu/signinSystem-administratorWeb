@@ -2,6 +2,7 @@ package com.signInStart.Configurer.Interceptors;
 
 import com.signInStart.Entity.BaseClass.HttpContent;
 import com.signInStart.Utils.RedisUtils;
+import com.signInStart.Utils.ResultUtils;
 import lombok.extern.log4j.Log4j2;
 import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Component;
@@ -38,19 +39,16 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         JSONObject map = new JSONObject();
         if (value == null) { //token为空或不匹配
-//            response.reset();
-            map.put("status", "99");
-            map.put("msg", "sign in, please.");
-            writer.print(map.toString());
+            writer.print(ResultUtils.error(99,"请先登陆").toString());
             writer.flush();
             writer.close();
             return false;
         }
         if (!token.equals(value)) {
 //            response.reset();
-            map.put("status", "99");
-            map.put("msg", "Time out!");
-            writer.print(map.toString());
+//            map.put("status", "99");
+//            map.put("msg", "Time out!");
+            writer.print(ResultUtils.error(99,"time out").toString());
             writer.flush();
             writer.close();
             return false;

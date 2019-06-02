@@ -28,6 +28,9 @@ public class Menu implements Serializable {
     private String menuName;
 
     @Column()
+    private String menuValue;
+
+    @Column()
     private String menuURL;
 
     @Column()
@@ -44,8 +47,9 @@ public class Menu implements Serializable {
     @JsonIgnore
     private List<RoleMenu> roleMenus;
 
-    @Column()
-    private String userType;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "menu")
+    @JsonIgnore
+    private List<MenuUserType> menuUserTypes;
 
     @Column()
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -198,11 +202,19 @@ public class Menu implements Serializable {
         return list;
     }
 
-    public String getUserType() {
-        return userType;
+    public String getMenuValue() {
+        return menuValue;
     }
 
-    public void setUserType(String userType) {
-        this.userType = userType;
+    public void setMenuValue(String menuValue) {
+        this.menuValue = menuValue;
+    }
+
+    public List<MenuUserType> getMenuUserTypes() {
+        return menuUserTypes;
+    }
+
+    public void setMenuUserTypes(List<MenuUserType> menuUserTypes) {
+        this.menuUserTypes = menuUserTypes;
     }
 }

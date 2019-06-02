@@ -10,7 +10,7 @@ public class BaseSetting {
         Disabled_SYS
     }
 
-    public enum ROLE {
+    public enum ROLE { //废弃不用了
         User_SYS,
         Admin_SYS,
         SupperAdmin_SYS
@@ -22,5 +22,11 @@ public class BaseSetting {
     public enum ISDEFAULT {
         isDefault_SYS,
         isNotDefault_SYS
+    }
+
+    public enum USRTYPE{
+        Admin_SYS,
+        User_SYS,
+        SupperAdmin_SYS
     }
 }

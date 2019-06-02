@@ -1,7 +1,9 @@
 package com.signInStart.Service;
 
 import com.signInStart.Entity.BaseClass.FriendlyException;
+import com.signInStart.Entity.DTO.MenuTreeDTO;
 import com.signInStart.Entity.Menu;
+import com.signInStart.Entity.MenuUserType;
 
 import java.util.List;
 import java.util.Map;
@@ -22,5 +24,8 @@ public interface MenuService {
 
     List<Menu> getSidebar() throws FriendlyException;
 
-    List<Menu> getMenuTree() throws FriendlyException;
+    List<MenuTreeDTO> getMenuTree() throws FriendlyException;
+
+    void addMenu(Menu menu, String[] userType)throws FriendlyException;
+
 }

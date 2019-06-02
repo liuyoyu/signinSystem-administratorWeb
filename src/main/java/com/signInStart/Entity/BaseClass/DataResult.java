@@ -1,7 +1,10 @@
 package com.signInStart.Entity.BaseClass;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class DataResult<T> {
-    private Integer status;
+    private Integer status = 1;
     private String msg;
     private T data;
     private Integer total;
@@ -36,5 +39,13 @@ public class DataResult<T> {
 
     public void setTotal(Integer total) {
         this.total = total;
+    }
+
+    @Override
+    public String toString() {
+        Map<String, String> map = new HashMap<>();
+        map.put("msg", getMsg());
+        map.put("status", getStatus().toString());
+        return map.toString();
     }
 }

@@ -28,7 +28,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/menu")
-public class MenuControl {
+public class MenuController {
 
     @Autowired
     MenuService menuService;
@@ -36,7 +36,13 @@ public class MenuControl {
     RoleMenuService roleMenuService;
     @Autowired
     LoginInfoService loginInfoService;
-
+    /**
+     * @Author liuyoyu
+     * @Description //TODO
+     * @Date 16:38 2019/6/2
+     * @Param []
+     * @return com.signInStart.Entity.BaseClass.DataResult
+     **/
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public DataResult findAll() throws FriendlyException {
         List<Menu> all = menuService.findAll();
@@ -51,20 +57,9 @@ public class MenuControl {
      * @return
      */
     @RequestMapping(value = "/roleMenu", method = RequestMethod.POST)
-    public DataResult add(Menu menu, @RequestParam("userType") String[] userTypes)throws FriendlyException  {
-        if (userTypes == null || userTypes.length < 1) {
-            return ResultUtils.error(3, "必须设置菜单权限的角色");
-        }
-        if (menu == null) {
-            return ResultUtils.error(4, "不能添加空值");
-        }
-        Integer res = menuService.add(menu);
-        if (res == 0) {
-            roleMenuService.add(menu, userTypes);
-            return ResultUtils.success();
-        }
-        String[] msg = {"必填项不能为空", "该URL已被占用"};
-        return ResultUtils.error(res, msg[res - 1]);
+    public DataResult add(Menu menu, @RequestParam("userType") String[] userTypes) throws FriendlyException  {
+        menuService.addMenu(menu, userTypes);
+        return ResultUtils.success();
     }
 
     /**
@@ -74,7 +69,7 @@ public class MenuControl {
      * @return
      */
     @RequestMapping(value = "/roleMenu", method = RequestMethod.DELETE)
-    public DataResult remove(@RequestParam("id") Long id)throws FriendlyException  {
+    public DataResult remove(@RequestParam("id") Long id) throws FriendlyException  {
         if (loginInfoService.checkUser()) {
             return ResultUtils.error(2, "没有权限");
         }
@@ -170,7 +165,13 @@ public class MenuControl {
         List<Menu> sidebar = menuService.getSidebar();
         return ResultUtils.success(sidebar);
     }
-
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  菜单树
+     * @Date 20:21 2019/6/2
+     * @Param []
+     * @return com.signInStart.Entity.BaseClass.DataResult
+     **/
     @RequestMapping(value = "/menuTree", method = RequestMethod.GET)
     public DataResult getMenuTree() throws FriendlyException {
         return ResultUtils.success(menuService.getMenuTree());

@@ -5,11 +5,17 @@
 package com.signInStart.Service.Impl;
 
 import com.signInStart.Entity.BaseClass.FriendlyException;
+import com.signInStart.Entity.BaseClass.HttpContent;
 import com.signInStart.Entity.BaseClass.LoginInfor;
+import com.signInStart.Entity.DTO.MenuTreeDTO;
 import com.signInStart.Entity.Menu;
+import com.signInStart.Entity.MenuUserType;
 import com.signInStart.Repository.MenuRepository;
+import com.signInStart.Repository.MenuUserTypeRepository;
 import com.signInStart.Service.LoginInfoService;
 import com.signInStart.Service.MenuService;
+import com.signInStart.Utils.DataUtils;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +27,16 @@ public class MenuServiceImpl implements MenuService {
     MenuRepository menuRepository;
 
     @Autowired
+    MenuUserTypeRepository menuUserTypeRepository;
+
+    @Autowired
     LoginInfoService loginInfoService;
 
     @Override
     public Menu findById(Long id) throws FriendlyException {
         Optional<Menu> byId = menuRepository.findById(id);
         if (!byId.isPresent()) {
-            throw new FriendlyException("菜单不存在",1);
+            throw new FriendlyException("菜单不存在", 1);
         }
         return byId.get();
     }
@@ -42,7 +51,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public Integer add(Menu menu)throws FriendlyException  {
+    public Integer add(Menu menu) throws FriendlyException {
         if (loginInfoService.checkUser()) {
             throw new FriendlyException("没有权限", 1);
         }
@@ -60,9 +69,19 @@ public class MenuServiceImpl implements MenuService {
         return 0;
     }
 
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  删除菜单：有子菜单的根菜单不能删除
+     * @Date 20:44 2019/6/2
+     * @Param [id]
+     * @return java.lang.Integer
+     **/
     @Override
     public Integer remove(Long id) throws FriendlyException {
         Menu menu = findById(id);
+        if (menu.getParentMenuId() == 0L && !menuRepository.findAllChildMenu(menu.getId()).isEmpty()) {
+            throw new FriendlyException("有子菜单，不能删除");
+        }
         if (menu == null) {
             return 1;//不能删除空对象
         }
@@ -71,7 +90,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public Integer modify(Menu menu)throws FriendlyException  {
+    public Integer modify(Menu menu) throws FriendlyException {
         if (menu == null) {
             return 1;//不能修改空对象
         }
@@ -92,20 +111,21 @@ public class MenuServiceImpl implements MenuService {
      * @return
      */
     @Override
-    public List<Map<String, String>> findAllRootMenu()throws FriendlyException  {
+    public List<Map<String, String>> findAllRootMenu() throws FriendlyException {
         return menuRepository.findRootMenu();
     }
 
     /**
      * 根据角色获取侧边栏
-     *  二级侧边栏
+     * 二级侧边栏
+     *
      * @return
      */
     @Override
     public List<Menu> getSidebar() throws FriendlyException {
         String currUserType = loginInfoService.getCurrUserType();
         if (currUserType == null) {
-            throw new FriendlyException("请先登陆",1);
+            throw new FriendlyException("请先登陆", 1);
         }
         List<Menu> allRootMenu = menuRepository.findAllRootMenuByUserType();
 
@@ -119,24 +139,81 @@ public class MenuServiceImpl implements MenuService {
     }
 
     /**
+     * @return java.util.List<com.signInStart.Entity.Menu>
      * @Author liuyoyu
      * @Description //TODO  获取取菜单树
      * @Date 15:33 2019/5/26
      * @Param []
-     * @return java.util.List<com.signInStart.Entity.Menu>
      **/
     @Override
-    public List<Menu> getMenuTree() throws FriendlyException {
+    public List<MenuTreeDTO> getMenuTree() throws FriendlyException {
         List<Menu> all = menuRepository.getAllRootMenu();
         if (all == null) {
             throw new FriendlyException("列表为空，请先创建根菜单");
         }
-        List<Menu> tree = new ArrayList<>();
+        List<MenuTreeDTO> tree = new ArrayList<>();
         for (Menu menu : all) {
+            MenuTreeDTO menuTreeDTO = new MenuTreeDTO(menu);
             List<Menu> tmp = menuRepository.findAllChildMenu(menu.getId());
-            menu.setChildrenMenu(tmp);
-            tree.add(menu);
+            menuTreeDTO.setChildrenMenu(tmp);
+            tree.add(menuTreeDTO);
         }
         return tree;
     }
+
+    /**
+     * @return void
+     * @Author liuyoyu
+     * @Description //TODO  添加菜单
+     * @Date 19:20 2019/6/2
+     * @Param [menu]
+     **/
+    @Override
+    public void addMenu(Menu menu, String[] userType) throws FriendlyException {
+        if (loginInfoService.checkUser()) {
+            throw new FriendlyException("没有权限，请联系管理员",1);
+        }
+        if (!DataUtils.containsUserType(userType)) {
+            throw new FriendlyException("角色类型不在指定类型中，请重新选择");
+        }
+        if (DataUtils.isEmptyString(menu.getMenuName())) {
+            throw new FriendlyException("菜单名称为空，请填入菜单名称", 1);
+        }
+        if (DataUtils.isEmptyString(menu.getMenuValue())) {
+            throw new FriendlyException("菜单代码为空，请填入菜单代码", 1);
+        }
+
+        if (DataUtils.isEmptyString(menu.getMenuStatus())) {
+            throw new FriendlyException("菜单状态为必填，请填入菜单状态", 1);
+        }
+        if (menu.getParentMenuId() == null) {
+            throw new FriendlyException("父级菜单为空，请填入父级菜单", 1);
+        }
+        if (DataUtils.isEmptyString(menu.getMenuURL())) {
+            throw new FriendlyException("URL为空，请填入URL", 1);
+        }
+        if (!menuRepository.findByMenuValue(menu.getMenuValue()).isEmpty()) {
+            throw new FriendlyException("菜单代码已被使用，请换其他菜单代码", 1);
+        }
+        if (!menuRepository.findByMenuURL(menu.getMenuURL()).isEmpty()) {
+            throw new FriendlyException("URL已被使用，请更换其他URL", 1);
+        }
+        menu.setCreateBy(loginInfoService.getAccount());
+        menu.setCreateDate(new Date());
+        menuRepository.save(menu);
+        if (userType != null && userType.length > 0) {
+            List<MenuUserType> mList = new ArrayList<>();
+            for (String u : userType) {
+                MenuUserType menuUserType = new MenuUserType();
+                menuUserType.setMenu(menu);
+                menuUserType.setUserType(u);
+                menuUserType.setCreateBy(loginInfoService.getAccount());
+                menuUserType.setCreateDate(new Date());
+                mList.add(menuUserType);
+            }
+            menuUserTypeRepository.saveAll(mList);
+        }
+    }
+
+
 }
