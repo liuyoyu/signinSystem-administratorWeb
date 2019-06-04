@@ -28,4 +28,7 @@ public interface MenuService {
 
     void addMenu(Menu menu, String[] userType)throws FriendlyException;
 
+    List<String> getMenuByUserType(String userType) throws FriendlyException;
+
+    List<String> getUserTypeByMenuValue(String menuValue) throws FriendlyException;
 }

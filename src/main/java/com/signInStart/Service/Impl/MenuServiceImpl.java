@@ -70,20 +70,20 @@ public class MenuServiceImpl implements MenuService {
     }
 
     /**
+     * @return java.lang.Integer
      * @Author liuyoyu
      * @Description //TODO  删除菜单：有子菜单的根菜单不能删除
      * @Date 20:44 2019/6/2
      * @Param [id]
-     * @return java.lang.Integer
      **/
     @Override
     public Integer remove(Long id) throws FriendlyException {
         Menu menu = findById(id);
-        if (menu.getParentMenuId() == 0L && !menuRepository.findAllChildMenu(menu.getId()).isEmpty()) {
-            throw new FriendlyException("有子菜单，不能删除");
-        }
         if (menu == null) {
             return 1;//不能删除空对象
+        }
+        if (menu.getParentMenuId() == 0L && !menuRepository.findAllChildMenu(menu.getId()).isEmpty()) {
+            throw new FriendlyException("有子菜单，不能删除");
         }
         menuRepository.delete(menu);
         return 0;
@@ -171,9 +171,9 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public void addMenu(Menu menu, String[] userType) throws FriendlyException {
         if (loginInfoService.checkUser()) {
-            throw new FriendlyException("没有权限，请联系管理员",1);
+            throw new FriendlyException("没有权限，请联系管理员", 1);
         }
-        if (!DataUtils.containsUserType(userType)) {
+        if (userType != null && userType.length > 1 && !DataUtils.containsUserType(userType)) {
             throw new FriendlyException("角色类型不在指定类型中，请重新选择");
         }
         if (DataUtils.isEmptyString(menu.getMenuName())) {
@@ -215,5 +215,34 @@ public class MenuServiceImpl implements MenuService {
         }
     }
 
-
+    /**
+     * @return java.util.List<java.lang.String>
+     * @Author liuyoyu
+     * @Description //TODO  根据权限类型（userType）来返回相应的菜单
+     * @Date 20:18 2019/6/4
+     * @Param [userType]
+     **/
+    @Override
+    public List<String> getMenuByUserType(String userType) throws FriendlyException {
+        List<String> menuByUserType = menuUserTypeRepository.getMenuByUserType(userType);
+        if (menuByUserType.isEmpty()) {
+            throw new FriendlyException("没有找到相应的菜单");
+        }
+        return menuByUserType;
+    }
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  根据菜单代码获取角色类型
+     * @Date 21:20 2019/6/4
+     * @Param [menuValue]
+     * @return java.util.List<java.lang.String>
+     **/
+    @Override
+    public List<String> getUserTypeByMenuValue(String menuValue) throws FriendlyException {
+        List<String> userTypeByMenuValue = menuUserTypeRepository.getUserTypeByMenuValue(menuValue);
+        if (userTypeByMenuValue.isEmpty()) {
+            throw new FriendlyException("没有分配角色");
+        }
+        return userTypeByMenuValue;
+    }
 }

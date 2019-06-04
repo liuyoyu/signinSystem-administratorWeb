@@ -74,9 +74,9 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public Integer Insert(UserInfo user) throws FriendlyException {
-        if (loginInfoService.checkUser()) {
-            throw new FriendlyException("没有权限", 1);
-        }
+//        if (loginInfoService.checkUser()) {
+//            throw new FriendlyException("没有权限", 1);
+//        }
         if (user == null) {
             throw new FriendlyException("不能为空", 1);
         }

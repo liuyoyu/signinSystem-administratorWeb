@@ -39,7 +39,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         JSONObject map = new JSONObject();
         if (value == null) { //token为空或不匹配
-            writer.print(ResultUtils.error(99,"请先登陆").toString());
+            writer.print(ResultUtils.error(99,"SIGN IN, PLEASE!").toString());
             writer.flush();
             writer.close();
             return false;

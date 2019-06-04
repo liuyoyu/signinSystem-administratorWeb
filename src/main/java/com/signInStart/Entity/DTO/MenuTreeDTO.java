@@ -11,6 +11,8 @@ public class MenuTreeDTO {
     private Long menuId; //菜单id
     private String id;    //菜单键值（前端需求）
     private String label; //菜单值名（前端需求）
+    private String icon;
+    private String URL;
     private String status;
     List<MenuTreeDTO> children = new ArrayList<>();
 
@@ -22,6 +24,8 @@ public class MenuTreeDTO {
         this.id = menu.getMenuValue();
         this.label = menu.getMenuName();
         this.status = menu.getMenuStatus();
+        this.icon = menu.getIcon();
+        this.URL = menu.getMenuURL();
     }
 
     public MenuTreeDTO(Long menuId, String id, String label, String status) {
@@ -69,6 +73,22 @@ public class MenuTreeDTO {
 
     public void setChildren(List<MenuTreeDTO> children) {
         this.children = children;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getURL() {
+        return URL;
+    }
+
+    public void setURL(String URL) {
+        this.URL = URL;
     }
 
     public void setChildrenMenu(List<Menu> menus) {

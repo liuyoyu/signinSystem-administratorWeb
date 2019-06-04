@@ -1,5 +1,7 @@
 package com.signInStart.Entity.BaseClass;
 
+import net.minidev.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +45,7 @@ public class DataResult<T> {
 
     @Override
     public String toString() {
-        Map<String, String> map = new HashMap<>();
+        JSONObject map = new JSONObject();
         map.put("msg", getMsg());
         map.put("status", getStatus().toString());
         return map.toString();
