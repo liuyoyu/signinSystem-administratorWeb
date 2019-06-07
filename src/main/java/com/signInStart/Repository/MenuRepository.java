@@ -42,5 +42,7 @@ public interface MenuRepository extends JpaRepository<Menu,Long>{
 
     List<Menu> findByMenuURL(String menuURL);
 
-    List<Menu> findByMenuValue(String menuValue);
+    @Query("select m from Menu m where m.menuValue = ?1")
+   Menu findByMenuValue(String menuValue);
+
 }

@@ -191,5 +191,16 @@ public class MenuController {
     public DataResult getUserTypeList(@RequestParam("id")String menuValue) throws FriendlyException{
         return ResultUtils.success(menuService.getUserTypeByMenuValue(menuValue));
     }
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  根据菜单代码获取菜单信息
+     * @Date 16:07 2019/6/7
+     * @Param [userType]
+     * @return com.signInStart.Entity.BaseClass.DataResult
+     **/
+    @RequestMapping(value = "/MenuInfo",method = RequestMethod.GET)
+    public DataResult getMenuInfoByMenuValue(@RequestParam("menuValue") String menuValue) {
+        return ResultUtils.success(menuService.getMenuInfoByMenuValue(menuValue));
+    }
 
 }

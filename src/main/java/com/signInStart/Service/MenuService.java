@@ -31,4 +31,6 @@ public interface MenuService {
     List<String> getMenuByUserType(String userType) throws FriendlyException;
 
     List<String> getUserTypeByMenuValue(String menuValue) throws FriendlyException;
+
+    Menu getMenuInfoByMenuValue(String menuValue);
 }

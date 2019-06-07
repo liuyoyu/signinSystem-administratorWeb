@@ -192,7 +192,7 @@ public class MenuServiceImpl implements MenuService {
         if (DataUtils.isEmptyString(menu.getMenuURL())) {
             throw new FriendlyException("URL为空，请填入URL", 1);
         }
-        if (!menuRepository.findByMenuValue(menu.getMenuValue()).isEmpty()) {
+        if (menuRepository.findByMenuValue(menu.getMenuValue())!=null) {
             throw new FriendlyException("菜单代码已被使用，请换其他菜单代码", 1);
         }
         if (!menuRepository.findByMenuURL(menu.getMenuURL()).isEmpty()) {
@@ -244,5 +244,16 @@ public class MenuServiceImpl implements MenuService {
             throw new FriendlyException("没有分配角色");
         }
         return userTypeByMenuValue;
+    }
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  根据菜单代码获取菜单信息
+     * @Date 16:12 2019/6/7
+     * @Param [menuValue]
+     * @return com.signInStart.Entity.Menu
+     **/
+    @Override
+    public Menu getMenuInfoByMenuValue(String menuValue) {
+        return menuRepository.findByMenuValue(menuValue);
     }
 }
