@@ -40,13 +40,13 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     public Integer addUserRole(UserRole userRole)throws FriendlyException {
         if (userRole == null) {
-            return 1; // 对象不存在
+            throw new FriendlyException("对象不存在");
         }
-        if (!loginInfoService.checkAdmin()) {
-            return 2;//没有权限
-        }
+//        if (!loginInfoService.checkAdmin()) {
+//            return 2;//没有权限
+//        }
         if (userRoleRepository.findByUserIdRoleId(userRole.getUserId(), userRole.getRoleId())!=null) {
-            return 3;//用户该角色已存在
+            return 0;
         }
         userRole.setCreateDate(new Date());
         userRole.setCreateBy(loginInfoService.getAccount());
