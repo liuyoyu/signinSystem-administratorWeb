@@ -3,8 +3,10 @@ package com.signInStart.Configurer.Interceptors;
 import com.signInStart.Entity.BaseClass.HttpContent;
 import com.signInStart.Utils.RedisUtils;
 import com.signInStart.Utils.ResultUtils;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
+import org.jboss.logging.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.method.HandlerMethod;
@@ -17,8 +19,10 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @Component
-@Log4j2
+@Slf4j
 public class LoginInterceptor implements HandlerInterceptor {
+
+    Logger log = Logger.getLogger(LoginInterceptor.class);
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String path = request.getContextPath();
@@ -42,15 +46,17 @@ public class LoginInterceptor implements HandlerInterceptor {
             writer.print(ResultUtils.error(99,"SIGN IN, PLEASE!").toString());
             writer.flush();
             writer.close();
+            log.warn("没有登陆");
             return false;
         }
         if (!token.equals(value)) {
 //            response.reset();
 //            map.put("status", "99");
 //            map.put("msg", "Time out!");
-            writer.print(ResultUtils.error(99,"time out").toString());
+            writer.print(ResultUtils.error(99,"TIME OUT").toString());
             writer.flush();
             writer.close();
+            log.warn("账号密码错误");
             return false;
         }
         return true;

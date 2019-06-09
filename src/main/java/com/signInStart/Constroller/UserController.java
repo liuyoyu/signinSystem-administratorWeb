@@ -4,6 +4,8 @@
  **/
 package com.signInStart.Constroller;
 
+import com.signInStart.Entity.BaseClass.Auth;
+import com.signInStart.Entity.BaseClass.BaseSetting;
 import com.signInStart.Entity.BaseClass.DataResult;
 import com.signInStart.Entity.BaseClass.FriendlyException;
 import com.signInStart.Entity.Role;
@@ -55,6 +57,7 @@ public class UserController {
      * @return DataResult
      **/
     @RequestMapping(value = "/userInfo", method = RequestMethod.DELETE)
+    @Auth(BaseSetting.NOUSER)
     public DataResult deleteUserInfo(@RequestParam("uid") Long uid) throws FriendlyException {
         userInfoService.Delete(uid);
         return ResultUtils.success();

@@ -29,4 +29,9 @@ public class BaseSetting {
         User_SYS,
         SupperAdmin_SYS
     }
+
+    public static final String ADMIN = "Admin_SYS";
+    public static final String USER = "User_SYS";
+    public static final String SUPERADMIN = "SuperAdmin_SYS";
+    public static final String NOUSER = "NoUser";
 }

@@ -1,5 +1,6 @@
 package com.signInStart.Service.Impl;
 
+import com.signInStart.Entity.BaseClass.Auth;
 import com.signInStart.Entity.BaseClass.BaseSetting;
 import com.signInStart.Entity.BaseClass.FriendlyException;
 import com.signInStart.Entity.Role;
@@ -121,9 +122,9 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (userById == null) {
             throw new FriendlyException("删除对象不存在", 1);
         }
-        if (loginInfoService.checkUser()) {
-            throw new FriendlyException("没有权限", 1);
-        }
+//        if (loginInfoService.checkUser()) {
+//            throw new FriendlyException("没有权限", 1);
+//        }
         if (loginInfoService.checkAdmin() && userRoleService.isAdmin(userById.getId())) {
             throw new FriendlyException("管理员不能相互删除", 1);
         }
