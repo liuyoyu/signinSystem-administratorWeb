@@ -25,22 +25,28 @@ public class Menu implements Serializable {
     private Long parentMenuId = 0L ; // 根节点的父节点默认为0
 
     @Column()
-    private String menuName;
+    private String menuName;    //菜单名称
 
     @Column()
-    private String menuValue;
+    private String menuValue; //菜单代码
 
     @Column()
-    private String menuURL;
+    private String menuURL;     //url
 
     @Column()
-    private String menuStatus;
+    private String menuStatus;      //菜单状态
 
     @Column()
-    private String icon;
+    private String icon;    //图标
 
     @Column()
-    private Integer sequence;
+    private Integer sequence;   //菜单序号
+
+    @Transient
+    private String parentName;  //父菜单名称
+
+    @Column()
+    private Boolean hidden = false; //菜单是否隐藏
 
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "menu")
@@ -216,5 +222,21 @@ public class Menu implements Serializable {
 
     public void setMenuUserTypes(List<MenuUserType> menuUserTypes) {
         this.menuUserTypes = menuUserTypes;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
+
+    public Boolean getHidden() {
+        return hidden;
+    }
+
+    public void setHidden(Boolean hidden) {
+        this.hidden = hidden;
     }
 }

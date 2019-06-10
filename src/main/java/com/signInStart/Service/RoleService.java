@@ -13,6 +13,8 @@ public interface RoleService {
 
     List<Role> findByRoleNames(String[] names);
 
+    List<Role> findByUserType(String userType);
+
     Integer Insert(Role role) throws FriendlyException;
 
     Integer Delete(Long roleId) throws FriendlyException;

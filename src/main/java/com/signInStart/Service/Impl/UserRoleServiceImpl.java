@@ -48,14 +48,15 @@ public class UserRoleServiceImpl implements UserRoleService {
         if (userRole.getRole() == null) {
             throw new FriendlyException("角色不存在");
         }
-        if (userRole.getUserType().equals(loginInfoService.getCurrUserType())) {
+        if (userRole.getUserType().equals(BaseSetting.USRTYPE.Admin_SYS.toString()) &&
+                userRole.getUserType().equals(loginInfoService.getCurrUserType())) {
             throw new FriendlyException("管理员间不能相互操作");
         }
         if (userRoleRepository.findByUserIdRoleId(userRole.getUserId(), userRole.getRoleId())!=null) {
             return 0;
         }
         userRole.setCreateDate(new Date());
-        userRole.setCreateBy(loginInfoService.getAccount());
+        userRole.setCreateBy(userRole.getAccount());
         userRoleRepository.save(userRole);
         return 0;
     }

@@ -10,10 +10,12 @@ import com.signInStart.Entity.BaseClass.LoginInfor;
 import com.signInStart.Entity.DTO.MenuTreeDTO;
 import com.signInStart.Entity.Menu;
 import com.signInStart.Entity.MenuUserType;
+import com.signInStart.Entity.Role;
 import com.signInStart.Repository.MenuRepository;
 import com.signInStart.Repository.MenuUserTypeRepository;
 import com.signInStart.Service.LoginInfoService;
 import com.signInStart.Service.MenuService;
+import com.signInStart.Service.RoleService;
 import com.signInStart.Utils.DataUtils;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class MenuServiceImpl implements MenuService {
 
     @Autowired
     LoginInfoService loginInfoService;
+
+    @Autowired
+    RoleService roleService;
 
     @Override
     public Menu findById(Long id) throws FriendlyException {
@@ -238,12 +243,17 @@ public class MenuServiceImpl implements MenuService {
      * @return java.util.List<java.lang.String>
      **/
     @Override
-    public List<String> getUserTypeByMenuValue(String menuValue) throws FriendlyException {
+    public List<Role> getUserTypeByMenuValue(String menuValue) throws FriendlyException {
         List<String> userTypeByMenuValue = menuUserTypeRepository.getUserTypeByMenuValue(menuValue);
         if (userTypeByMenuValue.isEmpty()) {
             throw new FriendlyException("没有分配角色");
         }
-        return userTypeByMenuValue;
+        List<Role> all = new ArrayList<>();
+        for (String userType : userTypeByMenuValue) {
+            List<Role> byUserType = roleService.findByUserType(userType);
+            all.addAll(byUserType);
+        }
+        return all;
     }
     /**
      * @Author liuyoyu
@@ -253,7 +263,18 @@ public class MenuServiceImpl implements MenuService {
      * @return com.signInStart.Entity.Menu
      **/
     @Override
-    public Menu getMenuInfoByMenuValue(String menuValue) {
-        return menuRepository.findByMenuValue(menuValue);
+    public Menu getMenuInfoByMenuValue(String menuValue) throws FriendlyException{
+        Menu byMenuValue = menuRepository.findByMenuValue(menuValue);
+        if (byMenuValue == null) {
+            throw new FriendlyException("没有找到相应菜单信息");
+        }
+        if (!DataUtils.isEmptyString(byMenuValue.getParentMenuId().toString())) {
+            Optional<Menu> byId = menuRepository.findById(byMenuValue.getParentMenuId());
+            if (byId.isPresent()) {
+                Menu menu = byId.get();
+                byMenuValue.setParentName(menu.getMenuName());
+            }
+        }
+        return byMenuValue;
     }
 }

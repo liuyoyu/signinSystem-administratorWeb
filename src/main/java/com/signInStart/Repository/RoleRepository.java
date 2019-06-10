@@ -19,7 +19,7 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     @Query("select r from Role r where r.roleName in (?1)")
     List<Role> findByRoleNames(String[] roleName);
 
-    @Query("from Role where userType = ?1 order by createTime asc")
+    @Query("from Role where userType = ?1 order by id asc")
     List<Role> findByUserType(String userType);
 
 }

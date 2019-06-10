@@ -4,6 +4,7 @@ import com.signInStart.Entity.BaseClass.FriendlyException;
 import com.signInStart.Entity.DTO.MenuTreeDTO;
 import com.signInStart.Entity.Menu;
 import com.signInStart.Entity.MenuUserType;
+import com.signInStart.Entity.Role;
 
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,7 @@ public interface MenuService {
 
     List<String> getMenuByUserType(String userType) throws FriendlyException;
 
-    List<String> getUserTypeByMenuValue(String menuValue) throws FriendlyException;
+    List<Role> getUserTypeByMenuValue(String menuValue) throws FriendlyException;
 
-    Menu getMenuInfoByMenuValue(String menuValue);
+    Menu getMenuInfoByMenuValue(String menuValue) throws FriendlyException;
 }

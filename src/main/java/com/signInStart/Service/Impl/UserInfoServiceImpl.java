@@ -98,7 +98,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
 
         user.setCreateDate(new Date());
-        user.setCreateBy(loginInfoService.getAccount());
+        user.setCreateBy(user.getAccount());
         user.setPwd(DigestUtils.md5DigestAsHex(user.getPwd().getBytes())); //md5加密
 
         Role byRoleName = roleRepository.findByRoleName("普通用户");

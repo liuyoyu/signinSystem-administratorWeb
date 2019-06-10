@@ -31,6 +31,16 @@ public class RoleServiceImpl implements RoleService {
     }
 
     /**
+     * 根据用户类型获取角色
+     * @param userType
+     * @return
+     */
+    @Override
+    public List<Role> findByUserType(String userType) {
+        return roleRepository.findByUserType(userType);
+    }
+
+    /**
      * 创建新的角色，默认角色类型为用户
      *
      * @param role
