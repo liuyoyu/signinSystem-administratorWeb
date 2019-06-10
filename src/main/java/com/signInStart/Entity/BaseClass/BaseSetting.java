@@ -25,8 +25,8 @@ public class BaseSetting {
     }
 
     public enum USRTYPE{
-        Admin_SYS,
         User_SYS,
+        Admin_SYS,
         SupperAdmin_SYS
     }
 

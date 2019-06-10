@@ -42,9 +42,15 @@ public class UserRoleServiceImpl implements UserRoleService {
         if (userRole == null) {
             throw new FriendlyException("对象不存在");
         }
-//        if (!loginInfoService.checkAdmin()) {
-//            return 2;//没有权限
-//        }
+        if (userRole.getUserInfo() == null) {
+            throw new FriendlyException("用户不存在");
+        }
+        if (userRole.getRole() == null) {
+            throw new FriendlyException("角色不存在");
+        }
+        if (userRole.getUserType().equals(loginInfoService.getCurrUserType())) {
+            throw new FriendlyException("管理员间不能相互操作");
+        }
         if (userRoleRepository.findByUserIdRoleId(userRole.getUserId(), userRole.getRoleId())!=null) {
             return 0;
         }
@@ -97,8 +103,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     public Boolean isAdmin(Long userId) {
         List<UserRole> allByUserId = userRoleRepository.findAllByUserId(userId);
         for (UserRole userrole : allByUserId) {
-            if (userrole.getUserType().equals(BaseSetting.ROLE.Admin_SYS.toString()) ||
-                    userrole.getRoleName().equals(BaseSetting.ROLE.SupperAdmin_SYS.toString())) {
+            if (userrole.getUserType().equals(BaseSetting.ROLE.Admin_SYS.toString())) {
                 return true;
             }
         }

@@ -9,7 +9,7 @@ package com.signInStart.Entity.BaseClass;
  * 在service层中，对control层抛出异常，control层接收异常后显示给前台
  */
 public class FriendlyException extends Exception {
-    private Integer errorCode;
+    private Integer errorCode=1;
 
     public FriendlyException() {
     }

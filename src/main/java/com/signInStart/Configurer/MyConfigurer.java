@@ -15,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MyConfigurer implements WebMvcConfigurer {
 
     @Autowired
-    private LoginInfoService loginInfoService;
+    LoginInfoService loginInfoService;
     //用来注册拦截器，写好的拦截器在这儿添加注册才能生效
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

@@ -2,8 +2,6 @@ package com.signInStart.Entity.BaseClass;
 
 import net.minidev.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class DataResult<T> {
     private Integer status = 1;

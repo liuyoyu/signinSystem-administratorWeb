@@ -183,9 +183,7 @@ public class UserInfo implements Serializable {
      * 初始化密码
      */
     public void setInitPassword(){
-        if (this.pwd == null) {
-            setPwd(DigestUtils.md5DigestAsHex("8888".getBytes()));
-        }
+        setPwd(DigestUtils.md5DigestAsHex("8888".getBytes()));
     }
 
     /**

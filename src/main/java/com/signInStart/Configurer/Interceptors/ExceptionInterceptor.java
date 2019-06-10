@@ -26,6 +26,6 @@ public class ExceptionInterceptor {
     @ResponseStatus(HttpStatus.OK)
     public DataResult FriendlyExceptionHandler(FriendlyException e) {
         log.warn(e.getMessage());
-        return ResultUtils.error(e.getErrorCode(), e.getMessage());
+        return ResultUtils.error(e.getMessage());
     }
 }

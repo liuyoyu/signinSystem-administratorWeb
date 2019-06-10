@@ -75,9 +75,6 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public Integer Insert(UserInfo user) throws FriendlyException {
-//        if (loginInfoService.checkUser()) {
-//            throw new FriendlyException("没有权限", 1);
-//        }
         if (user == null) {
             throw new FriendlyException("不能为空", 1);
         }
@@ -122,18 +119,14 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (userById == null) {
             throw new FriendlyException("删除对象不存在", 1);
         }
-//        if (loginInfoService.checkUser()) {
-//            throw new FriendlyException("没有权限", 1);
-//        }
         if (loginInfoService.checkAdmin() && userRoleService.isAdmin(userById.getId())) {
             throw new FriendlyException("管理员不能相互删除", 1);
         }
-//        userRoleService.removeAllUserRoleByUserId(userId);
         UserInfo userInfo = findUserById(userId);
         if (userInfo != null) {
             userInfoRepository.delete(userInfo);
         }
-        return 0;//删除成功
+        return 0;
     }
 
     /**
@@ -149,11 +142,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (null == userById) {
             throw new FriendlyException("修改对象不存在", 1);
         }
-        if (loginInfoService.checkUser()) {
-            throw new FriendlyException("没有权限", 1);
-        }
         if (loginInfoService.checkAdmin() && userRoleService.isAdmin(userById.getId())) {
-            throw new FriendlyException("管理员不能相互删除", 1);
+            throw new FriendlyException("管理员不能相互操作", 1);
         }
 
         if (!"".equals(userInfo.getEmail()) && userInfo.getEmail() != null) {

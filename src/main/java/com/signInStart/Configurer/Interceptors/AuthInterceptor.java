@@ -47,10 +47,9 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String methodName = "";
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
-            methodName = handlerMethod.getMethod().getName();
+            String methodName = handlerMethod.getMethod().getName();
             Auth auth = handlerMethod.getMethod().getAnnotation(Auth.class);// 获取方法上的注解
             if (auth == null) {// 如果方法上的注解为空 则获取类的注解
                 auth = handlerMethod.getMethod().getDeclaringClass().getAnnotation(Auth.class);
@@ -69,13 +68,14 @@ public class AuthInterceptor implements HandlerInterceptor {
                     return true;
                 }
                 log.warn("用户 " + loginInfoService.getAccount() + " 试图调用 " + methodName + " 方法：没有权限");
+                ServletOutputStream writer = response.getOutputStream();
+                writer.print(ResultUtils.error(99, "NOT AUTH").toString());
+                writer.flush();
+                writer.close();
+                return false;
             }
         }
-        ServletOutputStream writer = response.getOutputStream();
-        writer.print(ResultUtils.error(99, "NOT AUTH").toString());
-        writer.flush();
-        writer.close();
-        return false;
+        return true;
     }
 
     @Override

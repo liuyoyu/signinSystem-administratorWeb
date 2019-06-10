@@ -38,12 +38,13 @@ public class UserController {
 
     /**
      * @Author liuyoyu
-     * @Description //TODO  新增用户，由管理员操作
+     * @Description //TODO  新增用户
      * @Date 9:56 2019/5/26
      * @Param [userInfo]
      * @return DataResult
      **/
     @RequestMapping(value = "/userInfo", method = RequestMethod.POST)
+    @Auth(BaseSetting.NOUSER)
     public DataResult insertUserInfo(UserInfo userInfo) throws FriendlyException {
         userInfoService.Insert(userInfo);
         return ResultUtils.success();
@@ -62,7 +63,6 @@ public class UserController {
         userInfoService.Delete(uid);
         return ResultUtils.success();
     }
-
     /**
      * @Author liuyoyu
      * @Description //TODO  修改用户信息，由管理员操作
@@ -71,6 +71,7 @@ public class UserController {
      * @return DataResult
      **/
     @RequestMapping(value = "/userInfo", method = RequestMethod.PUT)
+    @Auth(BaseSetting.NOUSER)
     public DataResult modifyUserInfo(UserInfo userInfo) throws FriendlyException {
         userInfoService.modify(userInfo);
         return ResultUtils.success();
@@ -98,6 +99,7 @@ public class UserController {
      * @return DataResult
      **/
     @RequestMapping(value = "/pwd", method = RequestMethod.PUT)
+    @Auth(BaseSetting.NOUSER)
     public DataResult resetPwd(@RequestParam("id") Long id) throws FriendlyException {
         UserInfo userById = userInfoService.findUserById(id); //获取用户
         userById.setInitPassword();     //初始化
@@ -113,6 +115,7 @@ public class UserController {
      * @return DataResult
      **/
     @RequestMapping(value = "/allPwd", method = RequestMethod.PUT)
+    @Auth(BaseSetting.NOUSER)
     public DataResult allResetPwd(@RequestParam("idList") Long[] idList) throws FriendlyException {
         userInfoService.allResetPwd(idList);    //批量重置密码
         return ResultUtils.success();
@@ -126,6 +129,7 @@ public class UserController {
      * @return DataResult
      **/
     @RequestMapping(value = "/userRole", method = RequestMethod.POST)
+    @Auth(BaseSetting.NOUSER)
     public DataResult addUserRole(@RequestParam("userId") Long userId, @RequestParam("roleId") Long roleId) throws FriendlyException {
         UserInfo user = userInfoService.findUserById(userId);   //查找用户
         Role role = roleService.findRoleById(roleId);           //查找角色

@@ -30,4 +30,10 @@ public class ResultUtils {
         dataResult.setMsg(msg);
         return dataResult;
     }
+
+    public static DataResult error(String msg) {
+        DataResult dataResult = new DataResult();
+        dataResult.setMsg(msg);
+        return dataResult;
+    }
 }
