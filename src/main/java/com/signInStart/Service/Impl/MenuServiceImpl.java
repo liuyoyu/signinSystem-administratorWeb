@@ -246,7 +246,7 @@ public class MenuServiceImpl implements MenuService {
     public List<Role> getUserTypeByMenuValue(String menuValue) throws FriendlyException {
         List<String> userTypeByMenuValue = menuUserTypeRepository.getUserTypeByMenuValue(menuValue);
         if (userTypeByMenuValue.isEmpty()) {
-            throw new FriendlyException("没有分配角色");
+            throw new FriendlyException("没有分配角色",DataUtils.CurrentMethodName());
         }
         List<Role> all = new ArrayList<>();
         for (String userType : userTypeByMenuValue) {

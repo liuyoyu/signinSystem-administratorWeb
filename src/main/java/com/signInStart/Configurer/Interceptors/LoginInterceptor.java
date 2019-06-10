@@ -46,7 +46,6 @@ public class LoginInterceptor implements HandlerInterceptor {
             writer.print(ResultUtils.error(99,"SIGN IN, PLEASE!").toString());
             writer.flush();
             writer.close();
-            log.warn("没有登陆");
             return false;
         }
         if (!token.equals(value)) {
@@ -56,7 +55,6 @@ public class LoginInterceptor implements HandlerInterceptor {
             writer.print(ResultUtils.error(99,"TIME OUT").toString());
             writer.flush();
             writer.close();
-            log.warn("账号密码错误");
             return false;
         }
         return true;

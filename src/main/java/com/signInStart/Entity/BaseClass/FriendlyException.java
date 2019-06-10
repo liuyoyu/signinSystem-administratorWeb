@@ -11,6 +11,8 @@ package com.signInStart.Entity.BaseClass;
 public class FriendlyException extends Exception {
     private Integer errorCode=1;
 
+    private String methodName = "";
+
     public FriendlyException() {
     }
 
@@ -41,5 +43,18 @@ public class FriendlyException extends Exception {
     public FriendlyException(String message, Integer errorCode) {
         super(message);
         this.errorCode = errorCode;
+    }
+
+    public FriendlyException(String message, String methodName) {
+        super(message);
+        this.methodName = methodName;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
     }
 }

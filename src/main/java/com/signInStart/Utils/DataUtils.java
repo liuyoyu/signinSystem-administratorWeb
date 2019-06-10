@@ -81,5 +81,17 @@ public class DataUtils {
         }
         return true;
     }
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  获取当前的完整的方法名称
+     * @Date 22:47 2019/6/10
+     * @Params []
+     * @return java.lang.String
+     **/
+    public static String CurrentMethodName() {
+        String className = Thread.currentThread().getStackTrace()[2].getClassName();
+        String methodName = Thread.currentThread().getStackTrace()[2].getMethodName();
+        return className + " " + methodName+"()";
+    }
 
 }
