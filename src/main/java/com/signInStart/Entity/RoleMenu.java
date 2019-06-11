@@ -1,7 +1,7 @@
 /**
  * created by liuyoyu
  *
- * 废弃不用，由于角色权限判断的逻辑改变，这个表废弃不用了，，菜单权限判断直接在Menu.class中查看
+ *
  * Date:2019/4/15
  **/
 package com.signInStart.Entity;

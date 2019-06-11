@@ -27,11 +27,14 @@ public interface MenuService {
 
     List<MenuTreeDTO> getMenuTree() throws FriendlyException;
 
-    void addMenu(Menu menu, String[] userType)throws FriendlyException;
+    void addMenu(Menu menu)throws FriendlyException;
 
     List<String> getMenuByUserType(String userType) throws FriendlyException;
 
     List<Role> getUserTypeByMenuValue(String menuValue) throws FriendlyException;
 
     Menu getMenuInfoByMenuValue(String menuValue) throws FriendlyException;
+
+    void addMenuRole(String menuValue, Long roleID) throws FriendlyException;
+
 }

@@ -4,10 +4,7 @@
  **/
 package com.signInStart.Constroller;
 
-import com.signInStart.Entity.BaseClass.BaseSetting;
-import com.signInStart.Entity.BaseClass.DataResult;
-import com.signInStart.Entity.BaseClass.FriendlyException;
-import com.signInStart.Entity.BaseClass.LoginInfor;
+import com.signInStart.Entity.BaseClass.*;
 import com.signInStart.Entity.Menu;
 import com.signInStart.Entity.RoleMenu;
 import com.signInStart.Service.LoginInfoService;
@@ -38,7 +35,7 @@ public class MenuController {
     LoginInfoService loginInfoService;
     /**
      * @Author liuyoyu
-     * @Description //TODO
+     * @Description //TODO 获取所有菜单
      * @Date 16:38 2019/6/2
      * @Param []
      * @return com.signInStart.Entity.BaseClass.DataResult
@@ -57,8 +54,9 @@ public class MenuController {
      * @return
      */
     @RequestMapping(value = "/roleMenu", method = RequestMethod.POST)
-    public DataResult add(Menu menu, @RequestParam("userType") String[] userTypes) throws FriendlyException  {
-        menuService.addMenu(menu, userTypes);
+    @Auth(BaseSetting.NOUSER)
+    public DataResult add(Menu menu) throws FriendlyException  {
+        menuService.addMenu(menu);
         return ResultUtils.success();
     }
 
@@ -209,6 +207,18 @@ public class MenuController {
     @RequestMapping(value = "/MenuInfo",method = RequestMethod.GET)
     public DataResult getMenuInfoByMenuValue(@RequestParam("menuValue") String menuValue) throws FriendlyException{
         return ResultUtils.success(menuService.getMenuInfoByMenuValue(menuValue));
+    }
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  添加菜单角色
+     * @Date 22:48 2019/6/11
+     * @Params [menuValue, roleID]
+     * @return com.signInStart.Entity.BaseClass.DataResult
+     **/
+    @RequestMapping(value = "/MenuRole", method = RequestMethod.POST)
+    public DataResult addMenuRole(@RequestParam("menuValue")String menuValue, @RequestParam("roleID")Long roleID) throws FriendlyException{
+        menuService.addMenuRole(menuValue, roleID);
+        return ResultUtils.success();
     }
 
 }

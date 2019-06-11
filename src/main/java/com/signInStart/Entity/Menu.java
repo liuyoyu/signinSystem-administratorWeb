@@ -208,6 +208,17 @@ public class Menu implements Serializable {
         return list;
     }
 
+    public List<Role> getRole(){
+        if (roleMenus == null) {
+            return null;
+        }
+        List<Role> all = new ArrayList<>();
+        for (RoleMenu menuRole : roleMenus) {
+            all.add(menuRole.getRole());
+        }
+        return all;
+    }
+
     public String getMenuValue() {
         return menuValue;
     }

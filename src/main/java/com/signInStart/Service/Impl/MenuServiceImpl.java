@@ -11,8 +11,10 @@ import com.signInStart.Entity.DTO.MenuTreeDTO;
 import com.signInStart.Entity.Menu;
 import com.signInStart.Entity.MenuUserType;
 import com.signInStart.Entity.Role;
+import com.signInStart.Entity.RoleMenu;
 import com.signInStart.Repository.MenuRepository;
 import com.signInStart.Repository.MenuUserTypeRepository;
+import com.signInStart.Repository.RoleMenuRepository;
 import com.signInStart.Service.LoginInfoService;
 import com.signInStart.Service.MenuService;
 import com.signInStart.Service.RoleService;
@@ -29,6 +31,9 @@ public class MenuServiceImpl implements MenuService {
     MenuRepository menuRepository;
 
     @Autowired
+    RoleMenuRepository roleMenuRepository;
+
+    @Autowired
     MenuUserTypeRepository menuUserTypeRepository;
 
     @Autowired
@@ -36,6 +41,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Autowired
     RoleService roleService;
+
 
     @Override
     public Menu findById(Long id) throws FriendlyException {
@@ -174,13 +180,7 @@ public class MenuServiceImpl implements MenuService {
      * @Param [menu]
      **/
     @Override
-    public void addMenu(Menu menu, String[] userType) throws FriendlyException {
-        if (loginInfoService.checkUser()) {
-            throw new FriendlyException("没有权限，请联系管理员", 1);
-        }
-        if (userType != null && userType.length > 1 && !DataUtils.containsUserType(userType)) {
-            throw new FriendlyException("角色类型不在指定类型中，请重新选择");
-        }
+    public void addMenu(Menu menu) throws FriendlyException {
         if (DataUtils.isEmptyString(menu.getMenuName())) {
             throw new FriendlyException("菜单名称为空，请填入菜单名称", 1);
         }
@@ -197,7 +197,7 @@ public class MenuServiceImpl implements MenuService {
         if (DataUtils.isEmptyString(menu.getMenuURL())) {
             throw new FriendlyException("URL为空，请填入URL", 1);
         }
-        if (menuRepository.findByMenuValue(menu.getMenuValue())!=null) {
+        if (menuRepository.findByMenuValue(menu.getMenuValue()) != null) {
             throw new FriendlyException("菜单代码已被使用，请换其他菜单代码", 1);
         }
         if (!menuRepository.findByMenuURL(menu.getMenuURL()).isEmpty()) {
@@ -206,18 +206,6 @@ public class MenuServiceImpl implements MenuService {
         menu.setCreateBy(loginInfoService.getAccount());
         menu.setCreateDate(new Date());
         menuRepository.save(menu);
-        if (userType != null && userType.length > 0) {
-            List<MenuUserType> mList = new ArrayList<>();
-            for (String u : userType) {
-                MenuUserType menuUserType = new MenuUserType();
-                menuUserType.setMenu(menu);
-                menuUserType.setUserType(u);
-                menuUserType.setCreateBy(loginInfoService.getAccount());
-                menuUserType.setCreateDate(new Date());
-                mList.add(menuUserType);
-            }
-            menuUserTypeRepository.saveAll(mList);
-        }
     }
 
     /**
@@ -235,38 +223,35 @@ public class MenuServiceImpl implements MenuService {
         }
         return menuByUserType;
     }
+
     /**
+     * @return java.util.List<java.lang.String>
      * @Author liuyoyu
-     * @Description //TODO  根据菜单代码获取角色类型
+     * @Description //TODO  根据菜单代码获取角色列表
      * @Date 21:20 2019/6/4
      * @Param [menuValue]
-     * @return java.util.List<java.lang.String>
      **/
     @Override
     public List<Role> getUserTypeByMenuValue(String menuValue) throws FriendlyException {
-        List<String> userTypeByMenuValue = menuUserTypeRepository.getUserTypeByMenuValue(menuValue);
-        if (userTypeByMenuValue.isEmpty()) {
-            throw new FriendlyException("没有分配角色",DataUtils.CurrentMethodName());
+        Menu byMenuValue = menuRepository.findByMenuValue(menuValue);
+        if (byMenuValue == null) {
+            throw new FriendlyException("找不到相应的菜单", DataUtils.CurrentMethodName());
         }
-        List<Role> all = new ArrayList<>();
-        for (String userType : userTypeByMenuValue) {
-            List<Role> byUserType = roleService.findByUserType(userType);
-            all.addAll(byUserType);
-        }
-        return all;
+        return byMenuValue.getRole();
     }
+
     /**
+     * @return com.signInStart.Entity.Menu
      * @Author liuyoyu
      * @Description //TODO  根据菜单代码获取菜单信息
      * @Date 16:12 2019/6/7
      * @Param [menuValue]
-     * @return com.signInStart.Entity.Menu
      **/
     @Override
-    public Menu getMenuInfoByMenuValue(String menuValue) throws FriendlyException{
+    public Menu getMenuInfoByMenuValue(String menuValue) throws FriendlyException {
         Menu byMenuValue = menuRepository.findByMenuValue(menuValue);
         if (byMenuValue == null) {
-            throw new FriendlyException("没有找到相应菜单信息");
+            throw new FriendlyException("没有找到相应菜单信息", DataUtils.CurrentMethodName());
         }
         if (!DataUtils.isEmptyString(byMenuValue.getParentMenuId().toString())) {
             Optional<Menu> byId = menuRepository.findById(byMenuValue.getParentMenuId());
@@ -276,5 +261,33 @@ public class MenuServiceImpl implements MenuService {
             }
         }
         return byMenuValue;
+    }
+
+    /**
+     * @return void
+     * @Author liuyoyu
+     * @Description //TODO  添加菜单角色
+     * @Date 22:39 2019/6/11
+     * @Params [menuID, roleID]
+     **/
+    @Override
+    public void addMenuRole(String menuValue, Long roleID) throws FriendlyException {
+        Menu byMenuValue = menuRepository.findByMenuValue(menuValue);
+        Role roleById = roleService.findRoleById(roleID);
+        if (byMenuValue == null) {
+            throw new FriendlyException("菜单不存在，请重新选择", DataUtils.CurrentMethodName());
+        }
+        if (roleById == null) {
+            throw new FriendlyException("角色不存在，请重新选择", DataUtils.CurrentMethodName());
+        }
+        if (roleMenuRepository.findByMenuIdRoleId(byMenuValue.getId(), roleID) > 0) {
+            throw new FriendlyException("菜单角色已经分配好，不能重复设置", DataUtils.CurrentMethodName());
+        }
+        RoleMenu roleMenu = new RoleMenu();
+        roleMenu.setRole(roleById);
+        roleMenu.setMenu(byMenuValue);
+        roleMenu.setCreateBy(loginInfoService.getAccount());
+        roleMenu.setCreateDate(new Date());
+        roleMenuRepository.save(roleMenu);
     }
 }

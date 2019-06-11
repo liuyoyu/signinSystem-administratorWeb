@@ -5,9 +5,7 @@ import com.signInStart.Entity.UserInfo;
 import com.signInStart.Entity.UserRole;
 import com.signInStart.Repository.UserInfoRepository;
 import com.signInStart.Service.*;
-import com.signInStart.Utils.JWTUtils;
-import com.signInStart.Utils.RedisUtils;
-import com.signInStart.Utils.ResultUtils;
+import com.signInStart.Utils.*;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -63,25 +61,50 @@ public class LoginController {
      * @return
      */
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public DataResult create(UserInfo user) throws FriendlyException {
+    public DataResult create(UserInfo user,@RequestParam("code")String code) throws FriendlyException {
+        if (DataUtils.isEmptyString(code)) {
+            throw new FriendlyException("验证码为空，请填入验证码", DataUtils.CurrentMethodName());
+        }
+        if (user.getEmail() != null) {
+            String s = RedisUtils.get(user.getEmail()); //从redis缓存中那取验证吗
+            if (!code.equals(s)) {
+                throw new FriendlyException("验证码错误", DataUtils.CurrentMethodName());
+            }
+        }
         userInfoService.Insert(user);
         return ResultUtils.success();
     }
-
     /**
-     * 发送邮箱验证码
-     * @param receiver
-     * @param
-     * @return
-     */
-    @RequestMapping(value = "/email",method = RequestMethod.GET)
-    public DataResult sendEmail(@RequestParam("receiver") String receiver,
-                                @RequestParam("account") String account) throws FriendlyException {
-        userInfoService.findUserByAccount(account,receiver);
-
-        shortMessageService.sendEmailMessage(account, receiver, "重置密码");
+     * @Author liuyoyu
+     * @Description //TODO  发送验证邮件
+     * @Date 23:19 2019/6/11
+     * @Params [receiver]
+     * @return com.signInStart.Entity.BaseClass.DataResult
+     **/
+    @RequestMapping(value = "/email", method = RequestMethod.GET)
+    public DataResult sendMsg(@RequestParam("receiver")String receiver) throws FriendlyException {
+        if (DataUtils.isEmptyString(receiver)) {
+            throw new FriendlyException("短信接收人不能为空", DataUtils.CurrentMethodName());
+        }
+        String s = EmailUtils.editEmail(receiver);
+        RedisUtils.set(receiver, s); //将用户的验证码存在缓存中
         return ResultUtils.success();
     }
+
+//    /**
+//     *
+//     * @param receiver
+//     * @param
+//     * @return
+//     */
+//    @RequestMapping(value = "/email",method = RequestMethod.GET)
+//    public DataResult sendEmail(@RequestParam("receiver") String receiver,
+//                                @RequestParam("account") String account) throws FriendlyException {
+//        userInfoService.findUserByAccount(account,receiver);
+//
+//        shortMessageService.sendEmailMessage(account, receiver, "重置密码");
+//        return ResultUtils.success();
+//    }
 
     /**
      * 重置密码
