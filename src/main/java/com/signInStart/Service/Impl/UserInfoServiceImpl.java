@@ -19,6 +19,7 @@ import org.springframework.util.DigestUtils;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service("userInfoService")
 public class UserInfoServiceImpl implements UserInfoService {
@@ -94,7 +95,11 @@ public class UserInfoServiceImpl implements UserInfoService {
             throw new FriendlyException("该邮箱已被注册", 1);
         }
         if (user.getAccount().length() <= 4 || user.getAccount().length() > 10) {
-            throw new FriendlyException("账户长度限制", 1);
+            throw new FriendlyException("请输入长度为4-9位的账号", 1);
+        }
+        Pattern pattern = Pattern.compile("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,}$\n");
+        if (!pattern.matcher(user.getPwd()).matches()) {
+            throw new FriendlyException("请输入长度为6-20位包含数字和字母的密码");
         }
 
         user.setCreateDate(new Date());

@@ -36,4 +36,19 @@ public class ResultUtils {
         dataResult.setMsg(msg);
         return dataResult;
     }
+
+    public static DataResult success(Object object,String msg) {
+        DataResult dataResult = new DataResult();
+        dataResult.setMsg(msg);
+        dataResult.setStatus(0);
+        dataResult.setData(object);
+        return dataResult;
+    }
+
+    public static DataResult success(String msg) {
+        DataResult dataResult = new DataResult();
+        dataResult.setMsg(msg);
+        dataResult.setStatus(0);
+        return dataResult;
+    }
 }

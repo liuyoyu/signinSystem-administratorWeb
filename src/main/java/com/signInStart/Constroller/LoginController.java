@@ -87,8 +87,9 @@ public class LoginController {
             throw new FriendlyException("短信接收人不能为空", DataUtils.CurrentMethodName());
         }
         String s = EmailUtils.editEmail(receiver);
-        RedisUtils.set(receiver, s); //将用户的验证码存在缓存中
-        return ResultUtils.success();
+//        RedisUtils.set(receiver, s); //将用户的验证码存在缓存中
+        RedisUtils.setex(receiver, s, 10*60); //将用户的验证码存在缓存中
+        return ResultUtils.success("验证码发送成功，请及时查看");
     }
 
 //    /**

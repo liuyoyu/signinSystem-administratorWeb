@@ -23,7 +23,7 @@ public class EmailUtils {
     private static final String TITLE = "签到start邮箱验证";
     private static final String EAMIL_HOST = "smtp.163.com";
     private static final String EAMIL_PORT = 465 + "";
-    private static final Integer CODE_LENGTH = 25;
+    private static final Integer CODE_LENGTH = 4;
 
     /**
      * 发送验证邮件
