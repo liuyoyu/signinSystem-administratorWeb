@@ -1,5 +1,8 @@
 package com.signInStart.Utils;
 
+import com.signInStart.Entity.BaseClass.FriendlyException;
+import com.sun.mail.imap.protocol.FetchItem;
+import com.sun.mail.smtp.SMTPSendFailedException;
 import lombok.extern.log4j.Log4j2;
 
 import javax.mail.*;
@@ -15,13 +18,13 @@ import java.util.Random;
  */
 @Log4j2
 public class EmailUtils {
-//    private static final String account = "yoyu126@126.com";
-//    private static final String pwd = "liu111";//授权密码
-//    private static final String EAMIL_HOST = "smtp.126.com";
-    private static final String account = "heling_fzu@163.com";
-    private static final String pwd = "heling231231";//授权密码
-    private static final String TITLE = "签到start邮箱验证";
-    private static final String EAMIL_HOST = "smtp.163.com";
+        private static final String account = "yoyu126@126.com";
+    private static final String pwd = "liu111";//授权密码
+    private static final String EAMIL_HOST = "smtp.126.com";
+//    private static final String account = "heling_fzu@163.com";
+//    private static final String pwd = "heling231231";//授权密码
+//    private static final String EAMIL_HOST = "smtp.163.com";
+    private static final String TITLE = "【签到start】验证邮件";
     private static final String EAMIL_PORT = 465 + "";
     private static final Integer CODE_LENGTH = 4;
 
@@ -30,26 +33,31 @@ public class EmailUtils {
      *
      * @param receiver
      */
-    public static String editEmail(String receiver){
+    public static String editEmail(String receiver) {
         String code = getRandomCode();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String text = "<h1>亲爱的用户：</h1>" +
+        String text = "<h1>亲爱的用户，您好：</h1>" +
                 "<h2>感谢您使用我们的签到Start平台邮箱验证功能</h2>" +
-                "<p>您本次注册验证码为: " + code +
-                "</p><small>若非本人操作，请忽略本条邮件。祝，生活愉快</small><br><br>"+sdf.format(new Date())+
+                "<p>本次请求的验证码为: " + code +
+                " 。验证码10分钟内有效，请及时输入。"+
+                "</p><small>若非本人操作，请忽略本条邮件。祝，生活愉快ฅʕ•̫͡•ʔฅ</small><br><br>" + sdf.format(new Date()) +
                 "（本邮件由系统自动发出，请勿回复）";
         try {
             EmailUtils.sendEmail(receiver, text);
+        } catch (SMTPSendFailedException e) {
+            code = "0000";
+            throw new FriendlyException("邮箱被当垃圾邮件处理了！！", DataUtils.CurrentMethodName());
         } catch (Exception e) {
             e.printStackTrace();
-            code = "";
+            code = "0000";
         } finally {
             return code;
         }
     }
 
     public static String getRandomCode() {
-        String strcode = "abcdefghijklnmopqrstuvwxykABCDEFGHIJKLNMOPQRSTUVWXYZ0123456789";
+//        String strcode = "abcdefghijklnmopqrstuvwxykABCDEFGHIJKLNMOPQRSTUVWXYZ0123456789";
+        String strcode = "0123456789";
         String code = "";
         Random rand = new Random();
         for (int i = 0; i < CODE_LENGTH; i++) {
@@ -60,6 +68,7 @@ public class EmailUtils {
 
     /**
      * 发送邮件
+     *
      * @param receiver
      * @param code
      * @throws Exception

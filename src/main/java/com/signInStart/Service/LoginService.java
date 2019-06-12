@@ -7,4 +7,6 @@ public interface LoginService {
     UserInfo checkLogin(String uname, String pwd) throws FriendlyException;
 
     Integer createUser(UserInfo user) throws FriendlyException;
+
+    void resetPassword(String account,String email, String password) throws FriendlyException;
 }

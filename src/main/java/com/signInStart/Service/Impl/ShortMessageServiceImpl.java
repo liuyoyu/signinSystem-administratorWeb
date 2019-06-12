@@ -8,7 +8,9 @@ import com.signInStart.Entity.BaseClass.FriendlyException;
 import com.signInStart.Entity.ShortMessage;
 import com.signInStart.Repository.ShortMessageRepository;
 import com.signInStart.Service.ShortMessageService;
+import com.signInStart.Utils.DataUtils;
 import com.signInStart.Utils.EmailUtils;
+import com.signInStart.Utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,5 +57,26 @@ public class ShortMessageServiceImpl implements ShortMessageService {
             return 0;
         }
         throw new FriendlyException("验证错误");
+    }
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  从redis中拿取验证码，只做验证，不保存在数据库中
+     * @Date 21:05 2019/6/12
+     * @Params [code, email]
+     * @return java.lang.Integer
+     **/
+    @Override
+    public void verifyEmailMessage(String code, String email) throws FriendlyException {
+        if (DataUtils.isEmptyString(email)) {
+            throw new FriendlyException("邮箱为空，请输入邮箱", DataUtils.CurrentMethodName());
+        }
+        if (DataUtils.isEmptyString(code)) {
+            throw new FriendlyException("验证码为空，请输入验证码", DataUtils.CurrentMethodName());
+        }
+        String s = RedisUtils.get(email);
+        if (!code.equals(s)) {
+            throw new FriendlyException("验证码错误，请重新输入", DataUtils.CurrentMethodName());
+        }
+        RedisUtils.del(email);
     }
 }

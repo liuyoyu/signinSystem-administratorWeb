@@ -6,8 +6,10 @@ import com.signInStart.Entity.UserInfo;
 import com.signInStart.Repository.UserInfoRepository;
 import com.signInStart.Service.LoginService;
 import com.signInStart.Service.UserInfoService;
+import com.signInStart.Utils.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import java.util.Date;
@@ -62,5 +64,27 @@ public class LoginServiceImpl implements LoginService {
 //        return newUser;//增加成功
         Integer res = userInfoService.Insert(user);
         return res;
+    }
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  忘记密码
+     * @Date 21:10 2019/6/12
+     * @Params [account, password]
+     * @return void
+     **/
+    @Override
+    public void resetPassword(String account,String email, String password) throws FriendlyException {
+        UserInfo userInfoByAccount = userInfoRepository.findUserInfoByAccount(account);
+        if (userInfoByAccount == null) {
+            throw new FriendlyException("没有找到您的账号", DataUtils.CurrentMethodName());
+        }
+        if (DataUtils.isEmptyString(email)) {
+            throw new FriendlyException("邮箱为空，请输入邮箱", DataUtils.CurrentMethodName());
+        }
+        if (!email.equals(userInfoByAccount.getEmail())) {
+            throw new FriendlyException("该邮箱非账户绑定邮箱", DataUtils.CurrentMethodName());
+        }
+        userInfoByAccount.setNewPassword(password);
+        userInfoRepository.save(userInfoByAccount);
     }
 }

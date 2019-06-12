@@ -70,9 +70,10 @@ public class LoginController {
             if (!code.equals(s)) {
                 throw new FriendlyException("验证码错误", DataUtils.CurrentMethodName());
             }
+            RedisUtils.del(user.getEmail());//删除相关验证码
         }
         userInfoService.Insert(user);
-        return ResultUtils.success();
+        return ResultUtils.success("注册成功");
     }
     /**
      * @Author liuyoyu
@@ -162,10 +163,34 @@ public class LoginController {
 //        }
         return ResultUtils.success();//return "/login.html";
     }
-
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  获取用户信息
+     * @Date 20:57 2019/6/12
+     * @Params []
+     * @return com.signInStart.Entity.BaseClass.DataResult
+     **/
     @RequestMapping(value = "/loginRole",method = RequestMethod.GET)
     public DataResult getLoginRole() throws FriendlyException  {
         LoginInfor logiInfo = loginInfoService.getLogiInfo();
         return ResultUtils.success(logiInfo);
+    }
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  忘记密码，验证输入的验证码进行重置密码
+     * @Date 21:00 2019/6/12
+     * @Params [account, password, code]
+     * @return com.signInStart.Entity.BaseClass.DataResult
+     **/
+    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
+    public DataResult resetPassword(@RequestParam("account") String account,
+                                    @RequestParam("email") String email,
+                                    @RequestParam("password") String password,
+                                    @RequestParam("code") String code) throws FriendlyException{
+        shortMessageService.verifyEmailMessage(code, email);
+
+        loginService.resetPassword(account,email, password);
+
+        return ResultUtils.success("修改密码成功");
     }
 }
