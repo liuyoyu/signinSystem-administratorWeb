@@ -37,4 +37,5 @@ public interface MenuService {
 
     void addMenuRole(String menuValue, Long roleID) throws FriendlyException;
 
+    List<Map<String, String>> findAllMenuList();
 }

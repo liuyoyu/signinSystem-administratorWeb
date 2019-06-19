@@ -50,7 +50,7 @@ public class MenuController {
      * 添加菜单，设置菜单权限
      *
      * @param menu
-     * @param userTypes
+     * @param menu
      * @return
      */
     @RequestMapping(value = "/roleMenu", method = RequestMethod.POST)
@@ -219,6 +219,11 @@ public class MenuController {
     public DataResult addMenuRole(@RequestParam("menuValue")String menuValue, @RequestParam("roleID")Long roleID) throws FriendlyException{
         menuService.addMenuRole(menuValue, roleID);
         return ResultUtils.success();
+    }
+
+    @RequestMapping(value = "/MenuList/All")
+    public DataResult findAllMenu(){
+        return ResultUtils.success(menuService.findAllMenuList());
     }
 
 }

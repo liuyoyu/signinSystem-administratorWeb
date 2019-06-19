@@ -290,4 +290,15 @@ public class MenuServiceImpl implements MenuService {
         roleMenu.setCreateDate(new Date());
         roleMenuRepository.save(roleMenu);
     }
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  获取所有菜单
+     * @Date 13:33 2019/6/19
+     * @Params []
+     * @return java.util.List<com.signInStart.Entity.Menu>
+     **/
+    @Override
+    public List<Map<String, String>> findAllMenuList() {
+         return menuRepository.getMenu();
+    }
 }

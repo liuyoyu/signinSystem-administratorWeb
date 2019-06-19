@@ -1,6 +1,7 @@
 package com.signInStart.Repository;
 
 import com.signInStart.Entity.Menu;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -44,5 +45,8 @@ public interface MenuRepository extends JpaRepository<Menu,Long>{
 
     @Query("select m from Menu m where m.menuValue = ?1")
    Menu findByMenuValue(String menuValue);
+
+    @Query("select m.menuValue as key, m.menuName as text from Menu m")
+    List<Map<String,String>> getMenu();
 
 }
