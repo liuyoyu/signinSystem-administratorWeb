@@ -66,11 +66,12 @@ public class LoginController {
             throw new FriendlyException("验证码为空，请填入验证码", DataUtils.CurrentMethodName());
         }
         if (user.getEmail() != null) {
-            String s = RedisUtils.get(user.getEmail()); //从redis缓存中那取验证吗
+            String key = user.getEmail()+"_"+MsgContent.TYPE.LOGIN.toString();
+            String s = RedisUtils.get(key); //从redis缓存中那取验证吗
             if (!code.equals(s)) {
                 throw new FriendlyException("验证码错误", DataUtils.CurrentMethodName());
             }
-            RedisUtils.del(user.getEmail());//删除相关验证码
+            RedisUtils.del(key);//删除相关验证码
         }
         userInfoService.Insert(user);
         return ResultUtils.success("注册成功");
@@ -83,13 +84,14 @@ public class LoginController {
      * @return com.signInStart.Entity.BaseClass.DataResult
      **/
     @RequestMapping(value = "/email", method = RequestMethod.GET)
-    public DataResult sendMsg(@RequestParam("receiver")String receiver) throws FriendlyException {
+    public DataResult sendMsg(@RequestParam("receiver")String receiver, @RequestParam("type")String type) throws FriendlyException {
         if (DataUtils.isEmptyString(receiver)) {
             throw new FriendlyException("短信接收人不能为空", DataUtils.CurrentMethodName());
         }
         String s = EmailUtils.editEmail(receiver);
 //        RedisUtils.set(receiver, s); //将用户的验证码存在缓存中
-        RedisUtils.setex(receiver, s, 10*60); //将用户的验证码存在缓存中
+        MsgContent msgContent = new MsgContent(receiver,type);
+        RedisUtils.setex(msgContent.toString(), s, 10*60); //将用户的验证码存在缓存中
         return ResultUtils.success("验证码发送成功，请及时查看");
     }
 
@@ -177,9 +179,9 @@ public class LoginController {
     }
     /**
      * @Author liuyoyu
-     * @Description //TODO  忘记密码，验证输入的验证码进行重置密码
+     * @Description //TODO  忘记密码
      * @Date 21:00 2019/6/12
-     * @Params [account, password, code]
+     * @Params [account, password, code验证码]
      * @return com.signInStart.Entity.BaseClass.DataResult
      **/
     @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
@@ -187,7 +189,7 @@ public class LoginController {
                                     @RequestParam("email") String email,
                                     @RequestParam("password") String password,
                                     @RequestParam("code") String code) throws FriendlyException{
-        shortMessageService.verifyEmailMessage(code, email);
+        shortMessageService.verifyEmailMessage(code, email+"_"+MsgContent.TYPE.FORGETPWD.toString());
 
         loginService.resetPassword(account,email, password);
 

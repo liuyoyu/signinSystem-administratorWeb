@@ -1,5 +1,6 @@
 package com.signInStart;
 
+import com.signInStart.Entity.BaseClass.MsgContent;
 import com.signInStart.Entity.Organization;
 import com.signInStart.Entity.RoleMenu;
 import com.signInStart.Entity.UserInfo;
@@ -156,6 +157,12 @@ public class ServiceTest {
     public void repositoryTest(){
         RoleMenu jk = roleMenuRepository.findByMenuIdUsetType(117L, "Admin_SYS");
         System.out.println(jk.getId());
+    }
+
+    @Test
+    public void StringTest(){
+        MsgContent m = new MsgContent("123","444");
+        System.out.println(m.toString());
     }
 
 }
