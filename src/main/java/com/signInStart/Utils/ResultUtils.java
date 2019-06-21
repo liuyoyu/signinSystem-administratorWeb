@@ -21,7 +21,7 @@ public class ResultUtils {
     }
 
     public static DataResult success(){
-        return success(null);
+        return success("成功");
     }
 
     public static DataResult error(Integer status, String msg) {

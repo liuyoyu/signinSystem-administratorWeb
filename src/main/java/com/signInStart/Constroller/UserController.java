@@ -104,7 +104,7 @@ public class UserController {
         UserInfo userById = userInfoService.findUserById(id); //获取用户
         userById.setInitPassword();     //初始化
         userInfoService.modify(userById);   //修改密码
-        return ResultUtils.success();
+        return ResultUtils.success("重置密码成功");
     }
 
     /**
@@ -118,7 +118,7 @@ public class UserController {
     @Auth(BaseSetting.NOUSER)
     public DataResult allResetPwd(@RequestParam("idList") Long[] idList) throws FriendlyException {
         userInfoService.allResetPwd(idList);    //批量重置密码
-        return ResultUtils.success();
+        return ResultUtils.success("批量重置密码成功");
     }
 
     /**
@@ -135,7 +135,7 @@ public class UserController {
         Role role = roleService.findRoleById(roleId);           //查找角色
         UserRole userRole = new UserRole(user, role);           //创建新的用户角色
         userRoleService.addUserRole(userRole);                  //插入新的用户角色
-        return ResultUtils.success();
+        return ResultUtils.success("成功添加用户角色");
     }
     /**
      * @Author liuyoyu
