@@ -1,5 +1,7 @@
 package com.signInStart.Repository;
 
+import com.signInStart.Entity.Menu;
+import com.signInStart.Entity.Role;
 import com.signInStart.Entity.RoleMenu;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -38,4 +40,6 @@ public interface RoleMenuRepository extends JpaRepository<RoleMenu, Long> {
     @Query("select rm from RoleMenu rm where rm.menu.id = ?1")
     List<RoleMenu> findByMenuId(Long menuId);
 
+    @Query("select rm.menu.menuName from RoleMenu rm where rm.role.id = ?1")
+    List<String> findMenuByRoleID(Long roleId);
 }

@@ -111,7 +111,7 @@ public class MenuController {
     }
 
     /**
-     * 修改菜单
+     * 修改菜单（废弃）
      *
      * @param menu
      * @return
@@ -187,6 +187,19 @@ public class MenuController {
     }
     /**
      * @Author liuyoyu
+     * @Description //TODO  根据角色id获取菜单列表
+     * @Date 20:39 2019/6/22
+     * @Params [userType]
+     * @return com.signInStart.Entity.BaseClass.DataResult
+     **/
+    @RequestMapping(value = "/menu/list", method = RequestMethod.GET)
+    public DataResult getMenuByRoleID(@RequestParam("id") Long userType) throws FriendlyException {
+        return ResultUtils.success(menuService.getMenuByRoleID(userType));
+    }
+
+
+    /**
+     * @Author liuyoyu
      * @Description //TODO  根据菜单代码获取用户列表
      * @Date 22:13 2019/6/10
      * [menuValue]
@@ -220,18 +233,32 @@ public class MenuController {
         menuService.addMenuRole(menuValue, roleID);
         return ResultUtils.success();
     }
-
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  获取所有菜单
+     * @Date 21:02 2019/6/22
+     * @Params []
+     * @return com.signInStart.Entity.BaseClass.DataResult
+     **/
     @RequestMapping(value = "/MenuList/All")
     public DataResult findAllMenu(){
         List<Map<String, String>> allMenuList = menuService.findAllMenuList();
         return ResultUtils.success(allMenuList,allMenuList.size());
     }
-
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  修改菜单
+     * @Date 20:26 2019/6/22
+     * @Params [menu]
+     * @return com.signInStart.Entity.BaseClass.DataResult
+     **/
     @RequestMapping(value = "/menuInfo", method = RequestMethod.PUT)
     @Auth(BaseSetting.NOUSER)
     public DataResult modifyMenu(Menu menu) throws FriendlyException {
         menuService.modify(menu);
         return ResultUtils.success("修改菜单成功");
     }
+
+//    public DataResult addRoleMenu(@RequestParam("roleId") Long roleID, );
 
 }

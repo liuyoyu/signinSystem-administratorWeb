@@ -312,4 +312,15 @@ public class MenuServiceImpl implements MenuService {
     public List<Map<String, String>> findAllMenuList() {
         return menuRepository.getMenu();
     }
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  根据角色id获取菜单列表
+     * @Date 20:43 2019/6/22
+     * @Params [id]
+     * @return java.util.List<com.signInStart.Entity.Menu>
+     **/
+    @Override
+    public List<String> getMenuByRoleID(Long id) {
+        return  roleMenuRepository.findMenuByRoleID(id);
+    }
 }
