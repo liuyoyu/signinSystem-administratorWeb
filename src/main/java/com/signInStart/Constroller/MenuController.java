@@ -223,7 +223,15 @@ public class MenuController {
 
     @RequestMapping(value = "/MenuList/All")
     public DataResult findAllMenu(){
-        return ResultUtils.success(menuService.findAllMenuList());
+        List<Map<String, String>> allMenuList = menuService.findAllMenuList();
+        return ResultUtils.success(allMenuList,allMenuList.size());
+    }
+
+    @RequestMapping(value = "/menuInfo", method = RequestMethod.PUT)
+    @Auth(BaseSetting.NOUSER)
+    public DataResult modifyMenu(Menu menu) throws FriendlyException {
+        menuService.modify(menu);
+        return ResultUtils.success("修改菜单成功");
     }
 
 }

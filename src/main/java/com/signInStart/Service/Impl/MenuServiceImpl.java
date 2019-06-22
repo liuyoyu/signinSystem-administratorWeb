@@ -4,6 +4,7 @@
  **/
 package com.signInStart.Service.Impl;
 
+import com.signInStart.Entity.BaseClass.DataResult;
 import com.signInStart.Entity.BaseClass.FriendlyException;
 import com.signInStart.Entity.BaseClass.HttpContent;
 import com.signInStart.Entity.BaseClass.LoginInfor;
@@ -102,17 +103,26 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public Integer modify(Menu menu) throws FriendlyException {
-        if (menu == null) {
-            return 1;//不能修改空对象
+        Menu byId = findById(menu.getId());
+        if (menu == null || byId == null) {
+            throw new FriendlyException("不能传入空值");
+        }
+        if (!byId.getMenuValue().equals(menu.getMenuValue())) {
+            throw new FriendlyException("菜单代码不能进行修改");
         }
         List<Menu> exist = menuRepository.existURL(menu.getMenuURL());
-        if (menu.getMenuURL() != null && (exist != null || exist.size() < 1)) {
-            return 2; //URL已存在
+        if (exist != null && exist.size() >= 1) {
+            throw new FriendlyException("URL已被占用");
+        }
+        if (menu.getParentMenuId() == null) {
+            throw new FriendlyException("父级菜单不能为空");
         }
         LoginInfor logiInfo = loginInfoService.getLogiInfo();
         menu.setModifyBy(logiInfo.getUserId().toString());
         menu.setModifyDate(new Date());
-        menuRepository.save(menu);
+
+        DataUtils.copyProperty(menu, byId);
+        menuRepository.save(byId);
         return 0;
     }
 
@@ -290,15 +300,16 @@ public class MenuServiceImpl implements MenuService {
         roleMenu.setCreateDate(new Date());
         roleMenuRepository.save(roleMenu);
     }
+
     /**
+     * @return java.util.List<com.signInStart.Entity.Menu>
      * @Author liuyoyu
      * @Description //TODO  获取所有菜单
      * @Date 13:33 2019/6/19
      * @Params []
-     * @return java.util.List<com.signInStart.Entity.Menu>
      **/
     @Override
     public List<Map<String, String>> findAllMenuList() {
-         return menuRepository.getMenu();
+        return menuRepository.getMenu();
     }
 }
