@@ -65,14 +65,14 @@ public class LoginController {
         if (DataUtils.isEmptyString(code)) {
             throw new FriendlyException("验证码为空，请填入验证码", DataUtils.CurrentMethodName());
         }
-        if (user.getEmail() != null) {
-            String key = user.getEmail()+"_"+MsgContent.TYPE.LOGIN.toString();
-            String s = RedisUtils.get(key); //从redis缓存中那取验证吗
-            if (!code.equals(s)) {
-                throw new FriendlyException("验证码错误", DataUtils.CurrentMethodName());
-            }
-            RedisUtils.del(key);//删除相关验证码
-        }
+//        if (user.getEmail() != null) {
+//            String key = user.getEmail()+"_"+MsgContent.TYPE.LOGIN.toString();
+//            String s = RedisUtils.get(key); //从redis缓存中那取验证吗
+//            if (!code.equals(s)) {
+//                throw new FriendlyException("验证码错误", DataUtils.CurrentMethodName());
+//            }
+//            RedisUtils.del(key);//删除相关验证码
+//        }
         userInfoService.Insert(user);
         return ResultUtils.success("注册成功");
     }
@@ -115,21 +115,21 @@ public class LoginController {
      * @param code
      * @return
      */
-    @RequestMapping(value = "/pwd", method = RequestMethod.PUT)
-    public DataResult VerifyMsgCode(@RequestParam("code") String code,
-                                    @RequestParam("pwd") String pwd,
-                                    @RequestParam("account")String account,
-                                    @RequestParam("email")String email) throws FriendlyException {
-
-        Integer res = shortMessageService.verifyEmailMessage(code, account, email);
-        if (res == 0) {
-            UserInfo userByAccount = userInfoService.findUserByAccount(account);
-            userByAccount.setNewPassword(pwd);
-            userInfoRepository.save(userByAccount);
-            return ResultUtils.success();
-        }
-        return ResultUtils.error(1, "验证码错误");
-    }
+//    @RequestMapping(value = "/pwd", method = RequestMethod.PUT)
+//    public DataResult VerifyMsgCode(@RequestParam("code") String code,
+//                                    @RequestParam("pwd") String pwd,
+//                                    @RequestParam("account")String account,
+//                                    @RequestParam("email")String email) throws FriendlyException {
+//
+//        Integer res = shortMessageService.verifyEmailMessage(code, account, email);
+//        if (res == 0) {
+//            UserInfo userByAccount = userInfoService.findUserByAccount(account);
+//            userByAccount.setNewPassword(pwd);
+//            userInfoRepository.save(userByAccount);
+//            return ResultUtils.success();
+//        }
+//        return ResultUtils.error(1, "验证码错误");
+//    }
 
 //
 //    @RequestMapping(value = "login_remove",method = RequestMethod.POST)

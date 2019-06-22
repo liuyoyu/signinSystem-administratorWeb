@@ -97,7 +97,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (user.getAccount().length() <= 4 || user.getAccount().length() > 10) {
             throw new FriendlyException("请输入长度为4-9位的账号", 1);
         }
-        Pattern pattern = Pattern.compile("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,}$\n");
+        Pattern pattern = Pattern.compile("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,}$");
         if (!pattern.matcher(user.getPwd()).matches()) {
             throw new FriendlyException("请输入长度为6-20位包含数字和字母的密码");
         }
@@ -188,5 +188,4 @@ public class UserInfoServiceImpl implements UserInfoService {
     public void allResetPwd(Long[] list) throws FriendlyException {
         userInfoRepository.allResetPwd(DigestUtils.md5DigestAsHex("8888".getBytes()), new Date(), loginInfoService.getAccount(), list);
     }
-
 }
