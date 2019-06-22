@@ -158,11 +158,11 @@ public class MenuController {
      * 二级侧边栏
      * @return
      */
-    @RequestMapping(value = "/sidebar", method = RequestMethod.GET)
-    public DataResult getSideBar() throws FriendlyException {
-        List<Menu> sidebar = menuService.getSidebar();
-        return ResultUtils.success(sidebar);
-    }
+//    @RequestMapping(value = "/sidebar", method = RequestMethod.GET)
+//    public DataResult getSideBar() throws FriendlyException {
+//        List<Menu> sidebar = menuService.getSidebar();
+//        return ResultUtils.success(sidebar);
+//    }
     /**
      * @Author liuyoyu
      * @Description //TODO  菜单树
@@ -229,7 +229,7 @@ public class MenuController {
      * @return com.signInStart.Entity.BaseClass.DataResult
      **/
     @RequestMapping(value = "/MenuRole", method = RequestMethod.POST)
-    public DataResult addMenuRole(@RequestParam("menuValue")String menuValue, @RequestParam("roleID")Long roleID) throws FriendlyException{
+    public DataResult addMenuRole(@RequestParam("menuValue")String[] menuValue, @RequestParam("roleID")Long roleID) throws FriendlyException{
         menuService.addMenuRole(menuValue, roleID);
         return ResultUtils.success();
     }
@@ -257,6 +257,18 @@ public class MenuController {
     public DataResult modifyMenu(Menu menu) throws FriendlyException {
         menuService.modify(menu);
         return ResultUtils.success("修改菜单成功");
+    }
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  根据登陆用户获取左侧栏
+     * @Date 21:24 2019/6/22
+     * @Params []
+     * @return com.signInStart.Entity.BaseClass.DataResult
+     **/
+    @RequestMapping("/sider")
+    public DataResult getSider() throws FriendlyException {
+        List<Menu> sidebar = menuService.getSidebar();
+        return ResultUtils.success(sidebar,sidebar.size());
     }
 
 }

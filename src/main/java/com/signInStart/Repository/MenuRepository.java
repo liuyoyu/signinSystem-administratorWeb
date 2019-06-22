@@ -46,6 +46,9 @@ public interface MenuRepository extends JpaRepository<Menu,Long>{
     @Query("select m from Menu m where m.menuValue = ?1")
    Menu findByMenuValue(String menuValue);
 
+    @Query("select m from Menu m where m.menuValue in (?1)")
+   List<Menu> findByMenuValue(String[] menuValue);
+
     @Query("select m.id as id, m.menuValue as key, m.menuName as text from Menu m")
     List<Map<String,String>> getMenu();
 

@@ -136,6 +136,11 @@ public class MenuServiceImpl implements MenuService {
         return menuRepository.findRootMenu();
     }
 
+    @Override
+    public List<Menu> findRootMenuByRole(Long roleID) {
+        return roleMenuRepository.findRootMenuByRoleID(roleID);
+    }
+
     /**
      * 根据角色获取侧边栏
      * 二级侧边栏
@@ -144,15 +149,21 @@ public class MenuServiceImpl implements MenuService {
      */
     @Override
     public List<Menu> getSidebar() throws FriendlyException {
-        String currUserType = loginInfoService.getCurrUserType();
-        if (currUserType == null) {
-            throw new FriendlyException("请先登陆", 1);
+//        String currUserType = loginInfoService.getCurrUserType();
+//        if (currUserType == null) {
+//            throw new FriendlyException("请先登陆", 1);
+//        }
+        Long roleId = loginInfoService.getCurrRoleID();
+        if ( roleId== null) {
+            throw new FriendlyException("当前用户状态未知，请重新登陆", 1);
         }
-        List<Menu> allRootMenu = menuRepository.findAllRootMenuByUserType();
+//        List<Menu> allRootMenu = menuRepository.findAllRootMenuByUserType();
+        List<Menu> rootMenu = findRootMenuByRole(roleId);
 
         List<Menu> sidebar = new ArrayList<>();
-        for (Menu m : allRootMenu) {
-            List<Menu> all = menuRepository.findAllRootMenuByUserType();
+        for (Menu m : rootMenu) {
+//            List<Menu> all = menuRepository.findAllRootMenuByUserType();
+            List<Menu> all = roleMenuRepository.findByRoleIDParentID(roleId, m.getId());
             m.setChildrenMenu(all);
             sidebar.add(m);
         }
@@ -281,24 +292,30 @@ public class MenuServiceImpl implements MenuService {
      * @Params [menuID, roleID]
      **/
     @Override
-    public void addMenuRole(String menuValue, Long roleID) throws FriendlyException {
-        Menu byMenuValue = menuRepository.findByMenuValue(menuValue);
+    public void addMenuRole(String[] menuValue, Long roleID) throws FriendlyException {
+//        Menu byMenuValue = menuRepository.findByMenuValue(menuValue);
+        List<Menu> byMenuValue = menuRepository.findByMenuValue(menuValue);
         Role roleById = roleService.findRoleById(roleID);
-        if (byMenuValue == null) {
+        if (byMenuValue == null || byMenuValue.size() < 1) {
             throw new FriendlyException("菜单不存在，请重新选择", DataUtils.CurrentMethodName());
         }
         if (roleById == null) {
             throw new FriendlyException("角色不存在，请重新选择", DataUtils.CurrentMethodName());
         }
-        if (roleMenuRepository.findByMenuIdRoleId(byMenuValue.getId(), roleID) > 0) {
-            throw new FriendlyException("菜单角色已经分配好，不能重复设置", DataUtils.CurrentMethodName());
+
+        List<RoleMenu> all = new ArrayList<>();
+        for (Menu m : byMenuValue) {
+            if (roleMenuRepository.findByMenuIdRoleId(m.getId(), roleID) > 0) {
+                continue;
+            }
+            RoleMenu roleMenu = new RoleMenu();
+            roleMenu.setRole(roleById);
+            roleMenu.setMenu(m);
+            roleMenu.setCreateBy(loginInfoService.getAccount());
+            roleMenu.setCreateDate(new Date());
+            all.add(roleMenu);
         }
-        RoleMenu roleMenu = new RoleMenu();
-        roleMenu.setRole(roleById);
-        roleMenu.setMenu(byMenuValue);
-        roleMenu.setCreateBy(loginInfoService.getAccount());
-        roleMenu.setCreateDate(new Date());
-        roleMenuRepository.save(roleMenu);
+        roleMenuRepository.saveAll(all);
     }
 
     /**
