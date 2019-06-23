@@ -11,6 +11,7 @@ import com.signInStart.Repository.UserInfoRepository;
 import com.signInStart.Service.RoleService;
 import com.signInStart.Service.UserInfoService;
 import com.signInStart.Service.UserRoleService;
+import com.signInStart.Utils.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,10 +45,10 @@ public class UserInfoServiceImpl implements UserInfoService {
     public UserInfo findUserByAccount(String account,String receiver)throws FriendlyException {
         UserInfo userByAccount = userInfoRepository.findUserInfoByAccount(account);
         if (userByAccount == null) {
-            throw new FriendlyException("账号不存在", 1);
+            throw new FriendlyException("账号不存在", DataUtils.CurrentMethodName());
         }
         if (userByAccount.getEmail() == null || !userByAccount.getEmail().equals(receiver)) {
-            throw new FriendlyException("该邮箱不是注册邮箱", 1);
+            throw new FriendlyException("该邮箱不是注册邮箱", DataUtils.CurrentMethodName());
         }
         return userByAccount;
     }
@@ -77,25 +78,25 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public Integer Insert(UserInfo user) throws FriendlyException {
         if (user == null) {
-            throw new FriendlyException("不能为空", 1);
+            throw new FriendlyException("不能为空", DataUtils.CurrentMethodName());
         }
         if (user.getAccount() == null) {
-            throw new FriendlyException("账户不能为空", 1);
+            throw new FriendlyException("账户不能为空", DataUtils.CurrentMethodName());
         }
         if (user.getPwd() == null) {
-            throw new FriendlyException("密码不能空", 1);
+            throw new FriendlyException("密码不能空", DataUtils.CurrentMethodName());
         }
         if (user.getEmail() == null) {
-            throw new FriendlyException("邮箱不能空", 1);
+            throw new FriendlyException("邮箱不能空", DataUtils.CurrentMethodName());
         }
         if (findUserByAccount(user.getAccount()) != null) {
-            throw new FriendlyException("该账户已被注册", 1);
+            throw new FriendlyException("该账户已被注册", DataUtils.CurrentMethodName());
         }
         if (findUserByEmail(user.getEmail()) != null) {
-            throw new FriendlyException("该邮箱已被注册", 1);
+            throw new FriendlyException("该邮箱已被注册", DataUtils.CurrentMethodName());
         }
         if (user.getAccount().length() <= 4 || user.getAccount().length() > 10) {
-            throw new FriendlyException("请输入长度为4-9位的账号", 1);
+            throw new FriendlyException("请输入长度为4-9位的账号", DataUtils.CurrentMethodName());
         }
         Pattern pattern = Pattern.compile("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,}$");
         if (!pattern.matcher(user.getPwd()).matches()) {
@@ -122,10 +123,10 @@ public class UserInfoServiceImpl implements UserInfoService {
     public Integer Delete(Long userId) throws FriendlyException {
         UserInfo userById = findUserById(userId);
         if (userById == null) {
-            throw new FriendlyException("删除对象不存在", 1);
+            throw new FriendlyException("删除对象不存在", DataUtils.CurrentMethodName());
         }
         if (loginInfoService.checkAdmin() && userRoleService.isAdmin(userById.getId())) {
-            throw new FriendlyException("管理员不能相互删除", 1);
+            throw new FriendlyException("管理员不能相互删除", DataUtils.CurrentMethodName());
         }
         UserInfo userInfo = findUserById(userId);
         if (userInfo != null) {
@@ -145,19 +146,19 @@ public class UserInfoServiceImpl implements UserInfoService {
     public Integer modify(UserInfo userInfo) throws FriendlyException {
         UserInfo userById = findUserById(userInfo.getId());
         if (null == userById) {
-            throw new FriendlyException("修改对象不存在", 1);
+            throw new FriendlyException("修改对象不存在", DataUtils.CurrentMethodName());
         }
         if (loginInfoService.checkAdmin() && userRoleService.isAdmin(userById.getId())) {
-            throw new FriendlyException("管理员不能相互操作", 1);
+            throw new FriendlyException("管理员不能相互操作", DataUtils.CurrentMethodName());
         }
 
         if (!"".equals(userInfo.getEmail()) && userInfo.getEmail() != null) {
             if (findUserByEmail(userInfo.getEmail()) != null && !userInfo.getEmail().equals(userById.getEmail())) {
-                throw new FriendlyException("邮箱已被占用", 1);
+                throw new FriendlyException("邮箱已被占用", DataUtils.CurrentMethodName());
             }
             userById.setEmail(userInfo.getEmail());
         } else {
-            throw new FriendlyException("邮箱不能为空", 1);
+            throw new FriendlyException("邮箱不能为空", DataUtils.CurrentMethodName());
         }
         if (!"".equals(userInfo.getUserName()) && userInfo.getUserName() != null) {
             userById.setUserName(userInfo.getUserName());

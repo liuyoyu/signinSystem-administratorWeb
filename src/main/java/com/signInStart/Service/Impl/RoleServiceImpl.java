@@ -49,19 +49,19 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Integer Insert(Role role) throws FriendlyException {
         if (role == null) {
-            throw new FriendlyException("角色不能为空", 1);
+            throw new FriendlyException("角色不能为空", DataUtils.CurrentMethodName());
         }
         if (DataUtils.isEmptyString(role.getRoleName())) {
             throw new FriendlyException("角色名称不能为空", 1);
         }
         if (roleRepository.findByRoleName(role.getRoleName()) != null) {
-            throw new FriendlyException("角色名称重复", 2);
+            throw new FriendlyException("角色名称重复", DataUtils.CurrentMethodName());
         }
         loginInfoService.checkSupperAdimn();
         if (DataUtils.isEmptyString(role.getUserType())) { //设置默认角色类型
             role.setUserType(BaseSetting.ROLE.User_SYS.toString());
         } else if (!loginInfoService.checkSupperAdimn() && !role.getUserType().equals(BaseSetting.ROLE.User_SYS.toString())) {
-            throw new FriendlyException("没有权限,请联系超级管理员", 2);
+            throw new FriendlyException("没有权限,请联系超级管理员", DataUtils.CurrentMethodName());
         }
         role.setCreateDate(new Date());
         role.setCreateBy(loginInfoService.getAccount());
@@ -73,13 +73,13 @@ public class RoleServiceImpl implements RoleService {
     public Integer Delete(Long roleId) throws FriendlyException {
         Role role = findRoleById(roleId);
         if (role == null) {
-            throw new FriendlyException("删除对象不存在", 1);
+            throw new FriendlyException("删除对象不存在", DataUtils.CurrentMethodName());
         }
         if (loginInfoService.checkUser() || !BaseSetting.ROLE.User_SYS.toString().equals(role.getUserType()) && !loginInfoService.checkSupperAdimn()) {
             throw new FriendlyException("没有权限", 1);
         }
         if (BaseSetting.ROLE.SupperAdmin_SYS.toString().equals(role.getRoleName())) {
-            throw new FriendlyException("基本角色不能删除", 2);
+            throw new FriendlyException("基本角色不能删除", DataUtils.CurrentMethodName());
         }
         roleRepository.delete(role);
         return 0;
@@ -111,7 +111,7 @@ public class RoleServiceImpl implements RoleService {
     public List<JSONObject> findAll() throws FriendlyException {
         List<Role> all = roleRepository.findAll(new Sort(Sort.Direction.ASC, "userType"));
         if (all == null) {
-            throw new FriendlyException("没有角色，请先创建", 1);
+            throw new FriendlyException("没有角色，请先创建", DataUtils.CurrentMethodName());
         }
         String tmp = all.get(0).getUserType();
         List<JSONObject> jsonObjects = new LinkedList<>();

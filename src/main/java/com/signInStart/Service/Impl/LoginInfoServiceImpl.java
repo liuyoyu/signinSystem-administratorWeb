@@ -13,6 +13,7 @@ import com.signInStart.Service.LoginInfoService;
 import com.signInStart.Service.RoleService;
 import com.signInStart.Service.UserInfoService;
 import com.signInStart.Service.UserRoleService;
+import com.signInStart.Utils.DataUtils;
 import com.signInStart.Utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,11 +58,11 @@ public class LoginInfoServiceImpl implements LoginInfoService {
         HttpServletRequest request = getRequest();
         String token = request.getHeader(HttpContent.Token);
         if (token == null || "".equals(token)) {
-            throw new FriendlyException("请先登陆",1);
+            throw new FriendlyException("请先登陆",DataUtils.CurrentMethodName());
         }
         Map<String, Object> map = JWTUtils.validToken(token);
         if (!map.get(JWTUtils.params.STATUS.toString()).equals(JWTUtils.TokenStatus.Valid.toString())) {
-            throw new FriendlyException("登陆过期，请重新进行登陆",1);
+            throw new FriendlyException("登陆过期，请重新进行登陆", DataUtils.CurrentMethodName());
         }
         LoginInfor login = new LoginInfor();
         login.setStatus(map.get(JWTUtils.params.STATUS.toString()).toString());
@@ -133,7 +134,7 @@ public class LoginInfoServiceImpl implements LoginInfoService {
     public UserInfo getUserInfo() throws FriendlyException {
         UserInfo user = userInfoService.findUserByAccount(getAccount());
         if (user == null) {
-            throw new FriendlyException("用户信息不存在，请重新登陆",1);
+            throw new FriendlyException("用户信息不存在，请重新登陆",DataUtils.CurrentMethodName());
         }
         return user;
     }

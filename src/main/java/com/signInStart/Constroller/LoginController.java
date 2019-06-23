@@ -38,7 +38,7 @@ public class LoginController {
         UserInfo userInfo = loginService.checkLogin(account, password);
         if (userInfo != null) {
             if (userInfo.getStatus().equals(BaseSetting.STATUS.Disabled_SYS.toString())) {
-                throw new FriendlyException("该用户被禁用", 1);
+                throw new FriendlyException("该用户被禁用", DataUtils.CurrentMethodName());
             }
             UserRole defaultRoleByUserId = userRoleService.findDefaultRoleByUserId(userInfo.getId());
             String token = JWTUtils.generateToken(userInfo.getId(),defaultRoleByUserId.getId());//token携带用户id和用户角色id
@@ -51,7 +51,7 @@ public class LoginController {
             js.put("userId", defaultRoleByUserId.getUserId());
             return ResultUtils.success(js);
         }
-        throw new FriendlyException("用户名错误或密码错误", 1);
+        throw new FriendlyException("用户名错误或密码错误", DataUtils.CurrentMethodName());
     }
 
     /**
@@ -92,7 +92,7 @@ public class LoginController {
 //        RedisUtils.set(receiver, s); //将用户的验证码存在缓存中
         MsgContent msgContent = new MsgContent(receiver,type);
         RedisUtils.setex(msgContent.toString(), s, 10*60); //将用户的验证码存在缓存中
-        return ResultUtils.success("验证码发送成功，请及时查看");
+        return ResultUtils.success("验证码发送成功，请及时查看",DataUtils.CurrentMethodName());
     }
 
 //    /**

@@ -32,14 +32,14 @@ public class LoginServiceImpl implements LoginService {
     public UserInfo checkLogin(String uname, String pwd) throws FriendlyException {
         UserInfo user = userInfoRepository.findUserByAccountOrEmail(uname);
         if (user == null || BaseSetting.STATUS.Disabled_SYS.equals(user.getStatus())) {
-            throw new FriendlyException("用户不存在", 1);
+            throw new FriendlyException("用户不存在", DataUtils.CurrentMethodName());
         }
         if (DigestUtils.md5DigestAsHex(pwd.getBytes()).equals(user.getPwd())) {
             user.setLastLogin(new Date());
             userInfoRepository.save(user);
             return user;//账户密码正确
         }
-        throw new FriendlyException("密码错误",1);
+        throw new FriendlyException("密码错误",DataUtils.CurrentMethodName());
     }
 
     /**
