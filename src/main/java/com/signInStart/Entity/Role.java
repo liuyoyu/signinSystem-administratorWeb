@@ -158,7 +158,7 @@ public class Role implements Serializable {
     }
 
     public void setUserType(String userType) {
-        userType = userType;
+        this.userType = userType;
     }
 
     public void setRoleMenus(List<RoleMenu> roleMenus) {

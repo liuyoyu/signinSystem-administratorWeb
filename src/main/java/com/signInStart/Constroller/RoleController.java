@@ -4,6 +4,8 @@
  **/
 package com.signInStart.Constroller;
 
+import com.signInStart.Entity.BaseClass.Auth;
+import com.signInStart.Entity.BaseClass.BaseSetting;
 import com.signInStart.Entity.BaseClass.DataResult;
 import com.signInStart.Entity.BaseClass.FriendlyException;
 import com.signInStart.Entity.Role;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -59,10 +62,13 @@ public class RoleController {
     }
 
     @RequestMapping(value = "/roleInfo", method = RequestMethod.PUT)
+    @Auth(BaseSetting.NOUSER)
     public DataResult modify(Role role) throws FriendlyException{
 //        if (!loginInfoService.checkAdmin()) {
 //            return ResultUtils.error(1, "没有权限，只有管理员才能修改角色");
 //        }
+//        HttpServletRequest request = loginInfoService.getRequest();
+//        String queryString = request.getQueryString();
         Integer res = roleService.modify(role);
 //        if (res == 0) {
             return ResultUtils.success();

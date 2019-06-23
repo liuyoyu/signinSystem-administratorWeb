@@ -88,14 +88,17 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Integer modify(Role role) throws FriendlyException {
         if (role == null) {
-            throw new FriendlyException("传入参数不能为空", 1);
+            throw new FriendlyException("传入参数不能为空", DataUtils.CurrentMethodName());
+        }
+        if ("".equals(role.getUserType())) {
+            throw new FriendlyException("用户类型不能为空", DataUtils.CurrentMethodName());
         }
         if (loginInfoService.checkUser() || !BaseSetting.ROLE.User_SYS.toString().equals(role.getUserType()) && !loginInfoService.checkSupperAdimn()) {
-            throw new FriendlyException("没有权限", 1);
+            throw new FriendlyException("没有权限", DataUtils.CurrentMethodName());
         }
         Role oldRole = findRoleById(role.getRoleId());
         if (oldRole == null) {
-            throw new FriendlyException("修改对象不存在", 2);
+            throw new FriendlyException("修改对象不存在", DataUtils.CurrentMethodName());
         }
         DataUtils.copyProperty(role, oldRole);
         oldRole.setModifyBy(loginInfoService.getAccount());

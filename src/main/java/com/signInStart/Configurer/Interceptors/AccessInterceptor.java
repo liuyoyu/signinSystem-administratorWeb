@@ -26,11 +26,8 @@ public class AccessInterceptor implements HandlerInterceptor {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Credentials","true");
         response.setHeader("P3P","CP=CAO PSA OUR");
-//        if (request.getHeader("Access-Control-Request-Method") != null && "OPTION".equals(request.getMethod())) {
         response.addHeader("Access-Control-Allow-Methods", "POST,GET,PUT,TRACE,OPTION,DELETE");
         response.addHeader("Access-Control-Allow-Headers", "Authentication,Origin, X-Requested-With, Content-Type, Accept,token");
-//            response.addHeader("Access-Control-Max-Age", "120");
-//        }
         return true;
     }
 
