@@ -95,7 +95,7 @@ public class MenuServiceImpl implements MenuService {
             return 1;//不能删除空对象
         }
         if (menu.getParentMenuId() == 0L && !menuRepository.findAllChildMenu(menu.getId()).isEmpty()) {
-            throw new FriendlyException("有子菜单，不能删除");
+            throw new FriendlyException("有子菜单，不能删除",DataUtils.CurrentMethodName());
         }
         menuRepository.delete(menu);
         return 0;
@@ -108,14 +108,14 @@ public class MenuServiceImpl implements MenuService {
             throw new FriendlyException("不能传入空值");
         }
         if (!byId.getMenuValue().equals(menu.getMenuValue())) {
-            throw new FriendlyException("菜单代码不能进行修改");
+            throw new FriendlyException("菜单代码不能进行修改",DataUtils.CurrentMethodName());
         }
         List<Menu> exist = menuRepository.existURL(menu.getMenuURL());
         if (exist != null && exist.size() >= 1) {
-            throw new FriendlyException("URL已被占用");
+            throw new FriendlyException("URL已被占用",DataUtils.CurrentMethodName());
         }
         if (menu.getParentMenuId() == null) {
-            throw new FriendlyException("父级菜单不能为空");
+            throw new FriendlyException("父级菜单不能为空",DataUtils.CurrentMethodName());
         }
         LoginInfor logiInfo = loginInfoService.getLogiInfo();
         menu.setModifyBy(logiInfo.getUserId().toString());
@@ -155,7 +155,7 @@ public class MenuServiceImpl implements MenuService {
 //        }
         Long roleId = loginInfoService.getCurrRoleID();
         if ( roleId== null) {
-            throw new FriendlyException("当前用户状态未知，请重新登陆", 1);
+            throw new FriendlyException("当前用户状态未知，请重新登陆",DataUtils.CurrentMethodName());
         }
 //        List<Menu> allRootMenu = menuRepository.findAllRootMenuByUserType();
         List<Menu> rootMenu = findRootMenuByRole(roleId);
@@ -181,7 +181,7 @@ public class MenuServiceImpl implements MenuService {
     public List<MenuTreeDTO> getMenuTree() throws FriendlyException {
         List<Menu> all = menuRepository.getAllRootMenu();
         if (all == null) {
-            throw new FriendlyException("列表为空，请先创建根菜单");
+            throw new FriendlyException("列表为空，请先创建根菜单",DataUtils.CurrentMethodName());
         }
         List<MenuTreeDTO> tree = new ArrayList<>();
         for (Menu menu : all) {
@@ -203,10 +203,10 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public void addMenu(Menu menu) throws FriendlyException {
         if (DataUtils.isEmptyString(menu.getMenuName())) {
-            throw new FriendlyException("菜单名称为空，请填入菜单名称", 1);
+            throw new FriendlyException("菜单名称为空，请填入菜单名称",DataUtils.CurrentMethodName());
         }
         if (DataUtils.isEmptyString(menu.getMenuValue())) {
-            throw new FriendlyException("菜单代码为空，请填入菜单代码", 1);
+            throw new FriendlyException("菜单代码为空，请填入菜单代码",DataUtils.CurrentMethodName());
         }
 
         if (DataUtils.isEmptyString(menu.getMenuStatus())) {
