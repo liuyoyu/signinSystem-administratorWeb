@@ -8,6 +8,7 @@ import com.signInStart.Entity.BaseClass.Auth;
 import com.signInStart.Entity.BaseClass.BaseSetting;
 import com.signInStart.Entity.BaseClass.DataResult;
 import com.signInStart.Entity.BaseClass.FriendlyException;
+import com.signInStart.Entity.DTO.SearchUserDTO;
 import com.signInStart.Entity.Role;
 import com.signInStart.Entity.UserInfo;
 import com.signInStart.Entity.UserRole;

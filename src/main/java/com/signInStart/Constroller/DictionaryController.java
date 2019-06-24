@@ -4,9 +4,7 @@
  **/
 package com.signInStart.Constroller;
 
-import com.signInStart.Entity.BaseClass.DataResult;
-import com.signInStart.Entity.BaseClass.FriendlyException;
-import com.signInStart.Entity.BaseClass.LoginInfor;
+import com.signInStart.Entity.BaseClass.*;
 import com.signInStart.Entity.Dictionary;
 import com.signInStart.Entity.DictionaryContent;
 import com.signInStart.Service.DictionaryContentService;
@@ -19,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +51,7 @@ public class DictionaryController {
             return ResultUtils.error(4, "必填项不能为空");
         }
         dictionary.setCreateBy(loginInfoService.getAccount());
+        dictionary.setCreateDate(new Date());
         Integer res = dictionaryService.insert(dictionary);
         if (res != 0) {
             String[] msg = {"成功", "不能添加空对象", "字典键已存在，不能重复添加"};
@@ -138,6 +138,7 @@ public class DictionaryController {
     }
 
     @RequestMapping(value = "/dataContent", method = RequestMethod.PUT)
+    @Auth(BaseSetting.NOUSER)
     public DataResult modifyDataContent(DictionaryContent dicContent,
                                         @RequestParam("dicId") Long dicId)throws FriendlyException  {
         DictionaryContent dicCntByDicIdCntId = dicContentService.findDicCntByDicIdCntId(dicId, dicContent.getId());

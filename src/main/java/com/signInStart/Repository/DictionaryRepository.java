@@ -18,4 +18,7 @@ public interface DictionaryRepository extends JpaRepository<Dictionary, Long> {
 
     @Query(value = "select d.id, d.data_value from Dictionary d",nativeQuery = true)
     List<Map<String,Object>> getDicIdValue();
+
+    @Query("select d from Dictionary d where d.DataKey = ?1 and d.id <> ?2")
+    Dictionary findMultiDataKey(String dataKey, Long id);
 }

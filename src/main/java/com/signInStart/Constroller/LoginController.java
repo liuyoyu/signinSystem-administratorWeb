@@ -125,7 +125,7 @@ public class LoginController {
 //        if (res == 0) {
 //            UserInfo userByAccount = userInfoService.findUserByAccount(account);
 //            userByAccount.setNewPassword(pwd);
-//            userInfoRepository.save(userByAccount);
+//            userInfoRepositoryImpl.save(userByAccount);
 //            return ResultUtils.success();
 //        }
 //        return ResultUtils.error(1, "验证码错误");

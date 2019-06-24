@@ -52,7 +52,6 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (dictionaryRepository.findByDataKey(dictionary.getDataKey()) != null) {
             return 2; //键名已存在
         }
-        dictionary.setCreateDate(new Date());
         dictionaryRepository.save(dictionary);
         return 0;
     }
@@ -74,6 +73,9 @@ public class DictionaryServiceImpl implements DictionaryService {
     public Integer modify(Dictionary dictionary)throws FriendlyException {
         if (dictionary == null){
             return 1; //对象不能为空
+        }
+        if (dictionaryRepository.findMultiDataKey(dictionary.getDataKey(), dictionary.getId()) != null) {
+            throw new FriendlyException("不能添加重复字典键", DataUtils.CurrentMethodName());
         }
         Dictionary byId = findById(dictionary.getId());
         byId.setModifyDate(new Date());

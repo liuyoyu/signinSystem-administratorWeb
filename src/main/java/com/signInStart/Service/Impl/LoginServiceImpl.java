@@ -55,12 +55,12 @@ public class LoginServiceImpl implements LoginService {
 //
 //
 //
-//        UserInfo checkUser = userInfoRepository.findUserInfoByAccount(user.getAccount());
+//        UserInfo checkUser = userInfoRepositoryImpl.findUserInfoByAccount(user.getAccount());
 //        if (checkUser != null) {
 //            return null;//账号已存在
 //        }
 //
-//        UserInfo newUser = userInfoRepository.save(user);
+//        UserInfo newUser = userInfoRepositoryImpl.save(user);
 //        return newUser;//增加成功
         Integer res = userInfoService.Insert(user);
         return res;

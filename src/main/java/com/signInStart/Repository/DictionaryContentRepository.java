@@ -22,4 +22,7 @@ public interface DictionaryContentRepository extends JpaRepository<DictionaryCon
 
     @Query(value = "select dc.contentKey as value, dc.contentValue as text from DictionaryContent dc where dc.dictionary.DataKey = ?1")
     List<Map<String,String>> findDicCntKeyValueByDicKey(String dicKey);
+
+    @Query(value = "from DictionaryContent where contentKey = ?1 and id != ?2")
+    List<DictionaryContent> findByContentKey(String contentKey, Long id);
 }

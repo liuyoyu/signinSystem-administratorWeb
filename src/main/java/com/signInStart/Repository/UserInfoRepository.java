@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
+public interface UserInfoRepository extends JpaRepository<UserInfo, Long>{
 
     UserInfo findUserInfoByAccount(String account);
 
@@ -33,6 +33,5 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
 //    @Modifying
 //    @Query(value = "update UserInfo u set u.pwd = ?2 where u.account = ?1")
 //    void resetPassword(String account, String password);
-
 
 }

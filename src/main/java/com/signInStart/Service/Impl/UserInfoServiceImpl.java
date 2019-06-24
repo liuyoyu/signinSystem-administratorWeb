@@ -3,6 +3,7 @@ package com.signInStart.Service.Impl;
 import com.signInStart.Entity.BaseClass.Auth;
 import com.signInStart.Entity.BaseClass.BaseSetting;
 import com.signInStart.Entity.BaseClass.FriendlyException;
+import com.signInStart.Entity.DTO.SearchUserDTO;
 import com.signInStart.Entity.Role;
 import com.signInStart.Entity.UserInfo;
 import com.signInStart.Entity.UserRole;
@@ -188,5 +189,16 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Transactional
     public void allResetPwd(Long[] list) throws FriendlyException {
         userInfoRepository.allResetPwd(DigestUtils.md5DigestAsHex("8888".getBytes()), new Date(), loginInfoService.getAccount(), list);
+    }
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  搜索用户（模糊搜索）
+     * @Date 9:43 2019/6/24
+     * @Params [searchUserDTO]
+     * @return java.util.List<com.signInStart.Entity.UserInfo>
+     **/
+    @Override
+    public List<UserInfo> search(SearchUserDTO searchUserDTO) {
+       return null;
     }
 }

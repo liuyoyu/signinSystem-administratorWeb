@@ -1,6 +1,7 @@
 package com.signInStart.Service;
 
 import com.signInStart.Entity.BaseClass.FriendlyException;
+import com.signInStart.Entity.DTO.SearchUserDTO;
 import com.signInStart.Entity.UserInfo;
 
 import java.util.List;
@@ -24,5 +25,5 @@ public interface UserInfoService {
 
     void allResetPwd(Long[] list) throws FriendlyException;
 
-
+    List<UserInfo> search(SearchUserDTO searchUserDTO);
 }

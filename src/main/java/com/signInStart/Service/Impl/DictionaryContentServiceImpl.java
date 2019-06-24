@@ -10,6 +10,7 @@ import com.signInStart.Entity.DictionaryContent;
 import com.signInStart.Repository.DictionaryContentRepository;
 import com.signInStart.Service.DictionaryContentService;
 import com.signInStart.Service.LoginInfoService;
+import com.signInStart.Utils.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,9 +58,13 @@ public class DictionaryContentServiceImpl implements DictionaryContentService {
     }
 
     @Override
-    public Integer modify(DictionaryContent dictionaryContent)throws FriendlyException {
+    public Integer modify(DictionaryContent dictionaryContent) throws FriendlyException {
         if (dictionaryContent == null) {
             return 1;//对象不能为空
+        }
+        List<DictionaryContent> byContentKey = dictionaryContentRepository.findByContentKey(dictionaryContent.getContentKey(), dictionaryContent.getId());
+        if (byContentKey != null && byContentKey.size() > 0) {
+            throw new FriendlyException("键值不能重复", DataUtils.CurrentMethodName());
         }
         DictionaryContent byId = findById(dictionaryContent.getId());
         byId.setModifyBy(loginInfoService.getAccount());
@@ -96,6 +101,7 @@ public class DictionaryContentServiceImpl implements DictionaryContentService {
 
     /**
      * 通过contentkey查找dictionaryContent
+     *
      * @param dicId
      * @param key
      * @return
