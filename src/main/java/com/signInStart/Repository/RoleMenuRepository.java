@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface RoleMenuRepository extends JpaRepository<RoleMenu, Long> {
@@ -40,8 +41,8 @@ public interface RoleMenuRepository extends JpaRepository<RoleMenu, Long> {
     @Query("select rm from RoleMenu rm where rm.menu.id = ?1")
     List<RoleMenu> findByMenuId(Long menuId);
 
-    @Query("select rm.menu.menuName from RoleMenu rm where rm.role.id = ?1")
-    List<String> findMenuByRoleID(Long roleId);
+    @Query("select rm.menu.menuName as menuName, rm.menu.id as id from RoleMenu rm where rm.role.id = ?1")
+    List<Map<String, String>> findMenuByRoleID(Long roleId);
 
     @Query("select rm.menu from RoleMenu rm where rm.role.id = ?1 and rm.menu.menuStatus = 'Normal_SYS' and rm.menu.parentMenuId = 0")
     List<Menu> findRootMenuByRoleID(Long roleId);

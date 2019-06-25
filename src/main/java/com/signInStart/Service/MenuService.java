@@ -39,7 +39,7 @@ public interface MenuService {
 
     List<Map<String, String>> findAllMenuList();
 
-    List<String> getMenuByRoleID(Long id);
+    List<Map<String,String>> getMenuByRoleID(Long id);
 
     List<Menu> findRootMenuByRole(Long roleID);
 

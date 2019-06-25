@@ -337,7 +337,7 @@ public class MenuServiceImpl implements MenuService {
      * @return java.util.List<com.signInStart.Entity.Menu>
      **/
     @Override
-    public List<String> getMenuByRoleID(Long id) {
+    public List<Map<String,String>> getMenuByRoleID(Long id) {
         return  roleMenuRepository.findMenuByRoleID(id);
     }
 }
