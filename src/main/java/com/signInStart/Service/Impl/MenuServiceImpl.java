@@ -302,6 +302,7 @@ public class MenuServiceImpl implements MenuService {
         if (roleById == null) {
             throw new FriendlyException("角色不存在，请重新选择", DataUtils.CurrentMethodName());
         }
+        roleMenuRepository.deleteRoleByMenuValue(roleID);
 
         List<RoleMenu> all = new ArrayList<>();
         for (Menu m : byMenuValue) {

@@ -52,4 +52,5 @@ public interface MenuRepository extends JpaRepository<Menu,Long>{
     @Query("select m.id as id, m.menuValue as key, m.menuName as text from Menu m")
     List<Map<String,String>> getMenu();
 
+
 }
