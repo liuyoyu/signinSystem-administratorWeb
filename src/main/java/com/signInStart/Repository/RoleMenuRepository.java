@@ -55,4 +55,7 @@ public interface RoleMenuRepository extends JpaRepository<RoleMenu, Long> {
     @Transactional
     @Query("delete from RoleMenu where role.id = ?1")
     void deleteRoleByMenuValue(Long roleID);
+
+    @Query("select rm.menu.id as id, rm.menu.menuURL as url from RoleMenu rm where rm.role.roleId = ?1")
+    List<Map<String, String>> findMenuIdAndURLByRoleId(Long roleId);
 }

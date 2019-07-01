@@ -165,4 +165,10 @@ public class ServiceTest {
         System.out.println(m.toString());
     }
 
+    @Test
+    public void RoleMenuRepositoryTest(){
+        List<Map<String, String>> menuIdAndURLByRoleId = menuService.getMenuIdAndURLByRoleId(138L);
+        System.out.println(menuIdAndURLByRoleId.size());
+    }
+
 }

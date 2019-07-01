@@ -10,6 +10,7 @@ import com.signInStart.Entity.UserRole;
 import com.signInStart.Repository.UserRoleRepository;
 import com.signInStart.Service.LoginInfoService;
 import com.signInStart.Service.UserRoleService;
+import com.signInStart.Utils.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -151,5 +152,26 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     public List<UserRole> findByUserID(Long id) {
         return userRoleRepository.findByUserId(id);
+    }
+
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  修改用户角色
+     * @Date 16:50 2019/7/1
+     * @Params [userID, roleID, newID]
+     * @return void
+     **/
+    @Override
+    public void editRole(Long userID, Long roleID, Long newID) throws FriendlyException {
+        if (DataUtils.isEmptyString(userID.toString())) {
+            throw new FriendlyException("请先选择一个用户", DataUtils.CurrentMethodName());
+        }
+        if (DataUtils.isEmptyString(roleID.toString())) {
+            throw new FriendlyException("请选择要替换的角色", DataUtils.CurrentMethodName());
+        }
+        if (DataUtils.isEmptyString(newID.toString())) {
+            throw new FriendlyException("请选中新的角色", DataUtils.CurrentMethodName());
+        }
+        userRoleRepository.modifyRole(userID,roleID,newID);
     }
 }

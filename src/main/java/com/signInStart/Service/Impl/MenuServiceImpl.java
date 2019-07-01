@@ -95,7 +95,7 @@ public class MenuServiceImpl implements MenuService {
             return 1;//不能删除空对象
         }
         if (menu.getParentMenuId() == 0L && !menuRepository.findAllChildMenu(menu.getId()).isEmpty()) {
-            throw new FriendlyException("有子菜单，不能删除",DataUtils.CurrentMethodName());
+            throw new FriendlyException("有子菜单，不能删除", DataUtils.CurrentMethodName());
         }
         menuRepository.delete(menu);
         return 0;
@@ -108,14 +108,14 @@ public class MenuServiceImpl implements MenuService {
             throw new FriendlyException("不能传入空值");
         }
         if (!byId.getMenuValue().equals(menu.getMenuValue())) {
-            throw new FriendlyException("菜单代码不能进行修改",DataUtils.CurrentMethodName());
+            throw new FriendlyException("菜单代码不能进行修改", DataUtils.CurrentMethodName());
         }
         List<Menu> exist = menuRepository.existURL(menu.getMenuURL());
         if (exist != null && exist.size() >= 1) {
-            throw new FriendlyException("URL已被占用",DataUtils.CurrentMethodName());
+            throw new FriendlyException("URL已被占用", DataUtils.CurrentMethodName());
         }
         if (menu.getParentMenuId() == null) {
-            throw new FriendlyException("父级菜单不能为空",DataUtils.CurrentMethodName());
+            throw new FriendlyException("父级菜单不能为空", DataUtils.CurrentMethodName());
         }
         LoginInfor logiInfo = loginInfoService.getLogiInfo();
         menu.setModifyBy(logiInfo.getUserId().toString());
@@ -154,8 +154,8 @@ public class MenuServiceImpl implements MenuService {
 //            throw new FriendlyException("请先登陆", 1);
 //        }
         Long roleId = loginInfoService.getCurrRoleID();
-        if ( roleId== null) {
-            throw new FriendlyException("当前用户状态未知，请重新登陆",DataUtils.CurrentMethodName());
+        if (roleId == null) {
+            throw new FriendlyException("当前用户状态未知，请重新登陆", DataUtils.CurrentMethodName());
         }
 //        List<Menu> allRootMenu = menuRepository.findAllRootMenuByUserType();
         List<Menu> rootMenu = findRootMenuByRole(roleId);
@@ -181,7 +181,7 @@ public class MenuServiceImpl implements MenuService {
     public List<MenuTreeDTO> getMenuTree() throws FriendlyException {
         List<Menu> all = menuRepository.getAllRootMenu();
         if (all == null) {
-            throw new FriendlyException("列表为空，请先创建根菜单",DataUtils.CurrentMethodName());
+            throw new FriendlyException("列表为空，请先创建根菜单", DataUtils.CurrentMethodName());
         }
         List<MenuTreeDTO> tree = new ArrayList<>();
         for (Menu menu : all) {
@@ -203,10 +203,10 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public void addMenu(Menu menu) throws FriendlyException {
         if (DataUtils.isEmptyString(menu.getMenuName())) {
-            throw new FriendlyException("菜单名称为空，请填入菜单名称",DataUtils.CurrentMethodName());
+            throw new FriendlyException("菜单名称为空，请填入菜单名称", DataUtils.CurrentMethodName());
         }
         if (DataUtils.isEmptyString(menu.getMenuValue())) {
-            throw new FriendlyException("菜单代码为空，请填入菜单代码",DataUtils.CurrentMethodName());
+            throw new FriendlyException("菜单代码为空，请填入菜单代码", DataUtils.CurrentMethodName());
         }
 
         if (DataUtils.isEmptyString(menu.getMenuStatus())) {
@@ -274,12 +274,15 @@ public class MenuServiceImpl implements MenuService {
         if (byMenuValue == null) {
             throw new FriendlyException("没有找到相应菜单信息", DataUtils.CurrentMethodName());
         }
-        if (!DataUtils.isEmptyString(byMenuValue.getParentMenuId().toString())) {
+        if (!DataUtils.isEmptyString(byMenuValue.getParentMenuId().toString()) && !"0".equals(byMenuValue.getParentMenuId().toString())) {
             Optional<Menu> byId = menuRepository.findById(byMenuValue.getParentMenuId());
             if (byId.isPresent()) {
                 Menu menu = byId.get();
                 byMenuValue.setParentName(menu.getMenuName());
             }
+        } else {
+            byMenuValue.setParentName("");
+            byMenuValue.setParentMenuId(null);
         }
         return byMenuValue;
     }
@@ -330,15 +333,27 @@ public class MenuServiceImpl implements MenuService {
     public List<Map<String, String>> findAllMenuList() {
         return menuRepository.getMenu();
     }
+
     /**
+     * @return java.util.List<com.signInStart.Entity.Menu>
      * @Author liuyoyu
      * @Description //TODO  根据角色id获取菜单列表
      * @Date 20:43 2019/6/22
      * @Params [id]
-     * @return java.util.List<com.signInStart.Entity.Menu>
      **/
     @Override
-    public List<Map<String,String>> getMenuByRoleID(Long id) {
-        return  roleMenuRepository.findMenuByRoleID(id);
+    public List<Map<String, String>> getMenuByRoleID(Long id) {
+        return roleMenuRepository.findMenuByRoleID(id);
+    }
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  获取menu
+     * @Date 15:38 2019/7/1
+     * @Params [roleID]
+     * @return java.util.Map<java.lang.String,java.lang.String> 返回形式为menu的id和url
+     **/
+    @Override
+    public List<Map<String, String>> getMenuIdAndURLByRoleId(Long roleID) {
+        return roleMenuRepository.findMenuIdAndURLByRoleId(roleID);
     }
 }

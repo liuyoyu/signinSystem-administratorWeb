@@ -9,6 +9,8 @@ import lombok.extern.log4j.Log4j2;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -94,4 +96,21 @@ public class DataUtils {
         return className + " " + methodName+"()";
     }
 
+    public static Map<String, Object> ClassToMap(Object clazz) throws IllegalAccessException {
+        if (clazz == null) {
+            return new HashMap<>();
+        }
+        Class clz = clazz.getClass();
+        Field[] declaredFields = clz.getDeclaredFields();
+        Map<String, Object> map = new HashMap<>();
+        for (Field field : declaredFields) {
+            field.setAccessible(true);
+            Object val = field.get(clazz);
+            if (val == null || "".equals(val)) {    //空值不转成map
+                continue;
+            }
+            map.put(field.getName(), val.toString());
+        }
+        return map;
+    }
 }

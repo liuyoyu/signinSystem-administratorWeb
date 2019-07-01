@@ -8,14 +8,11 @@ import com.signInStart.Entity.BaseClass.Auth;
 import com.signInStart.Entity.BaseClass.BaseSetting;
 import com.signInStart.Entity.BaseClass.DataResult;
 import com.signInStart.Entity.BaseClass.FriendlyException;
-import com.signInStart.Entity.DTO.SearchUserDTO;
 import com.signInStart.Entity.Role;
 import com.signInStart.Entity.UserInfo;
 import com.signInStart.Entity.UserRole;
-import com.signInStart.Service.LoginInfoService;
-import com.signInStart.Service.RoleService;
-import com.signInStart.Service.UserInfoService;
-import com.signInStart.Service.UserRoleService;
+import com.signInStart.Service.*;
+import com.signInStart.Utils.DataUtils;
 import com.signInStart.Utils.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +33,8 @@ public class UserController {
     UserRoleService userRoleService;
     @Autowired
     RoleService roleService;
+    @Autowired
+    MenuService menuService;
 
     /**
      * @Author liuyoyu
@@ -153,13 +152,22 @@ public class UserController {
 
     /**
      * @Author liuyoyu
-     * @Description //TODO  通过token获取用户信息，前台验证使用
+     * @Description //TODO  通过token获取用户信息，用户菜单
      * @Date 23:23 2019/5/25
      * @Param []
      * @return DataResult
      **/
     @RequestMapping(value = "/token", method = RequestMethod.GET)
-    public DataResult getTokenInfo() throws FriendlyException {
-        return ResultUtils.success(loginInfoService.getUserInfo());
+    public DataResult getTokenInfo() throws FriendlyException, IllegalAccessException {
+        UserInfo userInfo = loginInfoService.getUserInfo();
+        Map<String, Object> resultMap = DataUtils.ClassToMap(userInfo);     //将类转成map
+        List<Map<String, String>> menuList = menuService.getMenuIdAndURLByRoleId(loginInfoService.getCurrRoleID());//获取用户的菜单
+        resultMap.put("menuList", menuList);
+        return ResultUtils.success(resultMap);
+    }
+    @RequestMapping(value = "/role", method = RequestMethod.PUT)
+    public DataResult editRoleUser(@RequestParam("userID")Long userID, @RequestParam("roleID") Long roleID, @RequestParam("newRoleID") Long newID) throws FriendlyException{
+        userRoleService.editRole(userID, roleID, newID);
+        return ResultUtils.success("修改用户角色成功");
     }
 }

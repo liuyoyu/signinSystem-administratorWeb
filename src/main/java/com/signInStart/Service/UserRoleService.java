@@ -31,4 +31,6 @@ public interface UserRoleService {
     Integer modifyUserRole(UserRole userRole)throws FriendlyException ;
 
     List<UserRole> findByUserID(Long id)throws FriendlyException ;
+
+    void editRole(Long userID, Long roleID, Long newID) throws FriendlyException;
 }

@@ -5,6 +5,7 @@ import com.signInStart.Entity.DTO.SearchUserDTO;
 import com.signInStart.Entity.UserInfo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserInfoService {
     UserInfo findUserById(Long id) throws FriendlyException;
@@ -26,4 +27,5 @@ public interface UserInfoService {
     void allResetPwd(Long[] list) throws FriendlyException;
 
     List<UserInfo> search(SearchUserDTO searchUserDTO);
+
 }

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,5 +28,8 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
     @Query(value = "select u from UserRole u where u.userInfo.id = ?1")
     List<UserRole> findByUserId(Long id);
 
-
+    @Transactional
+    @Modifying
+    @Query(value = "update user_role set role_id = ?3 where user_id = ?1 and role_id = ?2", nativeQuery = true)
+    void modifyRole(Long userID, Long roleID, Long newRoleID);
 }

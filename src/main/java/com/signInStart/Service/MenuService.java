@@ -43,4 +43,6 @@ public interface MenuService {
 
     List<Menu> findRootMenuByRole(Long roleID);
 
+    List<Map<String, String>> getMenuIdAndURLByRoleId(Long roleID);
+
 }

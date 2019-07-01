@@ -92,7 +92,7 @@ public class LoginController {
 //        RedisUtils.set(receiver, s); //将用户的验证码存在缓存中
         MsgContent msgContent = new MsgContent(receiver,type);
         RedisUtils.setex(msgContent.toString(), s, 10*60); //将用户的验证码存在缓存中
-        return ResultUtils.success("验证码发送成功，请及时查看",DataUtils.CurrentMethodName());
+        return ResultUtils.success("验证码发送成功，请及时查看");
     }
 
 //    /**

@@ -148,4 +148,9 @@ public class LoginInfoServiceImpl implements LoginInfoService {
     public String getCurrUserType() throws FriendlyException {
         return roleService.findRoleById(getCurrRoleID()).getUserType();
     }
+
+    @Override
+    public Long getUserInfoID() throws FriendlyException{
+        return getUserInfo().getId();
+    }
 }

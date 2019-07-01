@@ -1,5 +1,7 @@
 package com.signInStart;
 
+import com.signInStart.Entity.UserInfo;
+import com.signInStart.Utils.DataUtils;
 import com.signInStart.Utils.JWTUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,5 +21,12 @@ public class UtilsTest {
         for (String key : map.keySet()) {
             System.out.println(key + ":"+ map.get(key));
         }
+    }
+    @Test
+    public void DataUtilsTest() throws Exception{
+        UserInfo u = new UserInfo();
+        u.setNewPassword("123");
+        Map<String, Object> map = DataUtils.ClassToMap(u);
+        System.out.println("pwd: "+map.get("pwd"));
     }
 }

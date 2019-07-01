@@ -36,4 +36,6 @@ public interface LoginInfoService {
     String getCurrRoleName() throws FriendlyException;
 
     String getCurrUserType() throws FriendlyException;
+
+    Long getUserInfoID() throws FriendlyException;
 }
