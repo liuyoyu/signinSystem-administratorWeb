@@ -115,7 +115,7 @@ public class MenuServiceImpl implements MenuService {
             throw new FriendlyException("URL已被占用", DataUtils.CurrentMethodName());
         }
         if (menu.getParentMenuId() == null) {
-            throw new FriendlyException("父级菜单不能为空", DataUtils.CurrentMethodName());
+            menu.setParentMenuId(0L);
         }
         LoginInfor logiInfo = loginInfoService.getLogiInfo();
         menu.setModifyBy(logiInfo.getUserId().toString());
@@ -209,11 +209,11 @@ public class MenuServiceImpl implements MenuService {
             throw new FriendlyException("菜单代码为空，请填入菜单代码", DataUtils.CurrentMethodName());
         }
 
-        if (DataUtils.isEmptyString(menu.getMenuStatus())) {
+        if (DataUtils.isEmptyString(menu.getMenuStatus().toString())) {
             throw new FriendlyException("菜单状态为必填，请填入菜单状态", 1);
         }
         if (menu.getParentMenuId() == null) {
-            throw new FriendlyException("父级菜单为空，请填入父级菜单", 1);
+            menu.setParentMenuId(0L);
         }
         if (DataUtils.isEmptyString(menu.getMenuURL())) {
             throw new FriendlyException("URL为空，请填入URL", 1);

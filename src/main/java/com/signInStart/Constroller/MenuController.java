@@ -260,15 +260,16 @@ public class MenuController {
     }
     /**
      * @Author liuyoyu
-     * @Description //TODO  根据登陆用户获取左侧栏
+     * @Description //TODO  根据登陆用户获取左侧栏(废弃)
      * @Date 21:24 2019/6/22
      * @Params []
      * @return com.signInStart.Entity.BaseClass.DataResult
      **/
-    @RequestMapping("/sider")
-    public DataResult getSider() throws FriendlyException {
-        List<Menu> sidebar = menuService.getSidebar();
-        return ResultUtils.success(sidebar,sidebar.size());
-    }
+//    @RequestMapping("/sider")
+//    public DataResult getSider() throws FriendlyException {
+//        List<Menu> sidebar = menuService.getSidebar();
+//        return ResultUtils.success(sidebar,sidebar.size());
+//    }
+
 
 }

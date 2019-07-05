@@ -34,7 +34,7 @@ public class Menu implements Serializable {
     private String menuURL;     //url
 
     @Column()
-    private String menuStatus;      //菜单状态
+    private Boolean menuStatus = true;      //菜单状态
 
     @Column()
     private String icon;    //图标
@@ -44,9 +44,6 @@ public class Menu implements Serializable {
 
     @Transient
     private String parentName;  //父菜单名称
-
-    @Column()
-    private Boolean hidden = false; //菜单是否隐藏
 
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "menu")
@@ -110,11 +107,11 @@ public class Menu implements Serializable {
         this.menuURL = menuURL;
     }
 
-    public String getMenuStatus() {
+    public Boolean getMenuStatus() {
         return menuStatus;
     }
 
-    public void setMenuStatus(String menuStatus) {
+    public void setMenuStatus(Boolean menuStatus) {
         this.menuStatus = menuStatus;
     }
 
@@ -241,13 +238,5 @@ public class Menu implements Serializable {
 
     public void setParentName(String parentName) {
         this.parentName = parentName;
-    }
-
-    public Boolean getHidden() {
-        return hidden;
-    }
-
-    public void setHidden(Boolean hidden) {
-        this.hidden = hidden;
     }
 }

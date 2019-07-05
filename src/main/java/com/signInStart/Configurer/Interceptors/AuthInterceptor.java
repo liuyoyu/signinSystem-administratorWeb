@@ -69,7 +69,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                 }
                 log.warn("用户 " + loginInfoService.getAccount() + " 试图调用 " + methodName + " 方法：没有权限");
                 ServletOutputStream writer = response.getOutputStream();
-                writer.print(ResultUtils.error(99, "NOT AUTH").toString());
+                writer.print(ResultUtils.error(100, "NOT AUTH").toString());
                 writer.flush();
                 writer.close();
                 return false;

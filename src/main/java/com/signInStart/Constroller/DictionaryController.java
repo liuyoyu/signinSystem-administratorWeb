@@ -79,6 +79,7 @@ public class DictionaryController {
     }
 
     @RequestMapping(value = "/dataContent", method = RequestMethod.POST)
+    @Auth(BaseSetting.NOUSER)
     public DataResult addDataContent(DictionaryContent dicontent,
                                      @RequestParam("dicId") Long dicId)throws FriendlyException  {
         LoginInfor logiInfo = loginInfoService.getLogiInfo();
@@ -109,6 +110,7 @@ public class DictionaryController {
      * @return
      */
     @RequestMapping(value = "/dataContent", method = RequestMethod.DELETE)
+    @Auth(BaseSetting.NOUSER)
     public DataResult delDataContent(@RequestParam("id") Long id) throws FriendlyException {
         Integer res = dicContentService.Delete(id);
         if (res == 0) {
@@ -119,6 +121,7 @@ public class DictionaryController {
     }
 
     @RequestMapping(value = "/data", method = RequestMethod.DELETE)
+    @Auth(BaseSetting.NOUSER)
     public DataResult delData(@RequestParam("id") Long id) throws FriendlyException {
         Integer res = dictionaryService.Delete(id);
         if (res != 0) {
@@ -129,6 +132,7 @@ public class DictionaryController {
     }
 
     @RequestMapping(value = "/data", method = RequestMethod.PUT)
+    @Auth(BaseSetting.NOUSER)
     public DataResult modifyData(Dictionary dictionary)throws FriendlyException  {
         Integer res = dictionaryService.modify(dictionary);
         if (res == 1) {

@@ -13,7 +13,7 @@ public class MenuTreeDTO {
     private String label; //菜单值名（前端需求）
     private String icon;
     private String URL;
-    private String status;
+    private Boolean status;
     List<MenuTreeDTO> children = new ArrayList<>();
 
     public MenuTreeDTO() {
@@ -28,7 +28,7 @@ public class MenuTreeDTO {
         this.URL = menu.getMenuURL();
     }
 
-    public MenuTreeDTO(Long menuId, String id, String label, String status) {
+    public MenuTreeDTO(Long menuId, String id, String label, Boolean status) {
         this.menuId = menuId;
         this.id = id;
         this.label = label;
@@ -59,11 +59,11 @@ public class MenuTreeDTO {
         this.label = label;
     }
 
-    public String getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 

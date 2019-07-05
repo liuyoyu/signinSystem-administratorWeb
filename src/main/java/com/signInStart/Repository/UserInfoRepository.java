@@ -20,7 +20,7 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long>{
 
     List<UserInfo> findUserByEmail(String email);
 
-    @Query("select u from UserInfo u where u.account = ?1 or u.email = ?1")
+    @Query("select u from UserInfo u where ( u.account = ?1 or u.email = ?1 ) and u.status = 'Normal_SYS'")
     UserInfo findUserByAccountOrEmail(String inpput);
 
     @Query("select u from UserInfo u  order by u.createDate desc ")
