@@ -41,7 +41,7 @@ public class UserRole implements Serializable {
     private String modifyBy;
 
     @Column()
-    private String isDefault = BaseSetting.ISDEFAULT.isNotDefault_SYS.toString();
+    private String isDefault = BaseSetting.ISDEFAULT.isDefault_SYS.toString();
 
     public UserRole(UserInfo userInfo, Role role) {
         this.userInfo = userInfo;

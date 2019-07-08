@@ -32,6 +32,7 @@ public class RoleServiceImpl implements RoleService {
 
     /**
      * 根据用户类型获取角色
+     *
      * @param userType
      * @return
      */
@@ -116,7 +117,7 @@ public class RoleServiceImpl implements RoleService {
         String tmp = all.get(0).getUserType();
         List<JSONObject> jsonObjects = new LinkedList<>();
         List<JSONObject> roles = new LinkedList<>();
-        for (int i=0; i<all.size(); i++) {
+        for (int i = 0; i < all.size(); i++) {
             Role r = all.get(i);
             if (!tmp.equals(r.getUserType()) || i + 1 == all.size()) {
                 JSONObject jsonObject = new JSONObject();
@@ -146,5 +147,17 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> findByRoleNames(String[] names) {
         return roleRepository.findByRoleNames(names);
+    }
+
+    /**
+     * @return java.util.List<com.signInStart.Entity.Role>
+     * @Author liuyoyu
+     * @Description //TODO  获取所有角色信息
+     * @Date 10:03 2019/7/7
+     * @Params []
+     **/
+    @Override
+    public List<Role> getAll() throws FriendlyException {
+        return roleRepository.findAll();
     }
 }

@@ -89,4 +89,8 @@ public class RoleController {
     public DataResult findById(@RequestParam("roleId") Long roleId){
         return ResultUtils.success(roleService.findRoleById(roleId));
     }
+    @RequestMapping(value="/roleInfo/all", method = RequestMethod.GET)
+    public DataResult getAllRole() throws FriendlyException{
+        return ResultUtils.success(roleService.getAll());
+    }
 }

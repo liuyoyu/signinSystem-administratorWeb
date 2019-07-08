@@ -20,4 +20,6 @@ public interface RoleService {
     Integer Delete(Long roleId) throws FriendlyException;
 
     Integer modify(Role role) throws FriendlyException;
+
+    List<Role> getAll() throws FriendlyException;
 }
