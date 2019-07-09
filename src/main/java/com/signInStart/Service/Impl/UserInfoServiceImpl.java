@@ -97,7 +97,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (findUserByEmail(user.getEmail()) != null) {
             throw new FriendlyException("该邮箱已被注册", DataUtils.CurrentMethodName());
         }
-        if (user.getAccount().length() <= 4 || user.getAccount().length() > 10) {
+        if (user.getAccount().length() < 4 || user.getAccount().length() > 10) {
             throw new FriendlyException("请输入长度为4-9位的账号", DataUtils.CurrentMethodName());
         }
         Pattern pattern = Pattern.compile("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,}$");

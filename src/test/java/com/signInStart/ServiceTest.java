@@ -151,13 +151,13 @@ public class ServiceTest {
 
     }
 
-    @Autowired
-    RoleMenuRepository roleMenuRepository;
-    @Test
-    public void repositoryTest(){
-        RoleMenu jk = roleMenuRepository.findByMenuIdUsetType(117L, "Admin_SYS");
-        System.out.println(jk.getId());
-    }
+//    @Autowired
+//    RoleMenuRepository roleMenuRepository;
+//    @Test
+//    public void repositoryTest(){
+//        RoleMenu jk = roleMenuRepository.findByMenuIdUsetType(117L, "Admin_SYS");
+//        System.out.println(jk.getId());
+//    }
 
     @Test
     public void StringTest(){

@@ -206,9 +206,15 @@ public class UserInfo implements Serializable {
      * @Param []
      * @return java.util.Map<java.lang.String,java.util.List>
      **/
-    public List<JSONObject> getRole(){
+    public Object getRole(){
         if (userRoles == null || userRoles.size() < 1) {
             return null;
+        }
+        if (userRoles.size() == 1) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("userType", userRoles.get(0).getUserType());
+            jsonObject.put("roleName", userRoles.get(0).getRoleName());
+            return jsonObject;
         }
         List<JSONObject> list = new ArrayList<>();
         for (UserRole userRole : userRoles) {
