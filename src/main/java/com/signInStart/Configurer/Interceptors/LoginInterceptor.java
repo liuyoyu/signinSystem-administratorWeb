@@ -1,12 +1,12 @@
 package com.signInStart.Configurer.Interceptors;
 
 import com.signInStart.Entity.BaseClass.HttpContent;
+import com.signInStart.Utils.DataUtils;
 import com.signInStart.Utils.RedisUtils;
 import com.signInStart.Utils.ResultUtils;
-import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
-import org.jboss.logging.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.method.HandlerMethod;
@@ -16,13 +16,14 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.logging.Logger;
 
 @Controller
 @Component
-@Slf4j
 public class LoginInterceptor implements HandlerInterceptor {
 
-    Logger log = Logger.getLogger(LoginInterceptor.class);
+    Log log = LogFactory.getLog(LoginInterceptor.class);
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String path = request.getContextPath();
@@ -57,6 +58,8 @@ public class LoginInterceptor implements HandlerInterceptor {
             writer.close();
             return false;
         }
+        String s = DataUtils.GetClientIP(request);
+        log.info("用户:"+s+" 发送了一个请求："+request.getRequestURL().substring(request.getContextPath().length()));
         return true;
     }
 

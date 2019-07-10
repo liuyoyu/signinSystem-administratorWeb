@@ -8,7 +8,8 @@ import com.signInStart.Entity.BaseClass.DataResult;
 import com.signInStart.Entity.BaseClass.FriendlyException;
 import com.signInStart.Service.LoginInfoService;
 import com.signInStart.Utils.ResultUtils;
-import com.sun.mail.smtp.SMTPSendFailedException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -21,7 +22,7 @@ public class ExceptionInterceptor {
 
     @Autowired LoginInfoService loginInfoService;
 
-    org.jboss.logging.Logger log = org.jboss.logging.Logger.getLogger(FriendlyException.class);
+    Log log = LogFactory.getLog(ExceptionInterceptor.class);
 
     @ExceptionHandler(FriendlyException.class)
     @ResponseBody
@@ -36,7 +37,6 @@ public class ExceptionInterceptor {
     @ResponseStatus(HttpStatus.OK)
     public DataResult OtherExceptionHandler(Exception e) throws FriendlyException {
         log.warn("----------:统一异常拦截器，拦截到异常："+e.getMessage());
-        log.warn("----------:异常请求："+ loginInfoService.getRequestPath());
         return ResultUtils.error("ε=ε=ε=(~￣▽￣)~ 出现未知异常，苦逼的yoyu正在抓紧时间处理....");
     }
 }

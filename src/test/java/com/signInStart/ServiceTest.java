@@ -1,5 +1,6 @@
 package com.signInStart;
 
+import com.signInStart.Entity.BaseClass.FriendlyException;
 import com.signInStart.Entity.BaseClass.MsgContent;
 import com.signInStart.Entity.Organization;
 import com.signInStart.Entity.RoleMenu;
@@ -64,19 +65,24 @@ public class ServiceTest {
     }
 
     @Test
-    public void userInfoTest(){
+    public void userInfoTest() throws FriendlyException {
 //        Optional<UserInfo> userById = userInfoService.findUserById(Long.parseLong("7"));
 //        userById.get().setEmail("l673677179@163.com");
 //        Integer res = userInfoService.modifyUserInfo(userById.get());
 //        System.out.println(res);
-        UserInfo userInfo = new UserInfo();
-        userInfo.setEmail("673677179@qq.com");
-        userInfo.setAccount("root");
-        userInfo.setInitPassword();
-        userInfo.setUserName("管理员");
+//        UserInfo userInfo = new UserInfo();
+//        userInfo.setEmail("673677179@qq.com");
+//        userInfo.setAccount("root");
+//        userInfo.setInitPassword();
+//        userInfo.setUserName("管理员");
 
 //        Integer user = userInfoService.Insert(userInfo);
 //        System.out.println(user);
+
+        //重置密码
+        UserInfo u = userInfoService.findUserById(428L);
+        u.setNewPassword("123456");
+        userInfoRepository.save(u);
     }
     @Autowired
     DictionaryService dictionaryService;

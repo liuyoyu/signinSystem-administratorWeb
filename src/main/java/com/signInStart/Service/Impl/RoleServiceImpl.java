@@ -119,7 +119,7 @@ public class RoleServiceImpl implements RoleService {
         List<JSONObject> roles = new LinkedList<>();
         for (int i = 0; i < all.size(); i++) {
             Role r = all.get(i);
-            if (!tmp.equals(r.getUserType()) || i + 1 == all.size()) {
+            if (!tmp.equals(r.getUserType())) {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("id", tmp);
                 jsonObject.put("label", tmp.equals(BaseSetting.ROLE.SupperAdmin_SYS.toString()) ? "超级管理员" :
@@ -133,14 +133,23 @@ public class RoleServiceImpl implements RoleService {
             js.put("roleId", r.getRoleId());
             js.put("id", r.getUserType());
             js.put("label", r.getRoleName());
-            js.put("status", r.getStatus());
+//            js.put("status", r.getStatus());
             js.put("createDate", r.getCreateDate());
             js.put("modifyDate", r.getModifyDate());
             js.put("createBy", r.getCreateBy());
             js.put("modifyBy", r.getModifyBy());
             js.put("detail", r.getDetail());
             roles.add(js);
+            if (i + 1 == all.size()) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("id", tmp);
+                jsonObject.put("label", tmp.equals(BaseSetting.ROLE.SupperAdmin_SYS.toString()) ? "超级管理员" :
+                        (tmp.equals(BaseSetting.ROLE.Admin_SYS.toString()) ? "管理员" : "用户"));
+                jsonObject.put("children", roles);
+                jsonObjects.add(jsonObject);
+            }
         }
+
         return jsonObjects;
     }
 

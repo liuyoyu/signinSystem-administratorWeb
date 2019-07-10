@@ -40,8 +40,8 @@ public class Role implements Serializable {
 //    @Column()
 //    private String groupBy;
 
-    @Column()
-    private String status;
+//    @Column()
+//    private String status;
 
     @Column()
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -77,13 +77,13 @@ public class Role implements Serializable {
         roleMenus = new ArrayList<>();
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+//    public String getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(String status) {
+//        this.status = status;
+//    }
 
     public Long getRoleId() {
         return roleId;

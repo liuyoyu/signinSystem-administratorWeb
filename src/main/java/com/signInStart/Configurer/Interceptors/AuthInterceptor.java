@@ -8,10 +8,8 @@ import com.signInStart.Entity.BaseClass.Auth;
 import com.signInStart.Entity.BaseClass.BaseSetting;
 import com.signInStart.Service.LoginInfoService;
 import com.signInStart.Utils.ResultUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.jboss.logging.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
@@ -36,7 +34,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     private LoginInfoService loginInfoService;
 
-    Logger log = Logger.getLogger(AuthInterceptor.class);
+    Log log = LogFactory.getLog(AuthInterceptor.class);
 
     public AuthInterceptor() {
     }

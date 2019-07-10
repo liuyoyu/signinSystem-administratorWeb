@@ -7,6 +7,7 @@ package com.signInStart.Utils;
 import com.signInStart.Entity.BaseClass.BaseSetting;
 import lombok.extern.log4j.Log4j2;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.HashMap;
@@ -112,5 +113,29 @@ public class DataUtils {
             map.put(field.getName(), val.toString());
         }
         return map;
+    }
+    /**
+     * @Author liuyoyu
+     * @Description //TODO  获取客户端ip
+     * @Date 9:01 2019/7/10
+     * @Params []
+     * @return java.lang.String
+     **/
+    public static String GetClientIP(HttpServletRequest request){
+        String ip = request.getHeader("X-Forwarded-For");
+        if (!isEmptyString(ip) && !"unKnown".equalsIgnoreCase(ip)) {
+            //反向代理会有多个IP值，获取第一个ip
+            int index = ip.indexOf(",");
+            if (index == -1) {
+                return ip.substring(0, index);
+            } else {
+                return ip;
+            }
+        }
+        ip = request.getHeader("X-Real-IP");
+        if (!isEmptyString(ip) && !"unKnown".equalsIgnoreCase(ip)) {
+            return ip;
+        }
+        return request.getRemoteAddr();
     }
 }
