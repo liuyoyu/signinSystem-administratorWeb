@@ -6,6 +6,7 @@ package com.signInStart.Utils;
 
 import com.signInStart.Entity.BaseClass.BaseSetting;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
@@ -122,20 +123,26 @@ public class DataUtils {
      * @return java.lang.String
      **/
     public static String GetClientIP(HttpServletRequest request){
-        String ip = request.getHeader("X-Forwarded-For");
-        if (!isEmptyString(ip) && !"unKnown".equalsIgnoreCase(ip)) {
-            //反向代理会有多个IP值，获取第一个ip
-            int index = ip.indexOf(",");
-            if (index == -1) {
-                return ip.substring(0, index);
-            } else {
-                return ip;
-            }
+        String ip = request.getHeader("x-forwarded-for");
+        // Proxy-Client-IP 这个一般是经过apache http服务器的请求才会有，用apache http做代理时一般会加上Proxy-Client-IP请求头，而WL-Proxy-Client-IP是他的weblogic插件加上的头。
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
         }
-        ip = request.getHeader("X-Real-IP");
-        if (!isEmptyString(ip) && !"unKnown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        if(StringUtils.isEmpty(ip)){
+            return "";
+        }
+        int index = ip.indexOf(",");
+
+        if(index != -1){
+            return ip.substring(0,index);
+        }else{
             return ip;
         }
-        return request.getRemoteAddr();
     }
 }
