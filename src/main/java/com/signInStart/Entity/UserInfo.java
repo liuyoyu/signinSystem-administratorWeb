@@ -210,19 +210,19 @@ public class UserInfo implements Serializable {
         if (userRoles == null || userRoles.size() < 1) {
             return null;
         }
-        if (userRoles.size() == 1) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("userType", userRoles.get(0).getUserType());
-            jsonObject.put("roleName", userRoles.get(0).getRoleName());
-            return jsonObject;
+        JSONObject j = new JSONObject();
+        Role role = userRoles.get(0).getRole();
+        if (role == null) {
+            return j;
         }
-        List<JSONObject> list = new ArrayList<>();
-        for (UserRole userRole : userRoles) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("userType", userRole.getUserType());
-            jsonObject.put("roleName", userRole.getRoleName());
-            list.add(jsonObject);
-        }
-        return list;
+        j.put("roleId", role.getRoleId());
+        j.put("roleName", role.getRoleName());
+        j.put("userType", role.getUserType());
+        j.put("detail", role.getDetail());
+        j.put("createDate", role.getCreateDate());
+        j.put("createBy", role.getCreateBy());
+        j.put("modifyDate", role.getModifyDate());
+        j.put("modifyBy", role.getModifyBy());
+        return j; //一个用户一个角色
     }
 }

@@ -134,9 +134,7 @@ public class DataUtils {
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
-        if(StringUtils.isEmpty(ip)){
-            return "";
-        }
+        if(StringUtils.isEmpty(ip)) return "";
         int index = ip.indexOf(",");
 
         if(index != -1){
