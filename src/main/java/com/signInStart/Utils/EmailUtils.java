@@ -18,12 +18,9 @@ import java.util.Random;
  */
 @Log4j2
 public class EmailUtils {
-        private static final String account = "yoyu126@126.com";
-    private static final String pwd = "liu111";//授权密码
+        private static final String account = "@126.com";
+    private static final String pwd = "";//授权密码
     private static final String EAMIL_HOST = "smtp.126.com";
-//    private static final String account = "heling_fzu@163.com";
-//    private static final String pwd = "heling231231";//授权密码
-//    private static final String EAMIL_HOST = "smtp.163.com";
     private static final String TITLE = "【签到start】验证邮件";
     private static final String EAMIL_PORT = 465 + "";
     private static final Integer CODE_LENGTH = 4;
@@ -40,7 +37,7 @@ public class EmailUtils {
                 "<h2>感谢您使用我们的签到Start平台邮箱验证功能</h2>" +
                 "<p>本次请求的验证码为: " + code +
                 " (验证码10分钟内有效，请及时输入)"+
-                "</p><small>若非本人操作，请忽略本条邮件。祝，生活愉快ฅʕ•̫͡•ʔฅ</small><br><br>" + sdf.format(new Date()) +
+                "</p><small>若非本人操作，请忽略本条邮件。祝，生活愉快ฅʕ•̫͡•ʔฅ</small><br><br>" + sdf.format(new Date()) +
                 "（本邮件由系统自动发出，请勿回复）";
         try {
             EmailUtils.sendEmail(receiver, text);
