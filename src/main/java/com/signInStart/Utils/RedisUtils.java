@@ -14,9 +14,9 @@ import java.util.List;
 public class RedisUtils{
     public static int ValidTime = 3600*24*7; //记录有效时间
 
-    private static String addr = "59.77.134.183";
+    private static String addr = "";
     private static int PORT = 6379;
-    private static String auth = "#@.2019&liuyy&";
+    private static String auth = "";
 
     //可用连接实例的最大数目，默认值为8；
     //如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)。
